@@ -1,0 +1,40 @@
+
+
+Examples using ``multimodalboost.MumboClassifier.fit``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="In this toy example, we generate data from two classes, split between two two-dimensional views...">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_2_views_2_classes_thumb.png
+
+     :ref:`sphx_glr_auto_examples_plot_2_views_2_classes.py`
+
+.. raw:: html
+
+    </div>
+
+.. only:: not html
+
+ * :ref:`sphx_glr_auto_examples_plot_2_views_2_classes.py`
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="In this toy example, we generate data from three classes, split between three two-dimensional v...">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_3_views_3_classes_thumb.png
+
+     :ref:`sphx_glr_auto_examples_plot_3_views_3_classes.py`
+
+.. raw:: html
+
+    </div>
+
+.. only:: not html
+
+ * :ref:`sphx_glr_auto_examples_plot_3_views_3_classes.py`
