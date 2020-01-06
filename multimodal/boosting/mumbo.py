@@ -42,9 +42,10 @@ from sklearn.tree._tree import DTYPE
 from sklearn.utils import check_array, check_X_y, check_random_state
 from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import check_is_fitted, has_fit_parameter
+from .boost import UBoosting
 
 
-class MumboClassifier(BaseEnsemble, ClassifierMixin):
+class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
     r"""It then iterates the process on the same dataset but where the weights of
     incorrectly classified instances are adjusted such that subsequent
     classifiers focus more on difficult cases.
@@ -106,7 +107,7 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin):
 
     Examples
     --------
-    >>> from multimodalboost.mumbo import MumboClassifier
+    >>> from multimodal.boosting.mumbo import MumboClassifier
     >>> from sklearn.datasets import load_iris
     >>> X, y = load_iris(return_X_y=True)
     >>> views_ind = [0, 2, 4]  # view 0: sepal data, view 1: petal data
@@ -174,75 +175,6 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin):
         if not has_fit_parameter(self.base_estimator_, "sample_weight"):
             raise ValueError("%s doesn't support sample_weight."
                              % self.base_estimator_.__class__.__name__)
-
-    def _validate_X_predict(self, X):
-        """Ensure that X is in the proper format."""
-        if (self.base_estimator is None or
-                isinstance(self.base_estimator,
-                           (BaseDecisionTree, BaseForest))):
-            X = check_array(X, accept_sparse='csr', dtype=DTYPE)
-
-        else:
-            X = check_array(X, accept_sparse=['csr', 'csc'])
-        if X.shape[1] != self.n_features_:
-            raise ValueError("X doesn't contain the right number of features.")
-        return X
-
-    def _extract_view(self, X, ind_view):
-        """Extract the view for the given index ind_view from the dataset X."""
-        if self.view_mode_ == "indices":
-            return X[:, self.views_ind_[ind_view]]
-        else:
-            return X[:, self.views_ind_[ind_view]:self.views_ind_[ind_view+1]]
-
-    def _compute_predictions(self, X):
-        """Compute predictions for all the stored estimators on the data X."""
-        n_samples = X.shape[0]
-        n_estimators = len(self.estimators_)
-        predictions = np.zeros((n_samples, n_estimators), dtype=np.int64)
-        for ind_estimator, estimator in enumerate(self.estimators_):
-            ind_view = self.best_views_[ind_estimator]
-            predictions[:, ind_estimator] \
-                = estimator.predict(self._extract_view(X, ind_view))
-        return predictions
-
-    def _validate_views_ind(self, views_ind, n_features):
-        """Ensure proper format for views_ind and return number of views."""
-        views_ind = np.array(views_ind)
-        if np.issubdtype(views_ind.dtype, np.integer) and views_ind.ndim == 1:
-            if np.any(views_ind[:-1] >= views_ind[1:]):
-                raise ValueError("Values in views_ind must be sorted.")
-            if views_ind[0] < 0 or views_ind[-1] > n_features:
-                raise ValueError("Values in views_ind are not in a correct "
-                                 + "range for the provided data.")
-            self.view_mode_ = "slices"
-            n_views = views_ind.shape[0]-1
-        else:
-            if views_ind.ndim == 1:
-                if not views_ind.dtype == np.object:
-                    raise ValueError("The format of views_ind is not "
-                                     + "supported.")
-                for ind, val in enumerate(views_ind):
-                    views_ind[ind] = np.array(val)
-                    if not np.issubdtype(views_ind[ind].dtype, np.integer):
-                        raise ValueError("Values in views_ind must be "
-                                         + "integers.")
-                    if views_ind[ind].min() < 0 \
-                            or views_ind[ind].max() >= n_features:
-                        raise ValueError("Values in views_ind are not in a "
-                                         + "correct range for the provided "
-                                         + "data.")
-            elif views_ind.ndim == 2:
-                if not np.issubdtype(views_ind.dtype, np.integer):
-                    raise ValueError("Values in views_ind must be integers.")
-                if views_ind.min() < 0 or views_ind.max() >= n_features:
-                    raise ValueError("Values in views_ind are not in a "
-                                     + "correct range for the provided data.")
-            else:
-                raise ValueError("The format of views_ind is not supported.")
-            self.view_mode_ = "indices"
-            n_views = views_ind.shape[0]
-        return (views_ind, n_views)
 
     def _validate_best_view_mode(self, best_view_mode):
         """Ensure that best_view_mode has a proper value."""
@@ -353,6 +285,17 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin):
         cost[:, np.arange(n_samples), y] -= np.sum(cost, axis=2)
         return (cost, label_score)
 
+    def _compute_predictions(self, X):
+        """Compute predictions for all the stored estimators on the data X."""
+        n_samples = X.shape[0]
+        n_estimators = len(self.estimators_)
+        predictions = np.zeros((n_samples, n_estimators), dtype=np.int64)
+        for ind_estimator, estimator in enumerate(self.estimators_):
+            ind_view = self.best_views_[ind_estimator]
+            predictions[:, ind_estimator] \
+                = estimator.predict(X._extract_view(ind_view))
+        return predictions
+
     def fit(self, X, y, views_ind=None):
         """Build a multimodal boosted classifier from the training set (X, y).
 
@@ -400,9 +343,6 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin):
         else:
             dtype = None
             accept_sparse = ['csr', 'csc']
-        X, y = check_X_y(X, y, accept_sparse=accept_sparse, dtype=dtype)
-        check_classification_targets(y)
-        self._validate_estimator()
         if views_ind is None:
             if X.shape[1] > 1:
                 views_ind = np.array([0, X.shape[1]//2, X.shape[1]])
@@ -410,6 +350,10 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin):
                 views_ind = np.array([0, X.shape[1]])
         self.views_ind_, n_views = self._validate_views_ind(views_ind,
                                                             X.shape[1])
+        self.X_ = self._global_X_transform(X, views_ind=self.views_ind_)
+        check_X_y(self.X_, y, accept_sparse=accept_sparse, dtype=dtype)
+        check_classification_targets(y)
+        self._validate_estimator()
 
         self.classes_, y = np.unique(y, return_inverse=True)
         self.n_classes_ = len(self.classes_)
@@ -441,11 +385,11 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin):
             for ind_view in range(n_views):
                 estimator = self._make_estimator(append=False,
                                                  random_state=random_state)
-                estimator.fit(self._extract_view(X, ind_view), y,
+                estimator.fit(self.X_._extract_view(ind_view), y,
                               sample_weight=dist[ind_view, :])
                 estimators.append(estimator)
                 predicted_classes[ind_view, :] = estimator.predict(
-                    self._extract_view(X, ind_view))
+                    self.X_._extract_view(ind_view))
 
             edges = self._compute_edge_global(
                     cost_global, predicted_classes, y)

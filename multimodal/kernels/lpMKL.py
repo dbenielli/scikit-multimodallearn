@@ -5,7 +5,6 @@ from sklearn.utils.multiclass import unique_labels
 from sklearn.utils.validation import check_X_y
 from sklearn.utils.validation  import check_array
 from sklearn.utils.validation  import check_is_fitted
-from metriclearning.datasets.data_sample import DataSample, Metriclearn_array
 from metriclearning.mkernel import MKernel
 
 

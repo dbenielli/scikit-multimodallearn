@@ -2,7 +2,7 @@ import numpy as np
 import scipy as sp
 from sklearn.metrics.pairwise import pairwise_kernels
 from abc import ABCMeta
-from metriclearning.datasets.data_sample import DataSample, Metriclearn_array
+from multimodal.datasets.data_sample import DataSample, MultiModalArray
 
 
 class MKernel(metaclass=ABCMeta):
@@ -36,26 +36,26 @@ class MKernel(metaclass=ABCMeta):
         if Y is None:
             y = Y
         if isinstance(X, np.ndarray) and X.ndim == 1:
-            X_= Metriclearn_array(X, views_ind)
+            X_= MultiModalArray(X, views_ind)
             for v in range(X.shape[0]):
                 if Y is not None:  y = Y.get_view(v) #  y = self._global_check_pairwise(X_, Y, v)
                 kernel_dict[v] = self._get_kernel(X[v], y)
         elif isinstance(X, dict):
-            X_= Metriclearn_array(X)
+            X_= MultiModalArray(X)
             for v in X.keys():
                 if Y is not None:  y = Y.get_view(v) # y = self._global_check_pairwise(X_, Y, v)
                 kernel_dict[v] = self._get_kernel(X[v], y)
         elif isinstance(X, np.ndarray) and X.ndim > 1:
-            X_ = Metriclearn_array(X, views_ind)
+            X_ = MultiModalArray(X, views_ind)
             X = X_
-        if isinstance(X, Metriclearn_array):
+        if isinstance(X, MultiModalArray):
             for v in range(X.n_views):
                 if Y is not None:   y = Y.get_view(v) # y = self._global_check_pairwise(X, Y, v)
                 kernel_dict[v] = self._get_kernel(X.get_view(v), y)
             X_= X
-        if not isinstance(X_, Metriclearn_array):
+        if not isinstance(X_, MultiModalArray):
             raise TypeError("Input format is not reconized")
-        K_ = Metriclearn_array(kernel_dict)
+        K_ = MultiModalArray(kernel_dict)
         return X_, K_
 
     def _calc_nystrom(self, kernels, n_approx):

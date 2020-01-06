@@ -26,9 +26,9 @@ import numpy as np
 import numpy.ma as ma
 
 
-class Metriclearn_array(ma.MaskedArray, np.ndarray):
+class MultiModalArray(ma.MaskedArray, np.ndarray):
     """
-    Metriclearn_array inherit from numpy ndarray
+    MultiModalArray inherit from numpy ndarray
 
 
     Parameters
@@ -74,21 +74,21 @@ class Metriclearn_array(ma.MaskedArray, np.ndarray):
 
     :Example:
 
-    >>> from metriclearning.datasets.base import load_dict
-    >>> from metriclearning.tests.datasets.get_dataset_path import get_dataset_path
-    >>> from metriclearning.datasets.data_sample import DataSample
+    >>> from multimodal.datasets.base import load_dict
+    >>> from multimodal.tests.datasets.get_dataset_path import get_dataset_path
+    >>> from multimodal.datasets.data_sample import DataSample
     >>> file = 'input_x_dic.pkl'
     >>> data = load_dict(get_dataset_path(file))
     >>> print(data.__class__)
     <class 'dict'>
-    >>> metric = Metriclearn_array(data)
-    >>> metric.shape
+    >>> multiviews = MultiModalArray(data)
+    >>> multiviews.shape
     (120, 240)
-    >>> metric.keys
+    >>> multiviews.keys
     dict_keys([0, 1])
-    >>> metric.shapes_int
+    >>> multiviews.shapes_int
     [120, 120]
-    >>> metric.n_views
+    >>> multiviews.n_views
     2
 
 
@@ -126,7 +126,7 @@ class Metriclearn_array(ma.MaskedArray, np.ndarray):
                     view_ind = np.array([0, data.shape[1]//2, data.shape[1]])
                 else:
                     view_ind = np.array([0, data.shape[1]])
-                view_ind, n_views = cls._validate_views_ind(view_ind,
+                view_ind, n_views = cls._first_validate_views_ind(view_ind,
                                                             data.shape[1])
             shapes_int = [  in2-in1  for in1, in2 in  zip(view_ind, view_ind[1: ])]
             new_data = data
@@ -164,11 +164,11 @@ class Metriclearn_array(ma.MaskedArray, np.ndarray):
 
     def __array_finalize__(self, obj):
         if obj is None: return
-        super(Metriclearn_array, self).__array_finalize__(obj)
+        super(MultiModalArray, self).__array_finalize__(obj)
         self.shapes_int = getattr(obj, 'shapes_int', None)
         self.n_views = getattr(obj, 'n_views', None)
         self.keys = getattr(obj, 'keys', None)
-        self.views_ind_self = getattr(obj, 'views_ind_self', None)
+        self.views_ind = getattr(obj, 'views_ind', None)
 
     def get_col(self, view, col):
         start = np.sum(np.asarray(self.shapes_int[0: view]))
@@ -178,6 +178,13 @@ class Metriclearn_array(ma.MaskedArray, np.ndarray):
         start = int(np.sum(np.asarray(self.shapes_int[0: view])))
         stop = int(start + self.shapes_int[view])
         return self.data[:, start:stop]
+
+    def _extract_view(self, ind_view):
+        """Extract the view for the given index ind_view from the dataset X."""
+        if self.view_mode_ == "indices":
+            return self.data[:, self.views_ind[ind_view]]
+        else:
+            return self.data[:, self.views_ind[ind_view]:self.views_ind[ind_view+1]]
 
     def set_view(self, view, data):
         start = int(np.sum(np.asarray(self.shapes_int[0: view])))
@@ -214,7 +221,7 @@ class Metriclearn_array(ma.MaskedArray, np.ndarray):
         return dico
 
     @staticmethod
-    def _validate_views_ind(views_ind, n_features):
+    def _first_validate_views_ind(views_ind, n_features):
         """Ensure proper format for views_ind and return number of views."""
         views_ind = np.array(views_ind)
         if np.issubdtype(views_ind.dtype, np.integer) and views_ind.ndim == 1:
@@ -230,6 +237,46 @@ class Metriclearn_array(ma.MaskedArray, np.ndarray):
 
         return (views_ind, n_views)
 
+
+    def _validate_views_ind(self, views_ind, n_features):
+        """Ensure proper format for views_ind and return number of views."""
+        views_ind = np.array(views_ind)
+        if np.issubdtype(views_ind.dtype, np.integer) and views_ind.ndim == 1:
+            if np.any(views_ind[:-1] >= views_ind[1:]):
+                raise ValueError("Values in views_ind must be sorted.")
+            if views_ind[0] < 0 or views_ind[-1] > n_features:
+                raise ValueError("Values in views_ind are not in a correct "
+                                 + "range for the provided data.")
+            self.view_mode_ = "slices"
+            n_views = views_ind.shape[0]-1
+        else:
+            if views_ind.ndim == 1:
+                if not views_ind.dtype == np.object:
+                    raise ValueError("The format of views_ind is not "
+                                     + "supported.")
+                for ind, val in enumerate(views_ind):
+                    views_ind[ind] = np.array(val)
+                    if not np.issubdtype(views_ind[ind].dtype, np.integer):
+                        raise ValueError("Values in views_ind must be "
+                                         + "integers.")
+                    if views_ind[ind].min() < 0 \
+                            or views_ind[ind].max() >= n_features:
+                        raise ValueError("Values in views_ind are not in a "
+                                         + "correct range for the provided "
+                                         + "data.")
+            elif views_ind.ndim == 2:
+                if not np.issubdtype(views_ind.dtype, np.integer):
+                    raise ValueError("Values in views_ind must be integers.")
+                if views_ind.min() < 0 or views_ind.max() >= n_features:
+                    raise ValueError("Values in views_ind are not in a "
+                                     + "correct range for the provided data.")
+            else:
+                raise ValueError("The format of views_ind is not supported.")
+            self.view_mode_ = "indices"
+            n_views = views_ind.shape[0]
+        self.views_ind = views_ind
+        self.n_views = n_views
+        return (views_ind, n_views)
 
 class DataSample(dict):
     """
@@ -247,7 +294,7 @@ class DataSample(dict):
     <class 'dict'>
     >>> s = DataSample(data)
     >>> type(s.data)
-    <class 'metriclearning.datasets.data_sample.Metriclearn_array'>
+    <class 'multimodal.datasets.data_sample.MultiModalArray'>
 
 
     - Input:
@@ -260,7 +307,7 @@ class DataSample(dict):
     Attributes
     ----------
 
-    data   : { array like}  Metriclearn_array
+    data   : { array like}  MultiModalArray
     """
 
     def __init__(self, data=None, **kwargs):
@@ -270,7 +317,7 @@ class DataSample(dict):
         super(DataSample, self).__init__(kwargs)
         self._data = None # Metriclearn_array(np.zeros((0,0)))
         if data is not None:
-            self._data = Metriclearn_array(data)
+            self._data = MultiModalArray(data)
 
 
     @property
@@ -281,10 +328,10 @@ class DataSample(dict):
 
     @data.setter
     def data(self, data):
-        if isinstance(data, (Metriclearn_array, np.ndarray, ma.MaskedArray, np.generic)):
+        if isinstance(data, (MultiModalArray, np.ndarray, ma.MaskedArray, np.generic)):
             self._data = data
         else:
-            raise TypeError("sample should be a Metriclearn_array.")
+            raise TypeError("sample should be a MultiModalArray or numpy array.")
 
 
 

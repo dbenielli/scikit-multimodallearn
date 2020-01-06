@@ -43,11 +43,11 @@ from sklearn.utils import check_array, check_X_y, check_random_state
 from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import check_is_fitted, has_fit_parameter
 from cvxopt import solvers, matrix, spdiag, exp, spmatrix, mul, div
-from multimodal.datasets.data_sample import Metriclearn_array
+from .boost import UBoosting
 import warnings
 
 
-class MuCumboClassifier(BaseEnsemble, ClassifierMixin):
+class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
     r"""It then iterates the process on the same dataset but where the weights of
     incorrectly classified instances are adjusted such that subsequent
     classifiers focus more on difficult cases.
@@ -114,7 +114,7 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin):
 
     Examples
     --------
-    >>> from multiconfusion.cumbo import MuCumboClassifier
+    >>> from multimodal.boosting.cumbo import MuCumboClassifier
     >>> from sklearn.datasets import load_iris
     >>> X, y = load_iris(return_X_y=True)
     >>> views_ind = [0, 2, 4]  # view 0: sepal data, view 1: petal data
@@ -178,7 +178,6 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin):
         self.random_state = random_state
         # self.best_view_mode = self._validate_best_view_mode(best_view_mode)
 
-
     def _validate_estimator(self):
         """Check the estimator and set the base_estimator_ attribute."""
         super(MuCumboClassifier, self)._validate_estimator(
@@ -187,83 +186,6 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin):
         if not has_fit_parameter(self.base_estimator_, "sample_weight"):
             raise ValueError("%s doesn't support sample_weight."
                              % self.base_estimator_.__class__.__name__)
-
-    def _validate_X_predict(self, X):
-        """Ensure that X is in the proper format."""
-        if (self.base_estimator is None or
-                isinstance(self.base_estimator,
-                           (BaseDecisionTree, BaseForest))):
-            X = check_array(X, accept_sparse='csr', dtype=DTYPE)
-        else:
-            X = check_array(X, accept_sparse=['csr', 'csc'])
-        if X.shape[1] != self.n_features_:
-            raise ValueError("X doesn't contain the right number of features.")
-        return X
-
-    def _extract_view(self, X, ind_view):
-        """Extract the view for the given index ind_view from the dataset X."""
-        if self.view_mode_ == "indices":
-            return X[:, self.views_ind_[ind_view]]
-        else:
-            return X[:, self.views_ind_[ind_view]:self.views_ind_[ind_view+1]]
-
-    def _compute_predictions(self, X):
-        """Compute predictions for all the stored estimators on the data X."""
-        n_samples = X.shape[0]
-        n_estimators = len(self.estimators_)
-        predictions = np.zeros((n_samples, n_estimators), dtype=np.int64)
-        for ind_estimator, estimator in enumerate(self.estimators_):
-            # no best view in mucumbo but all view
-            # ind_view = self.best_views_[ind_estimator]
-            ind_view = ind_estimator % self.n_views_
-            predictions[:, ind_estimator] \
-                = estimator.predict(self._extract_view(X, ind_view))
-        return predictions
-
-    def _validate_views_ind(self, views_ind, n_features):
-        """Ensure proper format for views_ind and return number of views."""
-        views_ind = np.array(views_ind)
-        if np.issubdtype(views_ind.dtype, np.integer) and views_ind.ndim == 1:
-            if np.any(views_ind[:-1] >= views_ind[1:]):
-                raise ValueError("Values in views_ind must be sorted.")
-            if views_ind[0] < 0 or views_ind[-1] > n_features:
-                raise ValueError("Values in views_ind are not in a correct "
-                                 + "range for the provided data.")
-            self.view_mode_ = "slices"
-            n_views = views_ind.shape[0]-1
-        else:
-            if views_ind.ndim == 1:
-                if not views_ind.dtype == np.object:
-                    raise ValueError("The format of views_ind is not "
-                                     + "supported.")
-                for ind, val in enumerate(views_ind):
-                    views_ind[ind] = np.array(val)
-                    if not np.issubdtype(views_ind[ind].dtype, np.integer):
-                        raise ValueError("Values in views_ind must be "
-                                         + "integers.")
-                    if views_ind[ind].min() < 0 \
-                            or views_ind[ind].max() >= n_features:
-                        raise ValueError("Values in views_ind are not in a "
-                                         + "correct range for the provided "
-                                         + "data.")
-            elif views_ind.ndim == 2:
-                if not np.issubdtype(views_ind.dtype, np.integer):
-                    raise ValueError("Values in views_ind must be integers.")
-                if views_ind.min() < 0 or views_ind.max() >= n_features:
-                    raise ValueError("Values in views_ind are not in a "
-                                     + "correct range for the provided data.")
-            else:
-                raise ValueError("The format of views_ind is not supported.")
-            self.view_mode_ = "indices"
-            n_views = views_ind.shape[0]
-        return (views_ind, n_views)
-
-    # def _validate_best_view_mode(self, best_view_mode):
-    #     """Ensure that best_view_mode has a proper value."""
-    #     if best_view_mode not in ("edge", "error"):
-    #         raise ValueError('best_view_mode value must be either "edge" '
-    #                          + 'or "error"')
-    #     return best_view_mode
 
     def _init_var(self, n_views, y):
         "Create and initialize the variables used by the MuMBo algorithm."
@@ -279,24 +201,12 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin):
             n_yi_s[indice_class] = int(n_yi)
             cost[:, :, indice_class] /=   n_yi
         cost[:, np.arange(n_samples), y] *= -(n_classes-1)
-        # not necessary in mucombo
-        # cost_global = np.ones((n_samples, n_classes))
-        # cost_global[np.arange(n_samples), y] = -(n_classes-1)
         label_score = np.zeros((n_views, n_samples, n_classes))
         label_score_global = np.zeros((n_samples, n_classes))
         predicted_classes = np.empty((n_views, n_samples), dtype=np.int64)
         beta_class = np.ones((n_views, n_classes)) / n_classes
         return (cost, label_score, label_score_global, predicted_classes,
                 score_function, beta_class, n_yi_s)
-
-    # def _compute_edge_global(self, cost_global, predicted_classes, y):
-    #     """Compute edge values for the global cost matrix."""
-    #     n_samples = y.shape[0]
-    #     edge_global = - np.sum(
-    #         cost_global[np.arange(n_samples), predicted_classes], axis=1) \
-    #         / (np.sum(cost_global)
-    #            - np.sum(cost_global[np.arange(n_samples), y]))
-    #     return edge_global
 
     def _compute_dist(self, cost, y):
         """Compute the sample distribution (i.e. the weights to use)."""
@@ -311,13 +221,6 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin):
         dist[:, :] = cost[:, np.arange(n_samples), y] \
             / np.sum(cost[:, np.arange(n_samples), y], axis=1)[:, np.newaxis]
         return dist
-
-    # def _compute_coop_coef(self, predicted_classes, y):
-    #     """Compute the cooperation coefficients."""
-    #     coop_coef = np.zeros(predicted_classes.shape)
-    #     coop_coef[predicted_classes == y] = 1.
-    #     coop_coef[:, np.logical_not(coop_coef.any(axis=0))] = 1.
-    #     return coop_coef
 
     def _indicatrice(self, predicted_classes, y_i):
         n_samples = y_i.shape[0]
@@ -464,6 +367,19 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin):
             print("Value Error on the evaluation on beta coefficient %s "% e)
         return solver
 
+    def _compute_predictions(self, X):
+        """Compute predictions for all the stored estimators on the data X."""
+        n_samples = X.shape[0]
+        n_estimators = len(self.estimators_)
+        predictions = np.zeros((n_samples, n_estimators), dtype=np.int64)
+        for ind_estimator, estimator in enumerate(self.estimators_):
+            # no best view in mucumbo but all view
+            # ind_view = self.best_views_[ind_estimator]
+            ind_view = ind_estimator % self.n_views_
+            predictions[:, ind_estimator] \
+                = estimator.predict(X._extract_view(ind_view))
+        return predictions
+
     def fit(self, X, y, views_ind=None):
         """Build a multimodal boosted classifier from the training set (X, y).
 
@@ -516,17 +432,19 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin):
         else:
             dtype = None
             accept_sparse = ['csr', 'csc']
-        X, y = check_X_y(X, y, accept_sparse=accept_sparse, dtype=dtype)
-        check_classification_targets(y)
-        self._validate_estimator()
         if views_ind is None:
             if X.shape[1] > 1:
                 views_ind = np.array([0, X.shape[1]//2, X.shape[1]])
             else:
                 views_ind = np.array([0, X.shape[1]])
-        self.X_ = Metriclearn_array(X, view_ind=views_ind)
-        self.views_ind_, n_views = self._validate_views_ind(views_ind,
-                                                            X.shape[1])
+
+        self.X_ = self._global_X_transform(X, views_ind=views_ind)
+        views_ind_, n_views = self.X_._validate_views_ind(views_ind,
+                                                          X.shape[1])
+        check_X_y(self.X_, y, accept_sparse=accept_sparse, dtype=dtype)
+        check_classification_targets(y)
+        self._validate_estimator()
+
         self.n_iterations_ = self.n_estimators // n_views
         self.classes_, y = np.unique(y, return_inverse=True)
         self.n_classes_ = len(self.classes_)
@@ -560,13 +478,13 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin):
             for ind_view in range(n_views):
                 estimator = self._make_estimator(append=False,
                                                  random_state=random_state)
-                estimator.fit(self._extract_view(X, ind_view), y,
+                estimator.fit(self.X_._extract_view(ind_view), y,
                               sample_weight=dist[ind_view, :])
                 predicted_classes[ind_view, :] = estimator.predict(
-                    self._extract_view(X, ind_view))
+                    self.X_._extract_view(ind_view))
                 self.estimators_.append(estimator)
 
-            # fin de choose cost matrix
+            # end of choose cost matrix
             #   TO DO estimator_errors_ estimate
             ###########################################
 
@@ -609,7 +527,7 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin):
             ``classes_``.
         """
         check_is_fitted(self, ("estimators_", "estimator_weights_alpha_","n_views_",
-                               "estimator_weights_beta_", "n_classes_", "views_ind_"))
+                               "estimator_weights_beta_", "n_classes_"))
         X = self._validate_X_predict(X)
 
         n_samples = X.shape[0]
@@ -662,7 +580,7 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin):
             ``classes_``.
         """
         check_is_fitted(self, ("estimators_", "estimator_weights_alpha_","n_views_",
-                               "estimator_weights_beta_", "n_classes_", "views_ind_"))
+                               "estimator_weights_beta_", "n_classes_"))
         X = self._validate_X_predict(X)
 
         n_samples = X.shape[0]
@@ -687,7 +605,7 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin):
             else:
                 yield np.array(dec_func)
 
-    def predict(self, X):
+    def predict(self, X, views_ind=None):
         """Predict classes for X.
 
         The predicted class of an input sample is computed as the weighted mean
@@ -710,6 +628,7 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin):
         ValueError   'X' input matrix must be have the same total number of features
                      of 'X' fit data
         """
+        X = self._global_X_transform(X, views_ind=views_ind)
         pred = self.decision_function(X)
 
         if self.n_classes_ == 2:
@@ -739,9 +658,10 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin):
         y : generator of numpy.ndarrays, shape = (n_samples,)
             Predicted classes.
         """
+
         n_classes = self.n_classes_
         classes = self.classes_
-
+        X = self._validate_X_predict(X)
         if n_classes == 2:
             for pred in self.staged_decision_function(X):
                 yield np.array(classes.take(pred > 0, axis=0))
@@ -766,6 +686,7 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin):
         score : float
             Mean accuracy of self.predict(X) wrt. y.
         """
+        X = self._validate_X_predict(X)
         return super(MuCumboClassifier, self).score(X, y)
 
     def staged_score(self, X, y):
