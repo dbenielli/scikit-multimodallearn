@@ -104,3 +104,4 @@ class MKLTest(unittest.TestCase):
        mkl.fit(x_metric, y=self.y, views_ind=None)
        pred =mkl.predict(self.test_kernel_dict)
        self.assertEqual(pred.shape, (80,))
+
