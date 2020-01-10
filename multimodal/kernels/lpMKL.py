@@ -5,7 +5,7 @@ from sklearn.utils.multiclass import unique_labels
 from sklearn.utils.validation import check_X_y
 from sklearn.utils.validation  import check_array
 from sklearn.utils.validation  import check_is_fitted
-from metriclearning.mkernel import MKernel
+from multimodal.kernels.mkernel import MKernel
 
 
 class MKL(BaseEstimator, ClassifierMixin, MKernel):

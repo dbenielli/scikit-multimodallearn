@@ -17,7 +17,7 @@ from sklearn import datasets
 
 from multimodal.boosting.cumbo import MuCumboClassifier
 from multimodal.tests.data.get_dataset_path import get_dataset_path
-
+from multimodal.datasets.data_sample import MultiModalArray
 
 class TestMuCumboClassifier(unittest.TestCase):
 
@@ -909,11 +909,11 @@ class TestMuCumboClassifier(unittest.TestCase):
                 (self.iris.data, target_two_classes, self.iris.views_ind),
                 (self.iris.data, target_two_classes, np.array([[0, 2], [1, 3]])),
                )
+
     #
         for X, y, views_ind in data:
             clf = MuCumboClassifier(n_estimators=n_estimators, random_state=seed)
             clf.fit(X, y, views_ind)
-
             staged_dec_func = [dec_f for dec_f in clf.staged_decision_function(X)]
             staged_predict = [predict for predict in clf.staged_predict(X)]
             staged_score = [score for score in clf.staged_score(X, y)]

@@ -78,13 +78,6 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         If None, the random number generator is the RandomState instance used
         by `np.random`.
 
-    best_view_mode : {"edge", "error"}, optional (default="edge")
-        Mode used to select the best view at each iteration:
-
-        - if ``best_view_mode == "edge"``, the best view is the view maximizing
-          the edge value (variable δ (*delta*) in [1]_),
-        - if ``best_view_mode == "error"``, the best view is the view
-          minimizing the classification error.
 
     Attributes
     ----------
@@ -120,15 +113,13 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
     >>> views_ind = [0, 2, 4]  # view 0: sepal data, view 1: petal data
     >>> clf = MuCumboClassifier(random_state=0)
     >>> clf.fit(X, y, views_ind)  # doctest: +NORMALIZE_WHITESPACE
-    MumboClassifier(base_estimator=None, best_view_mode='edge',
-        n_estimators=50, random_state=0)
+
     >>> print(clf.predict([[ 5.,  3.,  1.,  1.]]))
     [1]
     >>> views_ind = [[0, 2], [1, 3]]  # view 0: length data, view 1: width data
     >>> clf = MuCumboClassifier(random_state=0)
     >>> clf.fit(X, y, views_ind)  # doctest: +NORMALIZE_WHITESPACE
-    MumboClassifier(base_estimator=None, best_view_mode='edge',
-        n_estimators=50, random_state=0)
+
     >>> print(clf.predict([[ 5.,  3.,  1.,  1.]]))
     [1]
 
@@ -136,13 +127,7 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
     >>> base_estimator = DecisionTreeClassifier(max_depth=2)
     >>> clf = MuCumboClassifier(base_estimator=base_estimator, random_state=0)
     >>> clf.fit(X, y, views_ind)  # doctest: +NORMALIZE_WHITESPACE
-    MumboClassifier(base_estimator=DecisionTreeClassifier(class_weight=None,
-            criterion='gini', max_depth=2, max_features=None,
-            max_leaf_nodes=None, min_impurity_decrease=0.0,
-            min_impurity_split=None, min_samples_leaf=1, min_samples_split=2,
-            min_weight_fraction_leaf=0.0, presort=False, random_state=None,
-            splitter='best'),
-        best_view_mode='edge', n_estimators=50, random_state=0)
+
     >>> print(clf.predict([[ 5.,  3.,  1.,  1.]]))
     [1]
 
@@ -176,7 +161,6 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
             base_estimator=base_estimator,
             n_estimators=n_estimators)
         self.random_state = random_state
-        # self.best_view_mode = self._validate_best_view_mode(best_view_mode)
 
     def _validate_estimator(self):
         """Check the estimator and set the base_estimator_ attribute."""
@@ -527,7 +511,8 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
             ``classes_``.
         """
         check_is_fitted(self, ("estimators_", "estimator_weights_alpha_","n_views_",
-                               "estimator_weights_beta_", "n_classes_"))
+                               "estimator_weights_beta_", "n_classes_", "X_"))
+        X = self._global_X_transform(X, views_ind=self.X_.views_ind)
         X = self._validate_X_predict(X)
 
         n_samples = X.shape[0]
@@ -581,6 +566,7 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         """
         check_is_fitted(self, ("estimators_", "estimator_weights_alpha_","n_views_",
                                "estimator_weights_beta_", "n_classes_"))
+        X = self._global_X_transform(X, views_ind=self.X_.views_ind)
         X = self._validate_X_predict(X)
 
         n_samples = X.shape[0]
@@ -605,7 +591,7 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
             else:
                 yield np.array(dec_func)
 
-    def predict(self, X, views_ind=None):
+    def predict(self, X):
         """Predict classes for X.
 
         The predicted class of an input sample is computed as the weighted mean
@@ -628,7 +614,6 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         ValueError   'X' input matrix must be have the same total number of features
                      of 'X' fit data
         """
-        X = self._global_X_transform(X, views_ind=views_ind)
         pred = self.decision_function(X)
 
         if self.n_classes_ == 2:

@@ -1,2 +1,2 @@
-from metriclearning.datasets.base import *
-from metriclearning.datasets.data_sample import DataSample, Metriclearn_array
+from multimodal.datasets.base import *
+from multimodal.datasets.data_sample import DataSample, MultiModalArray

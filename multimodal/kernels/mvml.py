@@ -10,8 +10,8 @@ from sklearn.utils.validation import check_X_y
 from sklearn.utils.validation  import check_array
 from sklearn.metrics.pairwise import check_pairwise_arrays
 from sklearn.utils.validation  import check_is_fitted
-from metriclearning.datasets.data_sample import DataSample, Metriclearn_array
-from metriclearning.mkernel import MKernel
+from multimodal.datasets.data_sample import DataSample, MultiModalArray
+from multimodal.kernels.mkernel import MKernel
 
 """
     Copyright (C) 2018  Riikka Huusari
@@ -196,7 +196,9 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
         # Return the classifier
         self.learn_mvml(learn_A=self.learn_A, learn_w=self.learn_w, n_loops=self.n_loops)
         if self.warning_message:
-            print("warning appears during fit process", self.warning_message)
+            import logging
+            logging.warning("warning appears during fit process" + str(self.warning_message))
+            # print("warning appears during fit process", self.warning_message)
         return self
 
     def learn_mvml(self, learn_A=1, learn_w=0, n_loops=6):

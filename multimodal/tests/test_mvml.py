@@ -6,9 +6,9 @@ import unittest
 import numpy as np
 from sklearn.exceptions import NotFittedError
 
-from metriclearning.datasets.data_sample import Metriclearn_array
-from metriclearning.mvml import MVML
-from metriclearning.tests.datasets.get_dataset_path import get_dataset_path
+from multimodal.datasets.data_sample import MultiModalArray
+from multimodal.kernels.mvml import MVML
+from multimodal.tests.datasets.get_dataset_path import get_dataset_path
 
 
 class MVMLTest(unittest.TestCase):
@@ -90,7 +90,7 @@ class MVMLTest(unittest.TestCase):
         #######################################################
         # mvml = MVML.fit(self.kernel_dict, self.y)
         w_expected = np.array([[0.5], [0.5]])
-        x_metricl = Metriclearn_array(self.kernel_dict)
+        x_metricl = MultiModalArray(self.kernel_dict)
         mvml2 = MVML(lmbda=0.1, eta=1, nystrom_param=1.0)
         mvml2.fit(x_metricl, y=self.y, views_ind=None)
         self.assertEqual(mvml2.A.shape, (240, 240))
@@ -105,7 +105,7 @@ class MVMLTest(unittest.TestCase):
         #######################################################
         # mvml = MVML.fit(self.kernel_dict, self.y)
         w_expected = np.array([[0.5], [0.5]])
-        x_metricl = Metriclearn_array(self.kernel_dict)
+        x_metricl = MultiModalArray(self.kernel_dict)
         mvml2 = MVML(lmbda=0.1, eta=1, nystrom_param=1.0, learn_A=4)
         mvml2.fit(x_metricl, y=self.y, views_ind=None)
         self.assertEqual(mvml2.A.shape, (240, 240))
@@ -120,7 +120,7 @@ class MVMLTest(unittest.TestCase):
         #######################################################
         # mvml = MVML.fit(self.kernel_dict, self.y)
         w_expected = np.array([[0.5], [0.5]])
-        x_metricl = Metriclearn_array(self.kernel_dict)
+        x_metricl = MultiModalArray(self.kernel_dict)
         mvml2 = MVML(lmbda=0.1, eta=1, nystrom_param=1.0, learn_A=3)
         mvml2.fit(x_metricl, y=self.y, views_ind=None)
         self.assertEqual(mvml2.A.shape, (240, 240))
@@ -134,7 +134,7 @@ class MVMLTest(unittest.TestCase):
         # task with Metric array
         #######################################################
         w_expected = np.array([0.2,  0.1]) # [0.94836083 , 0.94175933] [ 0.7182,  0.7388]
-        x_metricl = Metriclearn_array(self.kernel_dict)
+        x_metricl = MultiModalArray(self.kernel_dict)
         mvml2 = MVML(lmbda=0.1, eta=1, nystrom_param=0.6,
                      learn_A=2, learn_w=1)
         mvml2.fit(x_metricl, y=self.y, views_ind=None)
@@ -149,7 +149,7 @@ class MVMLTest(unittest.TestCase):
         # task with Metric array
         #######################################################
         w_expected = np.array([1.3,  1.4]) # [0.94836083 , 0.94175933] [ 0.7182,  0.7388]
-        x_metricl = Metriclearn_array(self.kernel_dict)
+        x_metricl = MultiModalArray(self.kernel_dict)
         mvml2 = MVML(lmbda=0.1, eta=1, nystrom_param=0.6,
                      learn_A=1, learn_w=1)
         mvml2.fit(x_metricl, y=self.y, views_ind=None)
@@ -164,7 +164,7 @@ class MVMLTest(unittest.TestCase):
         # task with nparray 2d
         #######################################################
         w_expected = np.array([[0.5], [0.5]])
-        x_metricl = Metriclearn_array(self.kernel_dict)
+        x_metricl = MultiModalArray(self.kernel_dict)
         x_array = np.asarray(x_metricl)
         mvml3 = MVML(lmbda=0.1, eta=1, nystrom_param=1.0)
         mvml3.fit(x_array, y=self.y, views_ind=[0, 120, 240])

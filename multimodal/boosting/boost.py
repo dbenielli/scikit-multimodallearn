@@ -1,11 +1,14 @@
 import numpy as np
+import scipy.sparse as sp
 from abc import ABCMeta
 from sklearn.utils import check_array, check_X_y, check_random_state
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.tree.tree import BaseDecisionTree
 from sklearn.tree._tree import DTYPE
 from sklearn.ensemble.forest import BaseForest
-from multimodal.datasets.data_sample import DataSample, MultiModalArray
+from multimodal.datasets.data_sample import DataSample
+from multimodal.datasets.data_sample import MultiModalData, MultiModalArray, MultiModalSparseArray
+
 
 class UBoosting(metaclass=ABCMeta):
     """
@@ -22,60 +25,32 @@ class UBoosting(metaclass=ABCMeta):
 
         else:
             check_array(X, accept_sparse=['csr', 'csc'])
-        if X.shape[1] != self.n_features_:
-            raise ValueError("X doesn't contain the right number of features.")
+        if X.ndim < 2:
+            mes = "Reshape your data"
+            raise ValueError(mes)
+        if X.ndim > 1:
+            if X.shape[1] != self.n_features_:
+                mes = "Reshape your data"
+                raise ValueError("Number of features of the model must "
+                                 "match the input. Model n_features is %s and "
+                                  "input n_features is %s " % (self.n_features_, X.shape[1]))
+
+
+            #
+            # raise ValueError(mes)
         return X
-
-
-    def _validate_views_ind(self, views_ind, n_features):
-        """Ensure proper format for views_ind and return number of views."""
-        views_ind = np.array(views_ind)
-        if np.issubdtype(views_ind.dtype, np.integer) and views_ind.ndim == 1:
-            if np.any(views_ind[:-1] >= views_ind[1:]):
-                raise ValueError("Values in views_ind must be sorted.")
-            if views_ind[0] < 0 or views_ind[-1] > n_features:
-                raise ValueError("Values in views_ind are not in a correct "
-                                 + "range for the provided data.")
-            self.view_mode_ = "slices"
-            n_views = views_ind.shape[0]-1
-        else:
-            if views_ind.ndim == 1:
-                if not views_ind.dtype == np.object:
-                    raise ValueError("The format of views_ind is not "
-                                     + "supported.")
-                for ind, val in enumerate(views_ind):
-                    views_ind[ind] = np.array(val)
-                    if not np.issubdtype(views_ind[ind].dtype, np.integer):
-                        raise ValueError("Values in views_ind must be "
-                                         + "integers.")
-                    if views_ind[ind].min() < 0 \
-                            or views_ind[ind].max() >= n_features:
-                        raise ValueError("Values in views_ind are not in a "
-                                         + "correct range for the provided "
-                                         + "data.")
-            elif views_ind.ndim == 2:
-                if not np.issubdtype(views_ind.dtype, np.integer):
-                    raise ValueError("Values in views_ind must be integers.")
-                if views_ind.min() < 0 or views_ind.max() >= n_features:
-                    raise ValueError("Values in views_ind are not in a "
-                                     + "correct range for the provided data.")
-            else:
-                raise ValueError("The format of views_ind is not supported.")
-            self.view_mode_ = "indices"
-            n_views = views_ind.shape[0]
-        return (views_ind, n_views)
 
     def _global_X_transform(self, X, views_ind=None):
         X_ = None
-        if isinstance(X, np.ndarray) and X.ndim == 1:
-            X_= MultiModalArray(X, views_ind)
-        elif isinstance(X, dict):
-            X_= MultiModalArray(X)
-        elif isinstance(X, np.ndarray) and X.ndim > 1:
+        if isinstance(X, sp.spmatrix):
+            X_ = MultiModalSparseArray(X, views_ind)
+        else:
             X_ = MultiModalArray(X, views_ind)
-        if not isinstance(X_, MultiModalArray):
-            raise TypeError("Input format is not reconized")
-        if hasattr(self, "X_"):
-            if not self.X_.viexs_ind == views_ind:
-                raise ValueError("Input format (viewd, features) for fit and predict must be the same")
+        if isinstance(X, MultiModalData):
+            X_ = X
+        if not isinstance(X_, MultiModalData):
+            try:
+                X_ = np.asarray(X)
+            except Exception as e:
+                raise TypeError('Reshape your data')
         return X_

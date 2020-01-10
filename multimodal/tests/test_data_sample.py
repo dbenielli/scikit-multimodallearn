@@ -1,9 +1,9 @@
 import unittest
 import numpy as np
 
-from metriclearning.datasets.base import load_dict
-from metriclearning.tests.datasets.get_dataset_path import get_dataset_path
-from metriclearning.datasets.data_sample import Metriclearn_array
+from multimodal.datasets.base import load_dict
+from multimodal.tests.datasets.get_dataset_path import get_dataset_path
+from multimodal.datasets.data_sample import MultiModalArray
 import pickle
 
 class UnitaryTest(unittest.TestCase):
@@ -29,12 +29,12 @@ class UnitaryTest(unittest.TestCase):
 
 
     def testGet_view(self):
-        a = Metriclearn_array(self.kernel_dict)
+        a = MultiModalArray(self.kernel_dict)
         np.testing.assert_almost_equal(a.get_view(0), self.kernel_dict[0], 8)
         np.testing.assert_almost_equal(a.get_view(1), self.kernel_dict[1], 8)
 
     def test_init_Metriclearn_array(self):
-        a = Metriclearn_array(self.kernel_dict)
+        a = MultiModalArray(self.kernel_dict)
         self.assertEqual(a.shape, (120, 240))
         self.assertEqual(a.shapes_int, [120, 120])
         self.assertEqual(a.n_views, 2)
@@ -42,9 +42,9 @@ class UnitaryTest(unittest.TestCase):
         self.assertEqual(a.keys, dict_key.keys())
 
     def test_init_Array(self):
-        a = Metriclearn_array(self.kernel_dict)
+        a = MultiModalArray(self.kernel_dict)
         array_x = a.data
-        b = Metriclearn_array(a)
+        b = MultiModalArray(a)
         np.testing.assert_equal(b.views_ind, np.array([0, 120, 240]))
 
 

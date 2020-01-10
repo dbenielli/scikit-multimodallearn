@@ -32,6 +32,7 @@ estimator for classification implemented in the ``MumboClassifier`` class.
 # structure, notations and behavior where possible.
 
 import numpy as np
+
 from sklearn.base import ClassifierMixin
 from sklearn.ensemble import BaseEnsemble
 from sklearn.ensemble.forest import BaseForest
@@ -343,22 +344,23 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         else:
             dtype = None
             accept_sparse = ['csr', 'csc']
-        if views_ind is None:
-            if X.shape[1] > 1:
-                views_ind = np.array([0, X.shape[1]//2, X.shape[1]])
-            else:
-                views_ind = np.array([0, X.shape[1]])
-        self.views_ind_, n_views = self._validate_views_ind(views_ind,
-                                                            X.shape[1])
-        self.X_ = self._global_X_transform(X, views_ind=self.views_ind_)
+        # if views_ind is None:
+        #     if X.shape[1] > 1:
+        #         views_ind = np.array([0, X.shape[1]//2, X.shape[1]])
+        #     elif X.shape[1]==1:
+        #         views_ind = np.array([0, X.shape[1]])
+        #     else:
+        #         views_ind = np.array([0])
+        self.X_ = self._global_X_transform(X, views_ind=views_ind)
+        views_ind_, n_views = self.X_._validate_views_ind(self.X_.views_ind,
+                                                          self.X_.shape[1])
         check_X_y(self.X_, y, accept_sparse=accept_sparse, dtype=dtype)
         check_classification_targets(y)
         self._validate_estimator()
 
         self.classes_, y = np.unique(y, return_inverse=True)
         self.n_classes_ = len(self.classes_)
-        self.n_features_ = X.shape[1]
-
+        self.n_features_ = self.X_.shape[1]
         if self.n_classes_ == 1:
             # This case would lead to division by 0 when computing the cost
             # matrix so it needs special handling (but it is an obvious case as
@@ -458,7 +460,8 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
             ``classes_``.
         """
         check_is_fitted(self, ("estimators_", "estimator_weights_",
-                               "best_views_", "n_classes_", "views_ind_"))
+                               "best_views_", "n_classes_", "X_"))
+        X = self._global_X_transform(X, views_ind=self.X_.views_ind)
         X = self._validate_X_predict(X)
 
         n_samples = X.shape[0]
@@ -504,7 +507,8 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
             ``classes_``.
         """
         check_is_fitted(self, ("estimators_", "estimator_weights_",
-                               "n_classes_", "views_ind_"))
+                               "n_classes_", "X_"))
+        X = self._global_X_transform(X, views_ind=self.X_.views_ind)
         X = self._validate_X_predict(X)
 
         n_samples = X.shape[0]
@@ -542,6 +546,7 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         y : numpy.ndarray, shape = (n_samples,)
             Predicted classes.
         """
+
         pred = self.decision_function(X)
 
         if self.n_classes_ == 2:
@@ -588,8 +593,7 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         ----------
         X : {array-like, sparse matrix} of shape = (n_samples, n_features)
             Multi-view test samples.
-            Sparse matrix can be CSC, CSR, COO, DOK, or LIL.
-            COO, DOK and LIL are converted to CSR.
+            Sparse matrix can be CSC, CSR
         y : array-like, shape = (n_samples,)
             True labels for X.
 

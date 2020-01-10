@@ -35,7 +35,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.cluster import KMeans
 from sklearn.tree import DecisionTreeClassifier
 from sklearn import datasets
-from multimodalboost.mumbo import MumboClassifier
+from multimodal.boosting.mumbo import MumboClassifier
 
 
 class TestMuCumboClassifier(unittest.TestCase):
@@ -46,6 +46,15 @@ class TestMuCumboClassifier(unittest.TestCase):
         iris = datasets.load_iris()
         iris.views_ind = np.array([0, 2, 4])
         clf.iris = iris
+
+    def test_sparse(self):
+        rng = np.random.RandomState(0)
+        X = rng.rand(40, 10)
+        X[X < .8] = 0
+        X_csr = csr_matrix(X)
+        clf = MumboClassifier()
+        y = (4 * rng.rand(40)).astype(np.int)
+        clf.fit(X_csr, y)
 
     def test_init_var(self):
         n_classes = 3
@@ -318,7 +327,7 @@ class TestMuCumboClassifier(unittest.TestCase):
         np.random.seed(seed)
 
         n_estimators = 10
-
+        #print("iris views ind", self.iris.views_ind)
         clf = MumboClassifier(n_estimators=n_estimators, best_view_mode='edge')
         clf.fit(self.iris.data, self.iris.target, self.iris.views_ind)
         score = clf.score(self.iris.data, self.iris.target)
@@ -347,7 +356,7 @@ class TestMuCumboClassifier(unittest.TestCase):
         expected_views_ind = np.array([0, 1, 3])
         clf = MumboClassifier()
         clf.fit(X, y)
-        np.testing.assert_equal(clf.views_ind_, expected_views_ind)
+        np.testing.assert_equal(clf.X_.views_ind, expected_views_ind)
 
         # Check that classes labels can be integers or strings and can be stored
         # into any kind of sequence
@@ -515,6 +524,7 @@ class TestMuCumboClassifier(unittest.TestCase):
         np.testing.assert_equal(clf.predict(X), y)
         np.testing.assert_equal(clf.predict(np.array([[1., 1.], [-1., -1.]])),
                            np.array([0, 1]))
+        X = clf._global_X_transform(X, clf.X_.views_ind)
         self.assertEqual(clf.decision_function(X).shape, y.shape)
 
         views_ind = np.array([[1, 0]])
@@ -695,6 +705,11 @@ class TestMuCumboClassifier(unittest.TestCase):
 
 
     def test_classifier(self):
+        X_zero_features = np.empty(0).reshape(3, 0)
+        y = np.array([1, 0, 1])
+        # e = MumboClassifier()
+        # e.fit(X_zero_features, y)
+        # print(e.predict(X_zero_features))
         return check_estimator(MumboClassifier)
 
     def test_iris(self):
@@ -742,7 +757,6 @@ class TestMuCumboClassifier(unittest.TestCase):
         for X, y, views_ind in data:
             clf = MumboClassifier(n_estimators=n_estimators, random_state=seed)
             clf.fit(X, y, views_ind)
-
             staged_dec_func = [dec_f for dec_f in clf.staged_decision_function(X)]
             staged_predict = [predict for predict in clf.staged_predict(X)]
             staged_score = [score for score in clf.staged_score(X, y)]
@@ -782,7 +796,6 @@ class TestMuCumboClassifier(unittest.TestCase):
         clf.fit(self.iris.data, self.iris.target, self.iris.views_ind)
         score = clf.score(self.iris.data, self.iris.target)
         dump = pickle.dumps(clf)
-
         clf_loaded = pickle.loads(dump)
         self.assertEqual(type(clf_loaded), clf.__class__)
         score_loaded = clf_loaded.score(self.iris.data, self.iris.target)
@@ -828,11 +841,9 @@ class TestMuCumboClassifier(unittest.TestCase):
         X_dense = self.iris.data
         y = self.iris.target
 
-        for sparse_format in [csc_matrix, csr_matrix, lil_matrix, coo_matrix,
-                              dok_matrix]:
+        for sparse_format in [csc_matrix, csr_matrix]: #, lil_matrix, coo_matrix,dok_matrix]:
             for views_ind in (self.iris.views_ind, np.array([[0, 2], [1, 3]])):
                 X_sparse = sparse_format(X_dense)
-
                 clf_sparse = MumboClassifier(
                     base_estimator=CustomSVC(),
                     random_state=seed,
@@ -872,9 +883,9 @@ class TestMuCumboClassifier(unittest.TestCase):
                 # Check that sparsity of data is maintained during training
                 types = [clf.data_type_ for clf in clf_sparse.estimators_]
                 if sparse_format == csc_matrix:
-                    self.assertTrue(all([type_ == csc_matrix for type_ in types]))
+                    self.assertTrue(all([issubclass(type_, csc_matrix)  for type_ in types]))
                 else:
-                    self.assertTrue(all([type_ == csr_matrix for type_ in types]))
+                    self.assertTrue(all([issubclass(type_, csr_matrix) for type_ in types]))
 
 
 if __name__ == '__main__':

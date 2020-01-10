@@ -3,9 +3,9 @@
 import unittest
 import numpy as np
 from sklearn.metrics.pairwise import rbf_kernel
-from metriclearning.tests.datasets.get_dataset_path import get_dataset_path
-from metriclearning.lpMKL import MKL
-from metriclearning.datasets.data_sample import Metriclearn_array
+from multimodal.tests.datasets.get_dataset_path import get_dataset_path
+from multimodal.kernels.lpMKL import MKL
+from multimodal.datasets.data_sample import MultiModalArray
 import pickle
 from sklearn.exceptions import NotFittedError
 
@@ -70,7 +70,7 @@ class MKLTest(unittest.TestCase):
         #######################################################
         # mvml = MVML.fit(self.kernel_dict, self.y)
         w_expected = np.array([[0.5], [0.5]])
-        x_metricl = Metriclearn_array(self.kernel_dict)
+        x_metricl = MultiModalArray(self.kernel_dict)
         mkl2 = MKL(lmbda=3, m_param = 0.3, kernel=['rbf'], kernel_params=[{'gamma':50}],
                    use_approx = True,
                    precision = 1E0, n_loops = 50)
@@ -83,7 +83,7 @@ class MKLTest(unittest.TestCase):
         #######################################################
         # mvml = MVML.fit(self.kernel_dict, self.y)
         w_expected = np.array([[0.5], [0.5]])
-        x_metricl = Metriclearn_array(self.kernel_dict)
+        x_metricl = MultiModalArray(self.kernel_dict)
         mkl2 = MKL(lmbda=3, m_param = 0.3, kernel="precomputed",
                    use_approx = True,
                    precision = 1E-9, n_loops = 600)
@@ -97,7 +97,7 @@ class MKLTest(unittest.TestCase):
             mkl.predict(self.test_kernel_dict)
 
     def testPredictMVML_witoutFit(self):
-       x_metric = Metriclearn_array(self.kernel_dict)
+       x_metric = MultiModalArray(self.kernel_dict)
        mkl = MKL(lmbda=3, m_param = 0.3, kernel=['rbf'], kernel_params=[{'gamma':50}],
                    use_approx = True,
                    precision = 1E-9, n_loops = 50)

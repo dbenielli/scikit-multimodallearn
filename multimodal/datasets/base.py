@@ -1,7 +1,7 @@
 from __future__ import print_function
 import numpy as np
 import numpy.ma as ma
-from metriclearning.datasets.data_sample import DataSample
+from multimodal.datasets.data_sample import DataSample
 
 from six.moves import cPickle as pickle #for performance
 
