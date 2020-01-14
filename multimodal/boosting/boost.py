@@ -26,14 +26,22 @@ class UBoosting(metaclass=ABCMeta):
         else:
             check_array(X, accept_sparse=['csr', 'csc'])
         if X.ndim < 2:
-            mes = "Reshape your data"
-            raise ValueError(mes)
+            X = X[np.newaxis, :]
+            if X.shape[1] != self.n_features_:
+                raise ValueError("Number of features of the model must "
+                                    "match the input. Model n_features is %s and "
+                                     "input n_features is %s " % (self.n_features_, X.shape[1]))
+            else:
+                mes = "Reshape your data"
+                raise ValueError(mes)
         if X.ndim > 1:
             if X.shape[1] != self.n_features_:
-                mes = "Reshape your data"
-                raise ValueError("Number of features of the model must "
-                                 "match the input. Model n_features is %s and "
-                                  "input n_features is %s " % (self.n_features_, X.shape[1]))
+                if X.shape[0] == self.n_features_ and X.shape[1] > 1:
+                    raise ValueError("Reshape your data")
+                else:
+                    raise ValueError("Number of features of the model must "
+                                    "match the input. Model n_features is %s and "
+                                     "input n_features is %s " % (self.n_features_, X.shape[1]))
 
 
             #

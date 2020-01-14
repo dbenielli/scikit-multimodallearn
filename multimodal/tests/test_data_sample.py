@@ -33,7 +33,7 @@ class UnitaryTest(unittest.TestCase):
         np.testing.assert_almost_equal(a.get_view(0), self.kernel_dict[0], 8)
         np.testing.assert_almost_equal(a.get_view(1), self.kernel_dict[1], 8)
 
-    def test_init_Metriclearn_array(self):
+    def test_init_Multimodal_array(self):
         a = MultiModalArray(self.kernel_dict)
         self.assertEqual(a.shape, (120, 240))
         self.assertEqual(a.shapes_int, [120, 120])
@@ -48,3 +48,5 @@ class UnitaryTest(unittest.TestCase):
         np.testing.assert_equal(b.views_ind, np.array([0, 120, 240]))
 
 
+if __name__ == '__main__':
+    unittest.main()

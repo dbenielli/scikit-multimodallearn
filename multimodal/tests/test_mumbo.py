@@ -705,8 +705,8 @@ class TestMuCumboClassifier(unittest.TestCase):
 
 
     def test_classifier(self):
-        X_zero_features = np.empty(0).reshape(3, 0)
-        y = np.array([1, 0, 1])
+        # X_zero_features = np.empty(0).reshape(3, 0)
+        # y = np.array([1, 0, 1])
         # e = MumboClassifier()
         # e.fit(X_zero_features, y)
         # print(e.predict(X_zero_features))
