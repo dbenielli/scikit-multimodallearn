@@ -36,6 +36,7 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
 
     n_loops : (default 50) number of iterions
 
+
     Attributes
     ----------
     lmbda : float coeficient for combined kernels
@@ -140,6 +141,7 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
         -------
         return tuple (C, weights)
         """
+        C = None
         views = self.K_.n_views
         X = self.K_
         p = 2

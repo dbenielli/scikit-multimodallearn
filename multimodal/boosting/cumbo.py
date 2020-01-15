@@ -408,6 +408,7 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         ValueError where `X` and `view_ind` are not compatibles
         """
         warnings.filterwarnings("ignore")
+        self.X_ = self._global_X_transform(X, views_ind=views_ind)
         if (self.base_estimator is None or
                 isinstance(self.base_estimator, (BaseDecisionTree,
                                                  BaseForest))):
@@ -416,16 +417,12 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         else:
             dtype = None
             accept_sparse = ['csr', 'csc']
-        if views_ind is None:
-            if X.shape[1] > 1:
-                views_ind = np.array([0, X.shape[1]//2, X.shape[1]])
-            else:
-                views_ind = np.array([0, X.shape[1]])
 
-        self.X_ = self._global_X_transform(X, views_ind=views_ind)
-        views_ind_, n_views = self.X_._validate_views_ind(views_ind,
-                                                          X.shape[1])
-        check_X_y(self.X_, y, accept_sparse=accept_sparse, dtype=dtype)
+
+
+        views_ind_, n_views = self.X_._validate_views_ind(self.X_.views_ind,
+                                                          self.X_.shape[1])
+        check_X_y(self.X_, y)
         check_classification_targets(y)
         self._validate_estimator()
 
@@ -471,7 +468,6 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
             # end of choose cost matrix
             #   TO DO estimator_errors_ estimate
             ###########################################
-
 
             #############self.estimator_errors_[current_iteration] = to do
             # update C_t de g

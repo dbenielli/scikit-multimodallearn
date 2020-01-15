@@ -1,1 +1,4 @@
-__all__ = ['MVML', 'MKernel', 'MVML']
+from .lpMKL import MKL
+from .mvml import MVML
+
+__all__ = ['MVML', 'MKL']

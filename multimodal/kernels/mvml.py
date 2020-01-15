@@ -14,39 +14,13 @@ from multimodal.datasets.data_sample import DataSample, MultiModalArray
 from multimodal.kernels.mkernel import MKernel
 
 """
-    Copyright (C) 2018  Riikka Huusari
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-This file contains algorithms for Multi-View Metric Learning (MVML) as introduced in
+This file contains algorithms for MultiModal  Learning (MVML) as
+introduced in
 
 Riikka Huusari, Hachem Kadri and Cécile Capponi:
 Multi-View Metric Learning in Vector-Valued Kernel Spaces
 in International Conference on Artificial Intelligence and Statistics (AISTATS) 2018
 
-Usage (see also demo.py for a more detailed example):
-    create a MVML object via:
-        mvml = MVML(kernel_dict, label_vector, regression_parameter_list, nystrom_param)
-    learn the model:
-        A, g, w = mvml.learn_mvml()
-    predict with the model:
-        predictions = predict_mvml(test_kernel_dict, g, w)
-
-(parameter names as in the paper)
-
-Code is tested with Python 3.5.2 and numpy 1.12.1
 """
 
 

@@ -344,13 +344,7 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         else:
             dtype = None
             accept_sparse = ['csr', 'csc']
-        # if views_ind is None:
-        #     if X.shape[1] > 1:
-        #         views_ind = np.array([0, X.shape[1]//2, X.shape[1]])
-        #     elif X.shape[1]==1:
-        #         views_ind = np.array([0, X.shape[1]])
-        #     else:
-        #         views_ind = np.array([0])
+
         self.X_ = self._global_X_transform(X, views_ind=views_ind)
         views_ind_, n_views = self.X_._validate_views_ind(self.X_.views_ind,
                                                           self.X_.shape[1])
@@ -442,10 +436,12 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
 
         Parameters
         ----------
-        X : {array-like, sparse matrix}, shape = (n_samples, n_features)
+        X : { array-like, sparse matrix},
+            shape = (n_samples, n_views * n_features)
             Multi-view input samples.
             Sparse matrix can be CSC, CSR, COO, DOK, or LIL.
             COO, DOK and LIL are converted to CSR.
+            maybe also MultimodalData
 
         Returns
         -------
@@ -493,6 +489,7 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
             Multi-view input samples.
             Sparse matrix can be CSC, CSR, COO, DOK, or LIL.
             COO, DOK and LIL are converted to CSR.
+            maybe also MultimodalData
 
         Returns
         -------

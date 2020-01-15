@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-"""This module contains the DataSample class and Metriclearn_array class
+"""This module contains the DataSample class, MultiModalArray, MultiModalSparseArray, MultiModalSparseInfo and MultiModalData, class
 The DataSample class encapsulates a sample 's components
 nbL and nbEx numbers,
-Metriclearn_arra class inherit from numpy ndarray and contains a 2d data ndarray
+MultiModalArray class inherit from numpy ndarray and contains a 2d data ndarray
 with the shape (n_samples, n_view_i * n_features_i)
 
 0        1    2    3
@@ -19,8 +19,8 @@ xxxxxxxx xxxx xxxx xxxx
 xxxxxxxx xxxx xxxx xxxx
 ======== ==== ==== ====
 
-the number nbL and nbEx and , the fourth dictionaries for sample,
-prefix, suffix and factor where they are computed
+MultiModalSparseArray inherit from scipy sparce matrix with the shape (n_samples, n_view_i * n_features_i)
+
 """
 from abc import ABCMeta
 import numpy as np
@@ -77,7 +77,7 @@ class MultiModalData(metaclass=ABCMeta):
 
     def _validate_views_ind(self, views_ind, n_features):
         """Ensure proper format for views_ind and return number of views."""
-        views_ind = np.array(views_ind)
+        # views_ind = np.array(views_ind)
         if np.issubdtype(views_ind.dtype, np.integer) and views_ind.ndim == 1:
             if len(views_ind) > 2 and np.any(views_ind[:-1] >= views_ind[1:]):
                 raise ValueError("Values in views_ind must be sorted.")
