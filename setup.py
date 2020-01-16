@@ -9,7 +9,7 @@ def setup_package():
     """Setup function"""
 
     name = 'scikit-multimodallearn'
-    version = multiconfusion.__version__
+    version = multimodal.__version__
     description = 'A scikit-learn compatible package for multimodal Classifiers'
     here = os.path.abspath(os.path.dirname(__file__))
     with open(os.path.join(here, 'README.rst'), encoding='utf-8') as readme:
