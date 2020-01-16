@@ -6,18 +6,29 @@ nbL and nbEx numbers,
 MultiModalArray class inherit from numpy ndarray and contains a 2d data ndarray
 with the shape (n_samples, n_view_i * n_features_i)
 
-0        1    2    3
-======== ==== ==== ====
-xxxxxxxx xxxx xxxx xxxx
-xxxxxxxx xxxx xxxx xxxx
-xxxxxxxx xxxx xxxx xxxx
-xxxxxxxx xxxx xxxx xxxx
-xxxxxxxx xxxx xxxx xxxx
-xxxxxxxx xxxx xxxx xxxx
-xxxxxxxx xxxx xxxx xxxx
-xxxxxxxx xxxx xxxx xxxx
-xxxxxxxx xxxx xxxx xxxx
-======== ==== ==== ====
+.. tabularcolumns::  |l|l|l|l|
+
++----------+------+------+------+
+| 0        | 1    | 2    | 3    |
++==========+======+======+======+
+| xxxxxxxx | xxxx | xxxx | xxxx |
++----------+------+------+------+
+| xxxxxxxx | xxxx | xxxx | xxxx |
++----------+------+------+------+
+| xxxxxxxx | xxxx | xxxx | xxxx |
++----------+------+------+------+
+| xxxxxxxx | xxxx | xxxx | xxxx |
++----------+------+------+------+
+| xxxxxxxx | xxxx | xxxx | xxxx |
++----------+------+------+------+
+| xxxxxxxx | xxxx | xxxx | xxxx |
++----------+------+------+------+
+| xxxxxxxx | xxxx | xxxx | xxxx |
++----------+------+------+------+
+| xxxxxxxx | xxxx | xxxx | xxxx |
++----------+------+------+------+
+| xxxxxxxx | xxxx | xxxx | xxxx |
++----------+------+------+------+
 
 MultiModalSparseArray inherit from scipy sparce matrix with the shape (n_samples, n_view_i * n_features_i)
 

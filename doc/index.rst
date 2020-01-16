@@ -1,7 +1,4 @@
-.. metriclearning documentation master file, created by
-   sphinx-quickstart on Mon Sep  2 12:12:08 2019.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+
 
 Welcome to scikit-multimodallearn's documentation!
 ==================================================
@@ -15,8 +12,11 @@ package for machine learning in Python.
 Documentation
 -------------
 
+:Release: |version|
+:Date: |today|
+
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
 
@@ -25,21 +25,6 @@ Documentation
    tutorial/install_devel
    tutorial/auto_examples/index
 
-
-
-Documentation
--------------
-
-:Release: |version|
-:Date: |today|
-
-.. toctree::
-   :maxdepth: 1
-
-   install_devel
-   api
-   auto_examples/index
-   credits
 
 
 Indices and tables

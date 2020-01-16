@@ -12,7 +12,7 @@ Documentation
 
 The **documentation** including installation instructions, API documentation
 and examples is
-`available online <http://dev.pages.lis-lab.fr/multimodal>`_.
+`available online <http://dev.pages.lis-lab.fr/scikit-multimodallearn>`_.
 
 
 Installation
@@ -31,7 +31,7 @@ Installation using pip
 ~~~~~~~~~~~~~~~~~~~~~~
 
 **scikit-multimodallearn** is
-`available on PyPI <https://pypi.org/project/multiconfusion/>`_
+`available on PyPI <https://pypi.org/project/scikit-multimodallearn/>`_
 and can be installed using **pip**::
 
   pip install scikit-multimodallearn
@@ -105,6 +105,22 @@ following paper::
             supervised learning},
  }
 
+ @InProceedings{Huu:2019:BAMCC,
+  author={Huusari, Riika, Kadri Hachem and Capponi, C{\'e}cile},
+  editor={},
+  title={Multi-view Metric Learning in Vector-valued Kernel Spaces},
+  booktitle={arXiv:1803.07821v1},
+  year={2018},
+  location={Athens, Greece},
+  publisher={},
+  address={},
+  pages={209--228},
+  numpages = {12}
+  isbn={978-3-642-23783-6}
+  url={https://link.springer.com/chapter/10.1007/978-3-642-23783-6_14},
+  keywords={boosting, classification, multiview learning,
+            merric learning, vector-valued, kernel spaces},
+ }
 
 References
 ~~~~~~~~~~
@@ -112,7 +128,6 @@ References
   `"Learning from Imbalanced Datasets with cross-view cooperation"`
   Linking and mining heterogeneous an multi-view data, Unsupervised and
   semi-supervised learning Series Editor M. Emre Celeri, pp 161-182, Springer
-
 
 * Sokol Koço, Cécile Capponi,
   `"A boosting approach to multiview classification with cooperation"

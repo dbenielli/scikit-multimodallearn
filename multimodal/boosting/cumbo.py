@@ -5,32 +5,6 @@ This module contains a **Mu**\ lti\ **C**\ onfusion **M**\ Matrix **B**\ osting 
 estimator for classification implemented in the ``MuCumboClassifier`` class.
 """
 
-# Université d'Aix Marseille (AMU) -
-# Centre National de la Recherche Scientifique (CNRS) -
-# Université de Toulon (UTLN).
-# Copyright © 2017-2018 AMU, CNRS, UTLN
-#
-# This file is part of multimodalboost.
-#
-# multimodalboost is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# multimodalboost is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License for more details.
-#
-# You should have received a copy of the GNU Lesser General Public License
-# along with multiconfusion. If not, see <http://www.gnu.org/licenses/>.
-#
-# Author: Dominique Benielli- Laboratoire d'Informatique et Systèmes - UMR 7020
-
-# The implementation of the MuCumboClassifier in this module used the code of
-# sklearn.ensemble.AdaBoostClassifier as a model and tried to use the same
-# structure, notations and behavior where possible.
-
 import numpy as np
 from sklearn.base import ClassifierMixin
 from sklearn.ensemble import BaseEnsemble

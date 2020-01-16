@@ -417,7 +417,7 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
 
         Parameters
         ----------
-        test_kernels : `Metriclearn_array` of test kernels
+        test_kernels : `` of test kernels
 
         g : learning solution that is learned in learn_mvml
 
