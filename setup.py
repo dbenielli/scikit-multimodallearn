@@ -2,7 +2,7 @@
 import os
 from setuptools import setup, find_packages
 
-import multiconfusion
+import multimodal
 
 
 def setup_package():
