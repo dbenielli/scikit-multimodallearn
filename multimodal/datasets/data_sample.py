@@ -355,8 +355,11 @@ class MultiModalArray(np.ndarray, MultiModalData):
                     view_ind = np.array([0, new_data.shape[1]])
             except  Exception as e:
                 raise ValueError('Reshape your data')
-
-            if new_data.ndim < 2 or new_data.shape == (1, 1) or view_ind[-1] > new_data.shape[1]:
+            if new_data.ndim < 2 :
+                raise ValueError('Reshape your data')
+            if  new_data.ndim > 1 and new_data.shape == (1, 1):
+                raise ValueError('Reshape your data')
+            if view_ind.ndim < 2 and new_data.ndim <2 and view_ind[-1] > new_data.shape[1]:
                 raise ValueError('Reshape your data')
 
             # view_ind_self = view_ind

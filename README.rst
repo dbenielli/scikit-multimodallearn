@@ -58,7 +58,7 @@ Testing
 
 **pytest** and **pytest-cov** are required to run the **test suite** with::
 
-  cd multiconfusion
+  cd multimodal
   pytest
 
 A code coverage report is displayed in the terminal when running the tests.
@@ -141,7 +141,5 @@ Copyright © 2017-2018 AMU, CNRS, UTLN
 License
 ~~~~~~~
 
-**multiconfusion** is free software: you can redistribute it and/or modify
-it under the terms of the **GNU Lesser General Public License** as published by
-the Free Software Foundation, either **version 3** of the License, or
-(at your option) any later version.
+**scikit-multimodallearn** is free software: you can redistribute it and/or modify
+it under the terms of the **New BSD License**
