@@ -74,10 +74,10 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         Empirical loss for each iteration.
 
 
-    best_views\_ : numpy.ndarray of integers, shape = (len(estimators\_),)
+    best\_views\_ : numpy.ndarray of integers, shape = (len(estimators\_),)
         Indices of the best view for each estimator in the boosted ensemble.
 
-    n_yi : numpy ndarray of int contains number of train sample for each classe shape (n_classes,)
+    n_yi\_ : numpy ndarray of int contains number of train sample for each classe shape (n_classes,)
 
     Examples
     --------
@@ -247,10 +247,10 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
                                                                            predicted_classes[np.arange(n_views), :]]
         cost = np.exp(
             label_score
-            - label_score[:, np.arange(n_samples), y][:, :, np.newaxis]) / self.n_yi[np.newaxis, np.newaxis, :]
+            - label_score[:, np.arange(n_samples), y][:, :, np.newaxis]) / self.n_yi_[np.newaxis, np.newaxis, :]
         score_function_dif = np.exp(
             label_score
-            - label_score[:, np.arange(n_samples), y][:, :, np.newaxis]) / self.n_yi[np.newaxis, np.newaxis, :]
+            - label_score[:, np.arange(n_samples), y][:, :, np.newaxis]) / self.n_yi_[np.newaxis, np.newaxis, :]
         cost[:, np.arange(n_samples), y] -= np.sum(cost, axis=2)
         return (cost, label_score, score_function_dif)
 
@@ -304,7 +304,7 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         solvers.options['show_progress'] = False
         n_view = self.n_views_
         m = self.n_classes_
-        coef = 1.0/np.tile(self.n_yi, self.n_views_).squeeze() * score_function_dif_Tminus1
+        coef = 1.0/np.tile(self.n_yi_, self.n_views_).squeeze() * score_function_dif_Tminus1
         zeta_v =  np.repeat(alphas, self.n_classes_) * indicate_vue * delta_vue
         zeta_v_yi = np.repeat(alphas, self.n_classes_) * indicate_vue_yi * delta_vue
         zeta = zeta_v + zeta_v_yi
@@ -325,8 +325,8 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         try:
             solver = solvers.cp(F, A=A, b=b, G=G, h=h, dim={'l':2*n_view*m})['x']
         except ValueError or ArithmeticError or OverflowError as e:
-            norm = np.sum(1.0/self.n_yi)
-            yi_norm = self.n_yi * (norm )
+            norm = np.sum(1.0/self.n_yi_)
+            yi_norm = self.n_yi_ * (norm )
             solver = matrix(1.0/np.tile(yi_norm, n_view).squeeze(), (n_view * m, 1))
             print("Value Error on the evaluation on beta coefficient %s "% e)
         return solver
@@ -349,7 +349,11 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
 
         Parameters
         ----------
-        X : {array-like, sparse matrix}, shape = (n_samples, n_features)
+        X : dict dictionary with all views
+            or
+            `MultiModalData` ,  `MultiModalArray`, `MultiModalSparseArray`
+            or
+            {array-like, sparse matrix}, shape = (n_samples, n_features)
             Training multi-view input samples.
             Sparse matrix can be CSC, CSR, COO, DOK, or LIL.
             COO, DOK and LIL are converted to CSR.
@@ -387,8 +391,7 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
 
         ValueError where `X` and `view_ind` are not compatibles
         """
-        warnings.filterwarnings("ignore")
-        self.X_ = self._global_X_transform(X, views_ind=views_ind)
+        warnings.filterwarnings("ignore", category=RuntimeWarning)
         if (self.base_estimator is None or
                 isinstance(self.base_estimator, (BaseDecisionTree,
                                                  BaseForest))):
@@ -398,8 +401,7 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
             dtype = None
             accept_sparse = ['csr', 'csc']
 
-
-
+        self.X_ = self._global_X_transform(X, views_ind=views_ind)
         views_ind_, n_views = self.X_._validate_views_ind(self.X_.views_ind,
                                                           self.X_.shape[1])
         check_X_y(self.X_, y)
@@ -410,7 +412,7 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         self.classes_, y = np.unique(y, return_inverse=True)
         self.n_classes_ = len(self.classes_)
         self.n_views_ = n_views
-        self.n_features_ = X.shape[1]
+        self.n_features_ = self.X_.shape[1]
         if self.n_classes_ == 1:
             # This case would lead to division by 0 when computing the cost
             # matrix so it needs special handling (but it is an obvious case as
@@ -431,7 +433,7 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         random_state = check_random_state(self.random_state)
         (cost, label_score, label_score_global,
          predicted_classes, score_function_dif, betas, n_yi) = self._init_var(n_views, y)
-        self.n_yi = n_yi
+        self.n_yi_ = n_yi
         for current_iteration in range(self.n_iterations_):
             # list de h pris a l'etape t
             dist = self._compute_dist(cost, y)
@@ -647,7 +649,6 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         score : float
             Mean accuracy of self.predict(X) wrt. y.
         """
-        X = self._validate_X_predict(X)
         return super(MuCumboClassifier, self).score(X, y)
 
     def staged_score(self, X, y):

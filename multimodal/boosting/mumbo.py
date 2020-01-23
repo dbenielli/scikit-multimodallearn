@@ -275,7 +275,11 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
 
         Parameters
         ----------
-        X : {array-like, sparse matrix}, shape = (n_samples, n_features)
+        X : dict dictionary with all views
+            or
+            `MultiModalData` ,  `MultiModalArray`, `MultiModalSparseArray`
+            or
+            {array-like, sparse matrix}, shape = (n_samples, n_features)
             Training multi-view input samples.
             Sparse matrix can be CSC, CSR, COO, DOK, or LIL.
             COO, DOK and LIL are converted to CSR.

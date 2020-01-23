@@ -14,7 +14,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.cluster import KMeans
 from sklearn.tree import DecisionTreeClassifier
 from sklearn import datasets
-
+from sklearn.utils.estimator_checks import check_estimator
 from multimodal.boosting.cumbo import MuCumboClassifier
 from multimodal.tests.data.get_dataset_path import get_dataset_path
 from multimodal.datasets.data_sample import MultiModalArray
@@ -208,7 +208,7 @@ class TestMuCumboClassifier(unittest.TestCase):
             clf = MuCumboClassifier()
             clf.n_views_ = 3
             clf.n_classes_ = 3
-            clf.n_yi = np.array([1, 1, 2])
+            clf.n_yi_ = np.array([1, 1, 2])
             A, b, G, h, l = clf._prepare_beta_solver()
             y_i = np.array([0, 1, 2, 0])
             predicted_classes = np.array([[0, 0, 1, 1], [0, 1, 0, 2], [2, 2, 0, 0]])
@@ -234,7 +234,7 @@ class TestMuCumboClassifier(unittest.TestCase):
         clf = MuCumboClassifier()
         clf.n_views_ = 3
         clf.n_classes_ = 3
-        clf.n_yi = np.array([1, 1, 2])
+        clf.n_yi_ = np.array([1, 1, 2])
         cost_Tminus1 =np.array([[[-7.45744585e+01,  3.67879439e-01,  7.42065790e+01],
           [ 4.78511743e-06,  3.87742081e-02, -3.87789932e-02],
           [ 2.47875218e-03, -2.48182428e-03,  3.07210618e-06],
@@ -356,7 +356,7 @@ class TestMuCumboClassifier(unittest.TestCase):
         clf = MuCumboClassifier()
         clf.n_views_ = 3
         clf.n_classes_ = 3
-        clf.n_yi = np.array([1, 1, 2])
+        clf.n_yi_ = np.array([1, 1, 2])
         betas = clf._compute_betas(alphas, y, score_function_Tminus1, predicted_classes)
         cost, label_score, score_function_dif = clf._compute_cost(label_score, predicted_classes, y, alphas,
                                               betas, use_coop_coef=True)
@@ -862,9 +862,9 @@ class TestMuCumboClassifier(unittest.TestCase):
     #     clf.fit(X, y, views_ind)
     #     assert_equal(clf.score(X, y), 1.)
     #
-    #
-    # def test_classifier():
-    #     return check_estimator(MuCumboClassifier)
+
+    def test_classifier(self):
+        return check_estimator(MuCumboClassifier)
     #
     #
     # def test_iris():

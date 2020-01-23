@@ -20,7 +20,8 @@ def setup_package():
         'Documentation': 'http://{}.pages.lis-lab.fr/{}'.format(group, name),
         'Source': url,
         'Tracker': '{}/issues'.format(url)}
-    author = 'Dominique Benielli'
+    author = 'Dominique Benielli and Sokol Koço and Florent Jaillet and Riikka Huusari ' \
+             'and Cécile Capponi and Hachem Kadri'
     author_email = 'contact.dev@lis-lab.fr'
     license = 'newBSD'
     classifiers = [

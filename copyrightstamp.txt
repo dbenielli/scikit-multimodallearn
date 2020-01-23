@@ -17,6 +17,7 @@ Contributors:
 * Dominique Benielli <dominique.benielli_AT_univ-amu.fr>
 * Riikka Huusari <rikka.huusari_AT_univ-amu.fr>
 * Baptiste Bauvin <baptiste.bauvin_AT_univ-amu.fr>
+* Hachem Kadri <hachem.kadri_AT_lis-lab.fr>
 
 Description:
 -----------

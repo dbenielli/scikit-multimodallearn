@@ -219,7 +219,6 @@ class MultiModalSparseArray(sp.csr_matrix, sp.csc_matrix, MultiModalSparseInfo, 
     >>> data = load_dict(get_dataset_path(file))
 
     """
-
     def __init__(self, *arg, **kwargs ):
         """Constructor of Metriclearn_array"""
         if sp.issparse(arg[0]):

@@ -243,17 +243,14 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
         Parameters
         ----------
 
-        X : - Metriclearn_array {array-like, sparse matrix}, shape = (n_samples, n_features)
-              Training multi-view input samples. can be also Kernel where attibute 'kernel'
-              is set to precompute "precomputed"
-
-            - Dictionary of {array like} with shape = (n_samples, n_features)  for multi-view
-              for each view.
-
-            - Array of {array like} with shape = (n_samples, n_features)  for multi-view
-              for each view.
-
-            - {array like} with (n_samples, nviews *  n_features) with 'views_ind' diferent to 'None'
+        X : dict dictionary with all views {array like} with shape = (n_samples, n_features)  for multi-view
+            for each view.
+            or
+            `MultiModalData` ,  `MultiModalArray`
+            or
+            {array-like,}, shape = (n_samples, n_features)
+            Training multi-view input samples. can be also Kernel where attibute 'kernel'
+            is set to precompute "precomputed"
 
         views_ind : array-like (default=[0, n_features//2, n_features])
             Paramater specifying how to extract the data views from X:
@@ -320,5 +317,19 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
 
         return np.dot(kernel, C)
 
+    def score(self, X, y):
+        """Return the mean accuracy on the given test data and labels.
 
+        Parameters
+        ----------
+        X : {array-like} of shape = (n_samples, n_features)
+        y : array-like, shape = (n_samples,)
+            True labels for X.
+
+        Returns
+        -------
+        score : float
+            Mean accuracy of self.predict(X) wrt. y.
+        """
+        return super(MKL, self).score(X, y)
 

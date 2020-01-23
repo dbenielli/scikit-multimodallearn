@@ -25,7 +25,7 @@ def load_dict(filename_):
     return ret_di
 
 
-def _create_pickle_files(self, adr, dsample):
+def _create_pickle_files(adr, dsample):
     f = open(adr + ".sample.pkl", "wb")
     pickle.dump(dsample, f)
     f.close()

@@ -89,6 +89,7 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
 
     y_ : array-like, shape = (n_samples,)
          Target values (class labels).
+         
 
     """
     # r_cond = 10-30
@@ -550,3 +551,19 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
                                                                                              v * m:(v + 1) * m]
 
         return A_new
+
+    def score(self, X, y):
+        """Return the mean accuracy on the given test data and labels.
+
+        Parameters
+        ----------
+        X : {array-like} of shape = (n_samples, n_features)
+        y : array-like, shape = (n_samples,)
+            True labels for X.
+
+        Returns
+        -------
+        score : float
+            Mean accuracy of self.predict(X) wrt. y.
+        """
+        return super(MVML, self).score(X, y)
