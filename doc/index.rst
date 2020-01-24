@@ -24,8 +24,8 @@ Documentation
    reference/api
    tutorial/install_devel
    tutorial/auto_examples/index
-   tutorial/auto_examples/sg_execution_times
-
+   tutorial/times
+   tutorial/credits
 
 
 Indices and tables

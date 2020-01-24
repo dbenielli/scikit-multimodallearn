@@ -1,10 +1,6 @@
-.. _examples:
 
-Examples
-========
-
-MVML
-----
+MVML Examples
+-------------
 
 The following toy examples illustrate how the MVML algorithm
 

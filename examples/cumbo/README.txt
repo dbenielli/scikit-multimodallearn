@@ -1,7 +1,3 @@
-.. _examples:
-
-Examples
-========
 
 MuCuMBo Examples
 ----------------

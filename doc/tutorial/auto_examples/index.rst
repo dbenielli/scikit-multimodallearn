@@ -21,10 +21,6 @@ Multimodal Examples
 
 .. _sphx_glr_tutorial_auto_examples_cumbo:
 
-.. _examples:
-
-Examples
-========
 
 MuCuMBo Examples
 ----------------
@@ -82,10 +78,6 @@ cooperation between views for classification.
 
 .. _sphx_glr_tutorial_auto_examples_mumbo:
 
-.. _examples:
-
-Examples
-========
 
 MuMBo Examples
 --------------
@@ -143,13 +135,9 @@ cooperation between views for classification.
 
 .. _sphx_glr_tutorial_auto_examples_mvml:
 
-.. _examples:
 
-Examples
-========
-
-MVML
-----
+MVML Examples
+-------------
 
 The following toy examples illustrate how the MVML algorithm
 
