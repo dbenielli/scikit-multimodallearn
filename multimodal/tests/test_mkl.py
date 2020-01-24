@@ -49,7 +49,7 @@ class MKLTest(unittest.TestCase):
                    precision = 1E-4, n_loops = 50)
         mkl.fit(self.kernel_dict, y=self.y, views_ind=None)
         self.assertEqual(mkl.C.shape, (120,))
-        np.testing.assert_almost_equal(mkl.weights, np.array([0.7428451 , 0.66946333]), 8)
+        np.testing.assert_almost_equal(mkl.weights, np.array([0.70629782, 0.70791482]), 8)
 
 
     def testFitMKLDictNLoop(self):
@@ -62,7 +62,7 @@ class MKLTest(unittest.TestCase):
         views_ind = [120, 240]
         mkl.fit(self.kernel_dict, y=self.y, views_ind=None)
         self.assertEqual(mkl.C.shape, (120,))
-        np.testing.assert_almost_equal(mkl.weights, np.array([0.7428451 , 0.66946333]), 8)
+        np.testing.assert_almost_equal(mkl.weights, np.array([0.70629782, 0.70791482]), 8)
 
     def testFitMKLMetricPrecision(self):
         #######################################################
