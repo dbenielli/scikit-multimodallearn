@@ -169,7 +169,7 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
             self.U_dict = self.K_._todict()
 
         # Return the classifier
-        self.learn_mvml(learn_A=self.learn_A, learn_w=self.learn_w, n_loops=self.n_loops)
+        self.A, self.g, self.w = self.learn_mvml(learn_A=self.learn_A, learn_w=self.learn_w, n_loops=self.n_loops)
         if self.warning_message:
             import logging
             logging.warning("warning appears during fit process" + str(self.warning_message))
@@ -270,7 +270,7 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
                         return A_prev, g_prev
             except ValueError:
                 self.warning_message["ValueError"] = self.warning_message.get("ValueError", 0) + 1
-                return A_prev, g_prev
+                return A_prev, g_prev, w_prev
             # print("A_inv ",np.sum(A_inv))
             # then calculate g (block-sparse multiplications in loop) using A_inv
             for v in range(views):
@@ -321,9 +321,6 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
                     Z[:, v] = np.dot(self.U_dict[v], g[v * self.n_approx:(v + 1) * self.n_approx]).ravel()
                 w = np.dot(spli.pinv(np.dot(np.transpose(Z), Z)), np.dot(np.transpose(Z), self.y_))
             loop_counter += 1
-        self.g = g
-        self.w = w
-        self.A = A
         return A, g, w
 
     def _inv_best_precond(self, A, pos="precond_A"):

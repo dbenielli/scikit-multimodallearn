@@ -1,7 +1,4 @@
 
-:orphan:
-
-.. _sphx_glr_tutorial_auto_examples_sg_execution_times:
 
 Computation times
 =================
