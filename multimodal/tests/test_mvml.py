@@ -81,7 +81,7 @@ class MVMLTest(unittest.TestCase):
         mvml.fit(self.kernel_dict, y=self.y, views_ind=None)
         self.assertEqual(mvml.A.shape, (48, 48))
         self.assertEqual(mvml.g.shape,(48, 1))
-        w_expected = np.array([0.73849765, 0.52974952])
+        w_expected = np.array([0.655, 0.65 ])
         np.testing.assert_almost_equal(mvml.w, w_expected, 3)
 
     def testFitMVMLMetric(self):

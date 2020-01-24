@@ -244,11 +244,9 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
         # ========= learn =========
         loop_counter = 0
         while True:
-            if loop_counter > 0:
-                g_prev = np.copy(g)
-                A_prev = np.copy(A)
-                w_prev = np.copy(w)
-
+            g_prev = np.copy(g)
+            A_prev = np.copy(A)
+            w_prev = np.copy(w)
             # ========= update g =========
 
             # first invert A

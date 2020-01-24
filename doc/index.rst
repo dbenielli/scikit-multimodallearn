@@ -27,6 +27,7 @@ Documentation
    tutorial/auto_examples/sg_execution_times
 
 
+
 Indices and tables
 ------------------
 

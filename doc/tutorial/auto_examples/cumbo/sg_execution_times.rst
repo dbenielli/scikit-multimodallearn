@@ -1,8 +1,4 @@
 
-:orphan:
-
-.. _sphx_glr_tutorial_auto_examples_cumbo_sg_execution_times:
-
 Computation times
 =================
 **00:01.113** total execution time for **tutorial_auto_examples_cumbo** files:

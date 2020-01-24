@@ -7,12 +7,12 @@ Computation times
 =================
 **00:02.336** total execution time for **tutorial_auto_examples** files:
 
-+-----------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_auto_examples_mumbo_plot_3_views_3_classes.py` (``mumbo_plot_3_views_3_classes.py``) | 00:01.313 | 0.0 MB |
-+-----------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_auto_examples_mumbo_plot_2_views_2_classes.py` (``mumbo_plot_2_views_2_classes.py``) | 00:01.023 | 0.0 MB |
-+-----------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_auto_examples_cumbo_plot_3_views_3_classes.py` (``cumbo_plot_3_views_3_classes.py``) | 00:01.313 | 0.0 MB |
-+-----------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_auto_examples_cumbo_plot_2_views_2_classes.py` (``cumbo_plot_2_views_2_classes.py``) | 00:01.023 | 0.0 MB |
-+-----------------------------------------------------------------------------------------------------+-----------+--------+
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+
+   tutorial/auto_examples/mumbo/sg_execution_times
+   tutorial/auto_examples/cumbo/sg_execution_times
+   tutorial/auto_examples/mvml/sg_execution_times
