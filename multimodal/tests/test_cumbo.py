@@ -66,17 +66,6 @@ class TestMuCumboClassifier(unittest.TestCase):
         np.testing.assert_equal(beta_class, expected_beta_class)
         np.testing.assert_equal(score_function, np.zeros((n_views, 4, n_classes)))
 
-    # def test_compute_edge_global(self):
-    #     cost_global = np.array([[-2, 1, 1], [1, 1, -2], [1, -2, 1], [1, 1, -2]],
-    #                            dtype=np.float64)
-    #     predicted_classes = np.array([[0, 0, 1, 1], [0, 1, 0, 2], [2, 2, 0, 0]])
-    #     y = np.array([0, 2, 1, 2])
-    #     expected_edge_global = np.array([0.25, 0.25, -0.125])
-    #
-    #     clf = MuCumboClassifier()
-    #     edge_global = clf._compute_edge_global(cost_global, predicted_classes, y)
-    #     np.testing.assert_equal(edge_global, expected_edge_global)
-
     def test_compute_dist(self):
         cost = np.array(
             [[[-2, 1, 1], [-1, -1, -2], [1, -2, 1], [1, 1, -2]],
@@ -258,63 +247,7 @@ class TestMuCumboClassifier(unittest.TestCase):
         np.testing.assert_almost_equal(np.sum(betas, axis =1), np.ones(3, dtype=np.float), 9)
         self.assertTrue(np.all(betas <= 1) )
         self.assertTrue(np.all(betas >= 0) )
-    #
-    #
-    # def test_compute_cost_global():betas.
-    #
-    #     decimal = 12
-    #     label_score_glob = np.array(
-    #         [[-1, -2, 4], [-8, 1, 4], [2, 8, -4], [2, -1, 4]],
-    #         dtype=np.float64)
-    #     best_pred_classes = np.array([0, 1, 0, 2])
-    #     y = np.array([0, 2, 1, 2])
-    #     alpha = 0.5
-    #     expected_label_score_glob = np.array(
-    #         [[-0.5, -2, 4], [-8, 1.5, 4], [2.5, 8, -4], [2, -1, 4.5]],
-    #         dtype=np.float64)
-    #
-    #     clf = MuCumboClassifier()
-    #     cost_glob, label_score_glob = clf._compute_cost_global(
-    #         label_score_glob, best_pred_classes, y, alpha)
-    #
-    #     assert_array_almost_equal(label_score_glob, expected_label_score_glob,
-    #                               decimal=decimal)
-    #
-    #     label_score_glob = np.zeros((4, 3), dtype=np.float64)
-    #     alpha = 0.
-    #     expected_label_score_glob = np.zeros((4, 3), dtype=np.float64)
-    #     expected_cost_glob = np.array(
-    #         [[-2, 1, 1], [1, 1, -2], [1, -2, 1], [1, 1, -2]],
-    #         dtype=np.float64)
-    #
-    #     cost_glob, label_score_glob = clf._compute_cost_global(
-    #         label_score_glob, best_pred_classes, y, alpha)
-    #
-    #     assert_array_equal(label_score_glob, expected_label_score_glob)
-    #     assert_array_almost_equal(cost_glob, expected_cost_glob, decimal=decimal)
-    #
-    #     label_score_glob = np.array(
-    #         [[0, 0, np.log(4)], [np.log(8), 0, 0], [0, 0, 0], [0, 0, 0]],
-    #         dtype=np.float64)
-    #     alpha = np.log(2)
-    #     expected_label_score_glob = np.array(
-    #         [[alpha, 0, np.log(4)],
-    #          [np.log(8), alpha, 0],
-    #          [alpha, 0, 0],
-    #          [0, 0, alpha]],
-    #         dtype=np.float64)
-    #     expected_cost_glob = np.array(
-    #         [[-2.5, 0.5, 2.], [8., 2., -10.], [2., -3., 1.], [0.5, 0.5, -1.]],
-    #         dtype=np.float64)
-    #
-    #     cost_glob, label_score_glob = clf._compute_cost_global(
-    #         label_score_glob, best_pred_classes, y, alpha)
-    #
-    #     assert_array_almost_equal(label_score_glob, expected_label_score_glob,
-    #                               decimal=decimal)
-    #     assert_array_almost_equal(cost_glob, expected_cost_glob, decimal=decimal)
 
-    # def test_compute_beta(self):
 
     def test_indicatrice(self):
         clf = MuCumboClassifier()
@@ -524,17 +457,6 @@ class TestMuCumboClassifier(unittest.TestCase):
         clf = MuCumboClassifier()
         clf.fit(X, y)
         np.testing.assert_equal(clf.predict(X), y)
-    #     assert_array_equal(clf.predict(X), y)
-    #
-    #     y = [1, 0]
-    #     clf = MuCumboClassifier()
-    #     clf.fit(X, y, views_ind)
-    #     assert_array_equal(clf.predict(X), y)
-    #
-    #     y = (2, 1)
-    #     clf = MuCumboClassifier()
-    #     clf.fit(X, y, views_ind)
-    #     assert_array_equal(clf.predict(X), y)
     #
     #     # Check that misformed or inconsistent inputs raise expections
         X = np.zeros((5, 4, 2))
@@ -1050,8 +972,6 @@ class TestMuCumboClassifier(unittest.TestCase):
     #             else:
     #                 assert_true(all([type_ == csr_matrix for type_ in types]))
     #
-    # def test():
-    #     cumbo = MuCumboClassifier()
 
 if __name__ == '__main__':
     unittest.main()

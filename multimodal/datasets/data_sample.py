@@ -280,8 +280,6 @@ class MultiModalArray(np.ndarray, MultiModalData):
 
     shapes_int: list of int numbers of feature for each views
 
-    keys : name of key, where data come from a dictionary
-
 
     :Example:
 
@@ -295,8 +293,6 @@ class MultiModalArray(np.ndarray, MultiModalData):
     >>> multiviews = MultiModalArray(data)
     >>> multiviews.shape
     (120, 240)
-    >>> multiviews.keys
-    dict_keys([0, 1])
     >>> multiviews.shapes_int
     [120, 120]
     >>> multiviews.n_views
@@ -313,16 +309,22 @@ class MultiModalArray(np.ndarray, MultiModalData):
         thekeys = None
         # view_ind_self =  None
         view_mode = 'slices'
-        if isinstance(data, dict):
+        if isinstance(data, dict) and not isinstance(data, sp.dok_matrix):
             n_views = len(data)
             view_ind = [0]
             for key, dat_values in data.items():
+                dat_values = np.asarray(dat_values)
+                if dat_values.ndim < 2:
+                    dat_values = dat_values.reshape(1, dat_values.shape[0])
                 new_data = cls._populate_new_data(index, dat_values, new_data)
                 shapes_int.append(dat_values.shape[1])
                 view_ind.append(dat_values.shape[1] + view_ind[index])
                 index += 1
             thekeys = data.keys()
-
+            if new_data.ndim < 2 :
+                raise ValueError('Reshape your data')
+            if  new_data.ndim > 1 and (new_data.shape == (1, 1) or new_data.shape == ()):
+                raise ValueError('Reshape your data')
         elif isinstance(data, np.ndarray) and view_ind is None and data.ndim == 1:
             try:
                 dat0 = np.array(data[0])
@@ -359,15 +361,13 @@ class MultiModalArray(np.ndarray, MultiModalData):
         else:
             try:
                 new_data = np.asarray(data)
-                # if new_data.ndim == 1:
-                #     new_data = new_data.reshape(1, new_data.shape[0])
                 if view_ind is None:
                     view_ind = np.array([0, new_data.shape[1]])
             except  Exception as e:
                 raise ValueError('Reshape your data')
             if new_data.ndim < 2 :
                 raise ValueError('Reshape your data')
-            if  new_data.ndim > 1 and new_data.shape == (1, 1):
+            if  new_data.ndim > 1 and (new_data.shape == (1, 1) or new_data.shape == ()):
                 raise ValueError('Reshape your data')
             if view_ind.ndim < 2 and new_data.ndim <2 and view_ind[-1] > new_data.shape[1]:
                 raise ValueError('Reshape your data')
@@ -396,7 +396,7 @@ class MultiModalArray(np.ndarray, MultiModalData):
         obj.views_ind = view_ind
         obj.shapes_int = shapes_int
         obj.n_views = n_views
-        obj.keys = thekeys
+        # obj.keys = thekeys
         return obj
 
     @staticmethod
@@ -443,7 +443,7 @@ class MultiModalArray(np.ndarray, MultiModalData):
         # super(MultiModalArray, self).__array_finalize__(obj)
         self.shapes_int = getattr(obj, 'shapes_int', None)
         self.n_views = getattr(obj, 'n_views', None)
-        self.keys = getattr(obj, 'keys', None)
+        # self.keys = getattr(obj, 'keys', None)
         self.views_ind = getattr(obj, 'views_ind', None)
         self.view_mode_ = getattr(obj, 'view_mode_', None)
 

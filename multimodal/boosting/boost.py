@@ -59,6 +59,7 @@ class UBoosting(metaclass=ABCMeta):
         if not isinstance(X_, MultiModalData):
             try:
                 X_ = np.asarray(X)
+                X_ = MultiModalArray(X_)
             except Exception as e:
                 raise TypeError('Reshape your data')
         return X_

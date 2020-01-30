@@ -8,7 +8,8 @@ from sklearn.utils.multiclass import unique_labels
 from sklearn.metrics.pairwise import pairwise_kernels
 from sklearn.utils.validation import check_X_y
 from sklearn.utils.validation  import check_array
-from sklearn.metrics.pairwise import check_pairwise_arrays
+from sklearn.utils.multiclass import check_classification_targets
+from sklearn.utils.multiclass import type_of_target
 from sklearn.utils.validation  import check_is_fitted
 from multimodal.datasets.data_sample import DataSample, MultiModalArray
 from multimodal.kernels.mkernel import MKernel
@@ -30,7 +31,9 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
 
     Parameters
     ----------
-    regression_params: array/list of regression parameters, first for basic regularization, second for
+    lmbda : float regression_params lmbda (default = 0.1)  for basic regularization
+
+    eta : float regression_params eta (default = 1), first for basic regularization,
         regularization of A (not necessary if A is not learned)
 
     kernel : list of str (default: "precomputed") if kernel is as input of fit function set kernel to
@@ -58,6 +61,10 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
 
     Attributes
     ----------
+    lmbda : float regression_params lmbda (default = 0.1)
+
+    eta : float regression_params eta (default = 1)
+
     regression_params : array/list of regression parameters
 
     kernel : list or str indicate the metrics used for each kernels
@@ -89,14 +96,16 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
 
     y_ : array-like, shape = (n_samples,)
          Target values (class labels).
+
+    regression_ : if the classifier is used as regression (default : False)
          
 
     """
     # r_cond = 10-30
-    def __init__(self, lmbda, eta, nystrom_param, kernel="precomputed",
+    def __init__(self, lmbda=0.1, eta=1, nystrom_param=1.0, kernel="linear",
                  kernel_params=None,
                  learn_A=1, learn_w=0, precision=1E-4, n_loops=6):
-
+        super(MVML, self).__init__()
         # calculate nyström approximation (if used)
         self.nystrom_param = nystrom_param
         self.lmbda = lmbda
@@ -109,6 +118,10 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
         self.kernel_params = kernel_params
         self.precision = precision
         self.warning_message = {}
+
+    def _more_tags(self):
+        return {'X_types': ["2darray"], 'binary_only': True,
+                'multilabel' : False}
 
     def fit(self, X, y= None, views_ind=None):
         """
@@ -153,11 +166,23 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
         # Check that X and y have correct shape
 
         # Store the classes seen during fit
-
+        self.regression_ = False
         self.X_, self.K_= self._global_kernel_transform(X, views_ind=views_ind)
         check_X_y(self.X_, y)
+        # if type_of_target(y) not in "binary":
+        #     raise ValueError("target should be binary")
 
-        self.classes_ = unique_labels(y)
+        check_classification_targets(y)
+
+        if type_of_target(y) in "binary":
+            self.classes_, y = np.unique(y, return_inverse=True)
+            y[y==0] = -1.0
+        elif type_of_target(y) in "continuous":
+            y = y.astype(float)
+            self.regression_ = True
+        else:
+            raise ValueError("MVML algorithms is a binary classifier"
+                             " or performs regression with float target")
         self.y_ = y
 
         # n = X[0].shape[0]
@@ -169,14 +194,14 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
             self.U_dict = self.K_._todict()
 
         # Return the classifier
-        self.A, self.g, self.w = self.learn_mvml(learn_A=self.learn_A, learn_w=self.learn_w, n_loops=self.n_loops)
+        self.A, self.g, self.w = self._learn_mvml(learn_A=self.learn_A, learn_w=self.learn_w, n_loops=self.n_loops)
         if self.warning_message:
             import logging
             logging.warning("warning appears during fit process" + str(self.warning_message))
             # print("warning appears during fit process", self.warning_message)
         return self
 
-    def learn_mvml(self, learn_A=1, learn_w=0, n_loops=6):
+    def _learn_mvml(self, learn_A=1, learn_w=0, n_loops=6):
         """
 
         Parameters
@@ -402,13 +427,22 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
             Predicted classes.
         """
         check_is_fitted(self, ['X_', 'U_dict', 'K_', 'y_']) # , 'U_dict', 'K_' 'y_'
-        X , test_kernels = self._global_kernel_transform(X,
-                                                         views_ind=views_ind,
-                                                         Y=self.X_)
-        check_array(X)
-        return self.predict_mvml(test_kernels, self.g, self.w)
+        X, test_kernels = self._global_kernel_transform(X,
+                                                        views_ind=views_ind,
+                                                        Y=self.X_)
 
-    def predict_mvml(self, test_kernels, g, w):
+        check_array(X)
+        pred = self._predict_mvml(test_kernels, self.g, self.w).squeeze()
+        if self.regression_:
+            return pred
+        else:
+            pred = np.sign(pred)
+            pred[pred==-1] = 0
+            pred = pred.astype(int)
+            return np.take(self.classes_, pred)
+
+
+    def _predict_mvml(self, test_kernels, g, w):
         """
 
         Parameters

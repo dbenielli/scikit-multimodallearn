@@ -1,6 +1,6 @@
 import numpy as np
 import scipy as sp
-from sklearn.metrics.pairwise import pairwise_kernels
+from sklearn.metrics.pairwise import pairwise_kernels, PAIRWISE_KERNEL_FUNCTIONS
 from abc import ABCMeta
 from multimodal.datasets.data_sample import DataSample, MultiModalArray
 
@@ -21,6 +21,9 @@ class MKernel(metaclass=ABCMeta):
     kernel_params  : list of dict of corresponding kernels
                      params KERNEL_PARAMS
     """
+    def _check_kernel(self):
+        if self.kernel not in PAIRWISE_KERNEL_FUNCTIONS.keys():
+            raise ValueError(self.kernel + "is not a availlable kernel")
 
     def _get_kernel(self, X, Y=None, v=0):
         met =None
@@ -67,33 +70,37 @@ class MKernel(metaclass=ABCMeta):
         K_ dict of kernels
         """
         kernel_dict = {}
-
+        flag_sparse = False
         X_ = None
         y = None
         if Y is None:
             y = Y
-        if isinstance(X, np.ndarray) and X.ndim == 1:
+        if isinstance(X, sp.sparse.spmatrix):
+            raise TypeError("Nonsensical Error: no sparse data are allowed as input")
+        else:
             X_= MultiModalArray(X, views_ind)
-            for v in range(X.shape[0]):
-                if Y is not None:  y = Y.get_view(v) #  y = self._global_check_pairwise(X_, Y, v)
-                kernel_dict[v] = self._get_kernel(X[v], y)
-        elif isinstance(X, dict):
-            X_= MultiModalArray(X)
-            for v in X.keys():
-                if Y is not None:  y = Y.get_view(v) # y = self._global_check_pairwise(X_, Y, v)
-                kernel_dict[v] = self._get_kernel(X[v], y)
-        elif isinstance(X, np.ndarray) and X.ndim > 1:
-            X_ = MultiModalArray(X, views_ind)
             X = X_
         if isinstance(X, MultiModalArray):
+            X_ = X
+        if not isinstance(X_, MultiModalArray):
+            try:
+                X_ = np.asarray(X)
+                X_ = MultiModalArray(X_)
+            except Exception as e:
+                pass
+                # raise TypeError('Reshape your data')
+        if isinstance(X_, MultiModalArray):
             for v in range(X.n_views):
                 if Y is not None:   y = Y.get_view(v) # y = self._global_check_pairwise(X, Y, v)
-                kernel_dict[v] = self._get_kernel(X.get_view(v), y)
-            X_= X
+                kernel_dict[v] = self._get_kernel(X_.get_view(v), y)
+
         if not isinstance(X_, MultiModalArray):
-            raise TypeError("Input format is not reconized")
+            if sp.sparse.issparse(X):
+                raise TypeError("Nonsensical Error: no sparse data are allowed as input")
+            raise TypeError('Reshape your data')
         K_ = MultiModalArray(kernel_dict)
         return X_, K_
+
 
     def _calc_nystrom(self, kernels, n_approx):
         # calculates the nyström approximation for all the kernels in the given dictionary

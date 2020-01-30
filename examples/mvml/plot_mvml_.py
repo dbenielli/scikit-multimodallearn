@@ -106,27 +106,27 @@ mvml.fit(kernel_dict, Y[0:n_tr])
 
 #
 
-pred1 = np.sign(mvml.predict(test_kernel_dict) ) # take sign for classification result
+pred1 = mvml.predict(test_kernel_dict)
 #
 # without approximation
 mvml2 = MVML(lmbda=0.1, eta=1, nystrom_param=1, kernel='precomputed')   # without approximation
 mvml2.fit(kernel_dict, Y[0:n_tr])
-pred2 = np.sign(mvml2.predict(test_kernel_dict))
+pred2 = mvml2.predict(test_kernel_dict)
 #
 # use MVML_Cov, don't learn w
 mvml3 = MVML(lmbda=0.1, eta=1,learn_A=3, nystrom_param=1, kernel='precomputed')
 mvml3.fit(kernel_dict, Y[0:n_tr])
-pred3 = np.sign(mvml3.predict(test_kernel_dict))
+pred3 = mvml3.predict(test_kernel_dict)
 #
 # use MVML_I, don't learn w
 mvml4 = MVML(lmbda=0.1, eta=1,learn_A=4, nystrom_param=1, kernel='precomputed')
 mvml4.fit(kernel_dict, Y[0:n_tr])
-pred4 = np.sign(mvml4.predict(test_kernel_dict))
+pred4 = mvml4.predict(test_kernel_dict)
 #
 # use kernel rbf equivalent to case 1
 mvml5 = MVML(lmbda=0.1, eta=1, nystrom_param=0.2, kernel='rbf')
 mvml5.fit(x_dict, Y[0:n_tr])
-pred5 = np.sign(mvml5.predict(test_x_dict))
+pred5 = mvml5.predict(test_x_dict)
 #
 #
 # # =========== show results ============

@@ -9,7 +9,7 @@ from sklearn.exceptions import NotFittedError
 from multimodal.datasets.data_sample import MultiModalArray
 from multimodal.kernels.mvml import MVML
 from multimodal.tests.datasets.get_dataset_path import get_dataset_path
-
+from sklearn.utils.estimator_checks import check_estimator
 
 class MVMLTest(unittest.TestCase):
 
@@ -96,7 +96,7 @@ class MVMLTest(unittest.TestCase):
         self.assertEqual(mvml2.A.shape, (240, 240))
         self.assertEqual(mvml2.g.shape,(240, 1))
         np.testing.assert_almost_equal(mvml2.w, w_expected, 8)
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             mvml2.fit([1, 2, 3])
 
     def testFitMVMLMetric_learA4(self):
@@ -111,7 +111,7 @@ class MVMLTest(unittest.TestCase):
         self.assertEqual(mvml2.A.shape, (240, 240))
         self.assertEqual(mvml2.g.shape,(240, 1))
         np.testing.assert_almost_equal(mvml2.w, w_expected, 8)
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             mvml2.fit([1, 2, 3])
 
     def testFitMVMLMetric_learA3(self):
@@ -126,7 +126,7 @@ class MVMLTest(unittest.TestCase):
         self.assertEqual(mvml2.A.shape, (240, 240))
         self.assertEqual(mvml2.g.shape,(240, 1))
         np.testing.assert_almost_equal(mvml2.w, w_expected, 8)
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             mvml2.fit([1, 2, 3])
 
     def testFitMVMLMetric_PredictA2(self):
@@ -142,7 +142,7 @@ class MVMLTest(unittest.TestCase):
         self.assertEqual(mvml2.g.shape,(144, 1))
         np.testing.assert_almost_equal(mvml2.w, w_expected, 0)
         pred = mvml2.predict(self.test_kernel_dict)
-        self.assertEqual(pred.shape, (80,1))
+        self.assertEqual(pred.shape, (80,))
 
     def testFitMVMLMetric_PredictA1(self):
         #######################################################
@@ -157,7 +157,7 @@ class MVMLTest(unittest.TestCase):
         self.assertEqual(mvml2.g.shape,(144, 1))
         np.testing.assert_almost_equal(mvml2.w, w_expected, 0)
         pred = mvml2.predict(self.test_kernel_dict)
-        self.assertEqual(pred.shape, (80,1))
+        self.assertEqual(pred.shape, (80,))
 
     def testFitMVMLArray_2d(self):
         #######################################################
@@ -202,17 +202,19 @@ class MVMLTest(unittest.TestCase):
                    nystrom_param=0.2, learn_A=4)
        mvml.fit(self.kernel_dict, y=self.y)
        pred =mvml.predict(self.test_kernel_dict)
-       self.assertEqual(pred.shape, (80,1))
+       self.assertEqual(pred.shape, (80,))
 
     def testPredictMVML(self):
        mvml = MVML(lmbda=0.1, eta=1,
                    nystrom_param=1.0, learn_A=4)
        mvml.fit(self.kernel_dict, y=self.y)
        pred = mvml.predict(self.test_kernel_dict)
-       self.assertEqual(pred.shape, (80,1))
+       self.assertEqual(pred.shape, (80,))
        # print(pred.shape)
 
-
+    def test_classifier(self):
+        pass
+        # return check_estimator(MVML)
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'Test.testName']

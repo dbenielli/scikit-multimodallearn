@@ -38,8 +38,6 @@ class UnitaryTest(unittest.TestCase):
         self.assertEqual(a.shape, (120, 240))
         self.assertEqual(a.shapes_int, [120, 120])
         self.assertEqual(a.n_views, 2)
-        dict_key = {0: 'a',1: 'b' }
-        self.assertEqual(a.keys, dict_key.keys())
 
     def test_init_Array(self):
         a = MultiModalArray(self.kernel_dict)
