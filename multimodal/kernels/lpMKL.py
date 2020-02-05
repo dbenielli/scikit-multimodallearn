@@ -193,7 +193,6 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
                     # ft2[v] = weights_old[v] * np.dot(np.transpose(C), np.dot(data.kernel_dict[v], C))
             # calculate the sum for downstairs
             # print(weights_old)
-            # print(ft2)
             # print(ft2 ** (p / (p + 1.0)))
             downstairs = np.sum(ft2 ** (p / (p + 1.0))) ** (1.0 / p)
             # and then the gammas

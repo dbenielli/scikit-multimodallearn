@@ -97,10 +97,10 @@ for ind_view in range(2):
                 label='Class {} ({})'.format(ind_class, label))
     ax.legend()
 
-print('\nThe second figure displays the classification results for the '
-      'sub-classifiers\non the learning sample data.\n')
-
-styles = ('.b', '.r')
+# print('\nThe second figure displays the classification results for the '
+#       'sub-classifiers\non the learning sample data.\n')
+#
+# styles = ('.b', '.r')
 # fig = plt.figure(figsize=(12., 7.))
 # fig.suptitle('Classification results on the learning data for the '
 #              'sub-classifiers', size=16)

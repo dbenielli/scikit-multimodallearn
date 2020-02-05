@@ -866,9 +866,15 @@ class TestMuCumboClassifier(unittest.TestCase):
                       'base_estimator__max_depth': (1, 2)}
         clf = GridSearchCV(mumbo, parameters)
         clf.fit(self.iris.data, self.iris.target, views_ind=self.iris.views_ind)
-    #
-    #
-    # def test_pickle():
+        self.assertEqual(clf.best_params_,{'base_estimator__max_depth': 2, 'n_estimators': 2})
+
+        multimodal_data = MultiModalArray(self.iris.data, views_ind=self.iris.views_ind)
+        clf = GridSearchCV(mumbo, parameters)
+        clf.fit(multimodal_data, self.iris.target)
+
+        self.assertEqual(clf.best_params_, {'base_estimator__max_depth': 2, 'n_estimators': 2})
+
+    # def test_pick         le():
     #     np.random.seed(seed)
     #
     #     # Check pickability.

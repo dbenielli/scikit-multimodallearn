@@ -786,6 +786,7 @@ class TestMuCumboClassifier(unittest.TestCase):
         clf = GridSearchCV(mumbo, parameters)
         clf.fit(self.iris.data, self.iris.target, views_ind=self.iris.views_ind)
 
+
     def test_pickle(self):
         seed = 7
         np.random.seed(seed)

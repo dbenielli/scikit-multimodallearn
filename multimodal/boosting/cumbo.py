@@ -99,15 +99,15 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
 
     >>> from sklearn.tree import DecisionTreeClassifier
     >>> base_estimator = DecisionTreeClassifier(max_depth=2)
-    >>> clf = MuCumboClassifier(base_estimator=base_estimator, random_state=0)
+    >>> clf = MuCumboClassifier(base_estimator=base_estimator, random_state=1)
     >>> clf.fit(X, y, views_ind)  # doctest: +NORMALIZE_WHITESPACE
     MuCumboClassifier(base_estimator=DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=2,
-                max_features=None, max_leaf_nodes=None,
-                min_impurity_decrease=0.0, min_impurity_split=None,
-                min_samples_leaf=1, min_samples_split=2,
-                min_weight_fraction_leaf=0.0, presort=False, random_state=None,
-                splitter='best'),
-             n_estimators=50, random_state=0)
+            max_features=None, max_leaf_nodes=None,
+            min_impurity_decrease=0.0, min_impurity_split=None,
+            min_samples_leaf=1, min_samples_split=2,
+            min_weight_fraction_leaf=0.0, presort=False, random_state=None,
+            splitter='best'),
+         n_estimators=50, random_state=1)
     >>> print(clf.predict([[ 5.,  3.,  1.,  1.]]))
     [0]
 

@@ -99,7 +99,41 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
 
     regression_ : if the classifier is used as regression (default : False)
          
+    Examples
+    --------
+    >>> from multimodal.kernels.mvml import MVML
+    >>> from sklearn.datasets import load_iris
+    >>> X, y = load_iris(return_X_y=True)
+    >>> views_ind = [0, 2, 4]  # view 0: sepal data, view 1: petal data
+    >>> clf = MVML()
+    clf.get_params()
+    {'eta': 1, 'kernel': 'linear', 'kernel_params': None, 'learn_A': 1, 'learn_w': 0, 'lmbda': 0.1, 'n_loops': 6, 'nystrom_param': 1.0, 'precision': 0.0001}
+    >>> clf.fit(X, y, views_ind)  # doctest: +NORMALIZE_WHITESPACE
+    MumboClassifier(base_estimator=None, best_view_mode='edge',
+        n_estimators=50, random_state=0)
+    >>> print(clf.predict([[ 5.,  3.,  1.,  1.]]))
+    [1]
+    >>> views_ind = [[0, 2], [1, 3]]  # view 0: length data, view 1: width data
+    >>> clf = MumboClassifier(random_state=0)
+    >>> clf.fit(X, y, views_ind)  # doctest: +NORMALIZE_WHITESPACE
+    MumboClassifier(base_estimator=None, best_view_mode='edge',
+        n_estimators=50, random_state=0)
+    >>> print(clf.predict([[ 5.,  3.,  1.,  1.]]))
+    [1]
 
+    >>> from sklearn.tree import DecisionTreeClassifier
+    >>> base_estimator = DecisionTreeClassifier(max_depth=2)
+    >>> clf = MumboClassifier(base_estimator=base_estimator, random_state=0)
+    >>> clf.fit(X, y, views_ind)  # doctest: +NORMALIZE_WHITESPACE
+    MumboClassifier(base_estimator=DecisionTreeClassifier(class_weight=None,
+            criterion='gini', max_depth=2, max_features=None,
+            max_leaf_nodes=None, min_impurity_decrease=0.0,
+            min_impurity_split=None, min_samples_leaf=1, min_samples_split=2,
+            min_weight_fraction_leaf=0.0, presort=False, random_state=None,
+            splitter='best'),
+        best_view_mode='edge', n_estimators=50, random_state=0)
+    >>> print(clf.predict([[ 5.,  3.,  1.,  1.]]))
+    [1]
     """
     # r_cond = 10-30
     def __init__(self, lmbda=0.1, eta=1, nystrom_param=1.0, kernel="linear",

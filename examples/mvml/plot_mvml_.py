@@ -157,7 +157,7 @@ plt.subplot(342)
 plt.scatter(X1[n_tr:n_tot, 0], X1[n_tr:n_tot, 1], c=Y[n_tr:n_tot])
 plt.title("orig. view 2")
 #
-pred1[np.where(pred1[:, 0] != Y[n_tr:n_tot])] = 0
+pred1[np.where(pred1[:] != Y[n_tr:n_tot])] = 0
 pred1 = pred1.reshape((pred1.shape[0]))
 plt.subplot(343)
 plt.scatter(X0[n_tr:n_tot, 0], X0[n_tr:n_tot, 1], c=pred1)
@@ -166,7 +166,7 @@ plt.subplot(344)
 plt.scatter(X1[n_tr:n_tot, 0], X1[n_tr:n_tot, 1], c=pred1)
 plt.title("MVML view 2")
 #
-pred2[np.where(pred2[:, 0] != Y[n_tr:n_tot])] = 0
+pred2[np.where(pred2[:] != Y[n_tr:n_tot])] = 0
 pred2 = pred2.reshape((pred2.shape[0]))
 plt.subplot(345)
 plt.scatter(X0[n_tr:n_tot, 0], X0[n_tr:n_tot, 1], c=pred2)
@@ -175,7 +175,7 @@ plt.subplot(346)
 plt.scatter(X1[n_tr:n_tot, 0], X1[n_tr:n_tot, 1], c=pred2)
 plt.title("MVMLsparse view 2")
 #
-pred3[np.where(pred3[:, 0] != Y[n_tr:n_tot])] = 0
+pred3[np.where(pred3[:] != Y[n_tr:n_tot])] = 0
 pred3 = pred3.reshape((pred3.shape[0]))
 #
 plt.subplot(347)
@@ -185,7 +185,7 @@ plt.subplot(348)
 plt.scatter(X1[n_tr:n_tot, 0], X1[n_tr:n_tot, 1], c=pred3)
 plt.title("MVML_Cov view 2")
 #
-pred4[np.where(pred4[:, 0] != Y[n_tr:n_tot])] = 0
+pred4[np.where(pred4[:] != Y[n_tr:n_tot])] = 0
 pred4 = pred4.reshape((pred4.shape[0]))
 plt.subplot(349)
 plt.scatter(X0[n_tr:n_tot, 0], X0[n_tr:n_tot, 1], c=pred4)
@@ -194,7 +194,7 @@ plt.subplot(3,4,10)
 plt.scatter(X1[n_tr:n_tot, 0], X1[n_tr:n_tot, 1], c=pred4)
 plt.title("MVML_I view 2")
 #
-pred5[np.where(pred5[:, 0] != Y[n_tr:n_tot])] = 0
+pred5[np.where(pred5[:] != Y[n_tr:n_tot])] = 0
 pred5 = pred5.reshape((pred5.shape[0]))
 plt.subplot(3,4,11)
 plt.scatter(X0[n_tr:n_tot, 0], X0[n_tr:n_tot, 1], c=pred5)
