@@ -361,7 +361,10 @@ class MultiModalArray(np.ndarray, MultiModalData):
             try:
                 new_data = np.asarray(data)
                 if views_ind is None:
-                    views_ind = np.array([0, new_data.shape[1]])
+                    if new_data.shape[1] > 1:
+                        views_ind = np.array([0, new_data.shape[1] // 2, new_data.shape[1]])
+                    else:
+                        views_ind = np.array([0, new_data.shape[1]])
             except  Exception as e:
                 raise ValueError('Reshape your data')
             if new_data.ndim < 2 :

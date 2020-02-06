@@ -85,7 +85,7 @@ class MKernel(metaclass=ABCMeta):
         if not isinstance(X_, MultiModalArray):
             try:
                 X_ = np.asarray(X)
-                X_ = MultiModalArray(X_)
+                X_ = MultiModalArray(X_, views_ind)
             except Exception as e:
                 pass
                 # raise TypeError('Reshape your data')
