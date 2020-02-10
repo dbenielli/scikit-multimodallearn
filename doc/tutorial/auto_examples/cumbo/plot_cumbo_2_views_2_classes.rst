@@ -54,10 +54,8 @@ rightly classify the points.
 
     The first figure displays the data, splitting the representation between the
     two views.
-
-    The second figure displays the classification results for the sub-classifiers
-    on the learning sample data.
-
+    /home/dominique/projets/ANR-Lives/scikit-multimodallearn/examples/cumbo/plot_cumbo_2_views_2_classes.py:127: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+      plt.show()
 
 
 
@@ -145,10 +143,10 @@ rightly classify the points.
                     label='Class {} ({})'.format(ind_class, label))
         ax.legend()
 
-    print('\nThe second figure displays the classification results for the '
-          'sub-classifiers\non the learning sample data.\n')
-
-    styles = ('.b', '.r')
+    # print('\nThe second figure displays the classification results for the '
+    #       'sub-classifiers\non the learning sample data.\n')
+    #
+    # styles = ('.b', '.r')
     # fig = plt.figure(figsize=(12., 7.))
     # fig.suptitle('Classification results on the learning data for the '
     #              'sub-classifiers', size=16)
@@ -177,7 +175,7 @@ rightly classify the points.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.616 seconds)
+   **Total running time of the script:** ( 0 minutes  0.926 seconds)
 
 
 .. _sphx_glr_download_tutorial_auto_examples_cumbo_plot_cumbo_2_views_2_classes.py:

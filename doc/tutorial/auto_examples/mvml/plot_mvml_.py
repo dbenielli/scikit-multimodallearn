@@ -106,27 +106,27 @@ mvml.fit(kernel_dict, Y[0:n_tr])
 
 #
 
-pred1 = np.sign(mvml.predict(test_kernel_dict) ) # take sign for classification result
+pred1 = mvml.predict(test_kernel_dict)
 #
 # without approximation
 mvml2 = MVML(lmbda=0.1, eta=1, nystrom_param=1, kernel='precomputed')   # without approximation
 mvml2.fit(kernel_dict, Y[0:n_tr])
-pred2 = np.sign(mvml2.predict(test_kernel_dict))
+pred2 = mvml2.predict(test_kernel_dict)
 #
 # use MVML_Cov, don't learn w
 mvml3 = MVML(lmbda=0.1, eta=1,learn_A=3, nystrom_param=1, kernel='precomputed')
 mvml3.fit(kernel_dict, Y[0:n_tr])
-pred3 = np.sign(mvml3.predict(test_kernel_dict))
+pred3 = mvml3.predict(test_kernel_dict)
 #
 # use MVML_I, don't learn w
 mvml4 = MVML(lmbda=0.1, eta=1,learn_A=4, nystrom_param=1, kernel='precomputed')
 mvml4.fit(kernel_dict, Y[0:n_tr])
-pred4 = np.sign(mvml4.predict(test_kernel_dict))
+pred4 = mvml4.predict(test_kernel_dict)
 #
 # use kernel rbf equivalent to case 1
 mvml5 = MVML(lmbda=0.1, eta=1, nystrom_param=0.2, kernel='rbf')
 mvml5.fit(x_dict, Y[0:n_tr])
-pred5 = np.sign(mvml5.predict(test_x_dict))
+pred5 = mvml5.predict(test_x_dict)
 #
 #
 # # =========== show results ============
@@ -157,7 +157,7 @@ plt.subplot(342)
 plt.scatter(X1[n_tr:n_tot, 0], X1[n_tr:n_tot, 1], c=Y[n_tr:n_tot])
 plt.title("orig. view 2")
 #
-pred1[np.where(pred1[:, 0] != Y[n_tr:n_tot])] = 0
+pred1[np.where(pred1[:] != Y[n_tr:n_tot])] = 0
 pred1 = pred1.reshape((pred1.shape[0]))
 plt.subplot(343)
 plt.scatter(X0[n_tr:n_tot, 0], X0[n_tr:n_tot, 1], c=pred1)
@@ -166,7 +166,7 @@ plt.subplot(344)
 plt.scatter(X1[n_tr:n_tot, 0], X1[n_tr:n_tot, 1], c=pred1)
 plt.title("MVML view 2")
 #
-pred2[np.where(pred2[:, 0] != Y[n_tr:n_tot])] = 0
+pred2[np.where(pred2[:] != Y[n_tr:n_tot])] = 0
 pred2 = pred2.reshape((pred2.shape[0]))
 plt.subplot(345)
 plt.scatter(X0[n_tr:n_tot, 0], X0[n_tr:n_tot, 1], c=pred2)
@@ -175,7 +175,7 @@ plt.subplot(346)
 plt.scatter(X1[n_tr:n_tot, 0], X1[n_tr:n_tot, 1], c=pred2)
 plt.title("MVMLsparse view 2")
 #
-pred3[np.where(pred3[:, 0] != Y[n_tr:n_tot])] = 0
+pred3[np.where(pred3[:] != Y[n_tr:n_tot])] = 0
 pred3 = pred3.reshape((pred3.shape[0]))
 #
 plt.subplot(347)
@@ -185,7 +185,7 @@ plt.subplot(348)
 plt.scatter(X1[n_tr:n_tot, 0], X1[n_tr:n_tot, 1], c=pred3)
 plt.title("MVML_Cov view 2")
 #
-pred4[np.where(pred4[:, 0] != Y[n_tr:n_tot])] = 0
+pred4[np.where(pred4[:] != Y[n_tr:n_tot])] = 0
 pred4 = pred4.reshape((pred4.shape[0]))
 plt.subplot(349)
 plt.scatter(X0[n_tr:n_tot, 0], X0[n_tr:n_tot, 1], c=pred4)
@@ -194,7 +194,7 @@ plt.subplot(3,4,10)
 plt.scatter(X1[n_tr:n_tot, 0], X1[n_tr:n_tot, 1], c=pred4)
 plt.title("MVML_I view 2")
 #
-pred5[np.where(pred5[:, 0] != Y[n_tr:n_tot])] = 0
+pred5[np.where(pred5[:] != Y[n_tr:n_tot])] = 0
 pred5 = pred5.reshape((pred5.shape[0]))
 plt.subplot(3,4,11)
 plt.scatter(X0[n_tr:n_tot, 0], X0[n_tr:n_tot, 1], c=pred5)

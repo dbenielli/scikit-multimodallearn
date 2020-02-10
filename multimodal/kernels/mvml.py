@@ -136,7 +136,8 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
 
     def _more_tags(self):
         return {'X_types': ["2darray"], 'binary_only': True,
-                'multilabel' : False}
+                'multilabel' : False,
+                }
 
     def fit(self, X, y= None, views_ind=None):
         """
@@ -455,6 +456,8 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
             pred = pred.astype(int)
             pred = np.where(pred == -1, 0 , pred)
             return np.take(self.classes_, pred)
+
+
 
 
     def _predict_mvml(self, test_kernels, g, w):

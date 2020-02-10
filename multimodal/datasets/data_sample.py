@@ -365,13 +365,18 @@ class MultiModalArray(np.ndarray, MultiModalData):
                         views_ind = np.array([0, new_data.shape[1] // 2, new_data.shape[1]])
                     else:
                         views_ind = np.array([0, new_data.shape[1]])
+                elif not isinstance(views_ind, np.ndarray):
+                    try:
+                       views_ind = np.asarray(views_ind)
+                    except Exception:
+                        raise TypeError("format of views_ind is not list or nd array")
             except  Exception as e:
                 raise ValueError('Reshape your data')
             if new_data.ndim < 2 :
                 raise ValueError('Reshape your data')
             if  new_data.ndim > 1 and (new_data.shape == (1, 1) or new_data.shape == ()):
                 raise ValueError('Reshape your data')
-            if views_ind.ndim < 2 and new_data.ndim <2 and views_ind[-1] > new_data.shape[1]:
+            if views_ind.ndim < 2 and new_data.ndim < 2 and views_ind[-1] > new_data.shape[1]:
                 raise ValueError('Reshape your data')
 
             # views_ind_self = views_ind
