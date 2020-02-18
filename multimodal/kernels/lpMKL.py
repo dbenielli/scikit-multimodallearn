@@ -237,7 +237,7 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
             return C, weights
 
 
-    def predict(self, X, views_ind=None):
+    def predict(self, X):
         """
 
         Parameters
@@ -271,7 +271,7 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
         """
         check_is_fitted(self, ['X_', 'C', 'K_', 'y_', 'weights'])
         X , test_kernels = self._global_kernel_transform(X,
-                                                         views_ind=views_ind,
+                                                         views_ind=self.X_.views_ind,
                                                          Y=self.X_)
         check_array(X)
         C = self.C
@@ -322,7 +322,15 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
 
         Parameters
         ----------
-        X : {array-like} of shape = (n_samples, n_features)
+        X : dict dictionary with all views {array like} with shape = (n_samples, n_features)  for multi-view
+            for each view.
+            or
+            `MultiModalData` ,  `MultiModalArray`
+            or
+            {array-like,}, shape = (n_samples, n_features)
+            Training multi-view input samples. can be also Kernel where attibute 'kernel'
+            is set to precompute "precomputed"
+
         y : array-like, shape = (n_samples,)
             True labels for X.
 

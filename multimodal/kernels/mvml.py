@@ -410,7 +410,7 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
             A_inv = spli.pinv(A)
         return A_inv
 
-    def predict(self, X, views_ind=None):
+    def predict(self, X):
         """
 
         Parameters
@@ -444,7 +444,7 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
         """
         check_is_fitted(self, ['X_', 'U_dict', 'K_', 'y_']) # , 'U_dict', 'K_' 'y_'
         X, test_kernels = self._global_kernel_transform(X,
-                                                        views_ind=views_ind,
+                                                        views_ind=self.X_.views_ind,
                                                         Y=self.X_)
 
         check_array(X)
@@ -454,11 +454,8 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
         else:
             pred = np.sign(pred)
             pred = pred.astype(int)
-            pred = np.where(pred == -1, 0 , pred)
+            pred = np.where(pred == -1, 0, pred)
             return np.take(self.classes_, pred)
-
-
-
 
     def _predict_mvml(self, test_kernels, g, w):
         """
@@ -599,7 +596,7 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
 
         return A_new
 
-    def score(self, X, y):
+    def score(self, X, y=None):
         """Return the mean accuracy on the given test data and labels.
 
         Parameters
