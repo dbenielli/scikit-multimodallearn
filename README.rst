@@ -1,4 +1,3 @@
-[![Build Status](https://gitlab.lis-lab.fr/dev/scikit-multimodallearn/badges/master/build.svg)](https://gitlab.lis-lab.fr/dev/scikit-multimodallearns/badges/master/build.svg)
 
 scikit-multimodallearn
 ======================
