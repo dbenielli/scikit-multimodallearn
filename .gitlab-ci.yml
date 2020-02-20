@@ -7,6 +7,9 @@ tests:
         - python3 setup.py install
         - pytest-3
     coverage: '/Code coverage: \d+\.\d+/'
+    artifacts:
+      paths:
+        - coverage/
 
 # generate the documentation
 doc:
