@@ -4,6 +4,7 @@ from scipy.sparse.linalg import splu
 from scipy.sparse import csc_matrix
 from sklearn.base import BaseEstimator
 from sklearn.base import ClassifierMixin
+from sklearn.base import RegressorMixin
 from sklearn.utils.multiclass import unique_labels
 from sklearn.metrics.pairwise import pairwise_kernels
 from sklearn.utils.validation import check_X_y
@@ -25,7 +26,7 @@ in International Conference on Artificial Intelligence and Statistics (AISTATS) 
 """
 
 
-class MVML(MKernel, BaseEstimator, ClassifierMixin):
+class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
     r"""
     The MVML Classifier
 
@@ -426,16 +427,7 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin):
               for each view.
             - {array like} with (n_samples, nviews *  n_features) with 'views_ind' diferent to 'None'
 
-        views_ind : array-like (default=[0, n_features//2, n_features])
-            Paramater specifying how to extract the data views from X:
 
-            - views_ind is a 1-D array of sorted integers, the entries
-              indicate the limits of the slices used to extract the views,
-              where view ``n`` is given by
-              ``X[:, views_ind[n]:views_ind[n+1]]``.
-
-              With this convention each view is therefore a view (in the NumPy
-              sense) of X and no copy of the data is done.
 
         Returns
         -------

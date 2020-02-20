@@ -6,6 +6,8 @@ from sklearn.utils.validation import check_X_y
 from sklearn.utils.validation  import check_array
 from sklearn.utils.validation  import check_is_fitted
 from multimodal.kernels.mkernel import MKernel
+from sklearn.utils.multiclass import type_of_target
+from sklearn.utils.multiclass import check_classification_targets
 
 
 class MKL(BaseEstimator, ClassifierMixin, MKernel):
@@ -122,9 +124,18 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
         self : object
             Returns self.
         """
-        self.X_, self.K_ = self._global_kernel_transform(X, views_ind=views_ind)
-        self.classes_ = unique_labels(y)
+        self.X_, self.K_= self._global_kernel_transform(X, views_ind=views_ind)
         check_X_y(self.X_, y)
+        check_classification_targets(y)
+        if type_of_target(y) in "binary":
+            self.classes_, y = np.unique(y, return_inverse=True)
+            y[y==0] = -1.0
+        elif type_of_target(y) in "continuous":
+            y = y.astype(float)
+            self.regression_ = True
+        else:
+            raise ValueError("MKL algorithms is a binary classifier"
+                             " or performs regression with float target")
         self.y_ = y
         n = self.K_.shape[0]
         self._calc_nystrom(self.K_, n)
@@ -270,13 +281,18 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
             Predicted classes.
         """
         check_is_fitted(self, ['X_', 'C', 'K_', 'y_', 'weights'])
-        X , test_kernels = self._global_kernel_transform(X,
+        X, K = self._global_kernel_transform(X,
                                                          views_ind=self.X_.views_ind,
                                                          Y=self.X_)
         check_array(X)
         C = self.C
         weights  = self.weights
-        return self.lpMKL_predict(test_kernels, C, weights)
+        pred = self.lpMKL_predict(K, C, weights)
+
+        pred = np.sign(pred)
+        pred = pred.astype(int)
+        pred = np.where(pred == -1, 0, pred)
+        return np.take(self.classes_, pred)
 
 
     def lpMKL_predict(self, X, C, weights):
