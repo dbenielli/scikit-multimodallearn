@@ -9,7 +9,7 @@ tests:
     coverage: '/Code coverage: \d+\.\d+/'
     artifacts:
       paths:
-        - coverage/
+        - htmlcov/
 
 # generate the documentation
 doc:
