@@ -6,7 +6,7 @@ tests:
     script:
         - python3 setup.py install
         - pytest-3
-    coverage: '/TOTAL.*\s+(\d+%)$/'
+    coverage: '/Code coverage: \d+\.\d+/'
 
 # generate the documentation
 doc:
