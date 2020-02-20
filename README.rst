@@ -1,3 +1,6 @@
+
+|build-status| |docs| |coverage|
+
 scikit-multimodallearn
 ======================
 
