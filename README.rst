@@ -1,5 +1,3 @@
-|build-status| |docs| |coverage|
-
 
 .. image:: https://gitlab.lis-lab.fr/dev/scikit-multimodallearn/badges/master/pipeline.svg
     :target: https://gitlab.lis-lab.fr/dev/scikit-multimodallearn/badges/master
