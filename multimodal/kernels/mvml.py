@@ -194,6 +194,7 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
         if type_of_target(y) in "binary":
             self.classes_, y = np.unique(y, return_inverse=True)
             y[y==0] = -1.0
+            self.n_classes = len(self.classes_)
         elif type_of_target(y) in "continuous":
             y = y.astype(float)
             self.regression_ = True
@@ -434,13 +435,7 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
         y : numpy.ndarray, shape = (n_samples,)
             Predicted classes.
         """
-        check_is_fitted(self, ['X_', 'U_dict', 'K_', 'y_']) # , 'U_dict', 'K_' 'y_'
-        X, test_kernels = self._global_kernel_transform(X,
-                                                        views_ind=self.X_.views_ind,
-                                                        Y=self.X_)
-
-        check_array(X)
-        pred = self._predict_mvml(test_kernels, self.g, self.w).squeeze()
+        pred = self.decision_function(X)
         if self.regression_:
             return pred
         else:
@@ -448,6 +443,36 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
             pred = pred.astype(int)
             pred = np.where(pred == -1, 0, pred)
             return np.take(self.classes_, pred)
+
+
+    def decision_function(self, X):
+        """Compute the decision function of X.
+
+        Parameters
+        ----------
+        X : { array-like, sparse matrix},
+            shape = (n_samples, n_views * n_features)
+            Multi-view input samples.
+            maybe also MultimodalData
+
+        Returns
+        -------
+        dec_fun : numpy.ndarray, shape = (n_samples, )
+            Decision function of the input samples.
+            For binary classification,
+            values <=0 mean classification in the first class in ``classes_``
+            and values >0 mean classification in the second class in
+            ``classes_``.
+
+        """
+        check_is_fitted(self, ['X_', 'U_dict', 'K_', 'y_']) # , 'U_dict', 'K_' 'y_'
+        X, test_kernels = self._global_kernel_transform(X,
+                                                        views_ind=self.X_.views_ind,
+                                                        Y=self.X_)
+
+        check_array(X)
+        pred = self._predict_mvml(test_kernels, self.g, self.w).squeeze()
+        return pred
 
     def _predict_mvml(self, test_kernels, g, w):
         """

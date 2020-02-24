@@ -32,10 +32,10 @@ class MKLTest(unittest.TestCase):
         clf.test_y = test_y
 
     def testInitMKL(self):
-        mkl = MKL(lmbda=3, m_param = 1.0, kernel = "precomputed",
+        mkl = MKL(lmbda=3, nystrom_param=1.0, kernel = "precomputed",
                    kernel_params = None, use_approx = True,
                    precision = 1E-4, n_loops = 50)
-        self.assertEqual(mkl.m_param, 1.0)
+        self.assertEqual(mkl.nystrom_param, 1.0)
         self.assertEqual(mkl.lmbda, 3)
         self.assertEqual(mkl.n_loops, 50)
         self.assertEqual(mkl.precision, 1E-4)
@@ -44,7 +44,7 @@ class MKLTest(unittest.TestCase):
         #######################################################
         # task with dict and not precomputed
         #######################################################
-        mkl = MKL(lmbda=3, m_param = 1.0, kernel=['rbf'], kernel_params=[{'gamma':50}],
+        mkl = MKL(lmbda=3, nystrom_param=1.0, kernel=['rbf'], kernel_params=[{'gamma':50}],
                    use_approx = True,
                    precision = 1E-4, n_loops = 50)
         mkl.fit(self.kernel_dict, y=self.y, views_ind=None)
@@ -56,8 +56,8 @@ class MKLTest(unittest.TestCase):
         #######################################################
         # task with dict and not precomputed
         #######################################################
-        mkl = MKL(lmbda=3, m_param = 0.3, kernel=['rbf'], kernel_params=[{'gamma':50}],
-                   use_approx = True,
+        mkl = MKL(lmbda=3, nystrom_param=0.3, kernel=['rbf'], kernel_params=[{'gamma':50}],
+                   use_approx=True,
                    precision = 1E-4, n_loops = 50)
         views_ind = [120, 240]
         mkl.fit(self.kernel_dict, y=self.y, views_ind=None)
@@ -71,7 +71,7 @@ class MKLTest(unittest.TestCase):
         # mvml = MVML.fit(self.kernel_dict, self.y)
         w_expected = np.array([[0.5], [0.5]])
         x_metricl = MultiModalArray(self.kernel_dict)
-        mkl2 = MKL(lmbda=3, m_param = 0.3, kernel=['rbf'], kernel_params=[{'gamma':50}],
+        mkl2 = MKL(lmbda=3, nystrom_param = 0.3, kernel=['rbf'], kernel_params=[{'gamma':50}],
                    use_approx = True,
                    precision = 1E0, n_loops = 50)
         with self.assertRaises(ValueError):
@@ -84,13 +84,13 @@ class MKLTest(unittest.TestCase):
         # mvml = MVML.fit(self.kernel_dict, self.y)
         w_expected = np.array([[0.5], [0.5]])
         x_metricl = MultiModalArray(self.kernel_dict)
-        mkl2 = MKL(lmbda=3, m_param = 0.3, kernel="precomputed",
+        mkl2 = MKL(lmbda=3, nystrom_param=0.3, kernel="precomputed",
                    use_approx = True,
                    precision = 1E-9, n_loops = 600)
         mkl2.fit(x_metricl, y=self.y, views_ind=None)
 
     def testPredictMVML_witoutFit(self):
-       mkl = MKL(lmbda=3, m_param = 0.3, kernel=['rbf'], kernel_params=[{'gamma':50}],
+       mkl = MKL(lmbda=3, nystrom_param=0.3, kernel=['rbf'], kernel_params=[{'gamma':50}],
                    use_approx = True,
                    precision = 1E-9, n_loops = 50)
        with self.assertRaises(NotFittedError):
@@ -98,7 +98,7 @@ class MKLTest(unittest.TestCase):
 
     def testPredictMVML_witoutFit(self):
        x_metric = MultiModalArray(self.kernel_dict)
-       mkl = MKL(lmbda=3, m_param = 0.3, kernel=['rbf'], kernel_params=[{'gamma':50}],
+       mkl = MKL(lmbda=3, nystrom_param = 0.3, kernel=['rbf'], kernel_params=[{'gamma':50}],
                    use_approx = True,
                    precision = 1E-9, n_loops = 50)
        mkl.fit(x_metric, y=self.y, views_ind=None)

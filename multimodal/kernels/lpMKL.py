@@ -19,7 +19,7 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
 
     lmbda : float coeficient for combined kernels
 
-    m_param : float (default : 1.0)
+    nystrom_param : float (default : 1.0)
        value between 0 and 1 indicating level of nyström approximation;
        1 = no approximation
 
@@ -74,13 +74,13 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
     weights : learned weight for combining the solutions of views, learned in
 
     """
-    def __init__(self, lmbda, m_param=1.0, kernel="precomputed",
+    def __init__(self, lmbda, nystrom_param=1.0, kernel="linear",
                  kernel_params=None, use_approx=True, precision=1E-4, n_loops=50):
         # calculate nyström approximation (if used)
         self.lmbda = lmbda
         self.n_loops = n_loops
         self.use_approx = use_approx
-        self.m_param = m_param
+        self.nystrom_param = nystrom_param
         self.kernel= kernel
         self.kernel_params = kernel_params
         self.precision = precision
@@ -134,11 +134,12 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
             y = y.astype(float)
             self.regression_ = True
         else:
-            raise ValueError("MKL algorithms is a binary classifier"
-                             " or performs regression with float target")
+            raise ValueError("MKL algorithms is a binary classifier")
+                            # " or performs regression with float target")
         self.y_ = y
         n = self.K_.shape[0]
         self._calc_nystrom(self.K_, n)
+
         C, weights = self.learn_lpMKL()
         self.C = C
         self.weights = weights
@@ -175,7 +176,7 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
             # gammas are fixed upon arrival to the loop
             # -> solve for alpha!
 
-            if self.m_param < 1 and self.use_approx:
+            if self.nystrom_param < 1 and self.use_approx:
                 combined_kernel = np.zeros((n, n))
                 for v in range(0, views):
                     combined_kernel = combined_kernel + weights[v] * kernels[v]
@@ -194,7 +195,7 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
             # first the ||f_t||^2 todo wtf is the formula used here????
             ft2 = np.zeros(views)
             for v in range(0, views):
-                if self.m_param < 1 and self.use_approx:
+                if self.nystrom_param < 1 and self.use_approx:
                         # ft2[v,vv] = weights_old[v,vv] * np.dot(np.transpose(C), np.dot(np.dot(np.dot(data.U_dict[v],
                         #                                                             np.transpose(data.U_dict[v])),
                         #                                                             np.dot(data.U_dict[vv],
@@ -247,6 +248,39 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
         else:
             return C, weights
 
+    def decision_function(self, X):
+        """Compute the decision function of X.
+
+        Parameters
+        ----------
+        X : dict dictionary with all views {array like} with shape = (n_samples, n_features)  for multi-view
+            for each view.
+            or
+            `MultiModalData` ,  `MultiModalArray`
+            or
+            {array-like,}, shape = (n_samples, n_features)
+            Training multi-view input samples. can be also Kernel where attibute 'kernel'
+            is set to precompute "precomputed"
+
+        Returns
+        -------
+        dec_fun : numpy.ndarray, shape = (n_samples, )
+            Decision function of the input samples.
+            For binary classification,
+            values <=0 mean classification in the first class in ``classes_``
+            and values >0 mean classification in the second class in
+            ``classes_``.
+
+        """
+        check_is_fitted(self, ['X_', 'C', 'K_', 'y_', 'weights'])
+        X, K = self._global_kernel_transform(X,
+                                                         views_ind=self.X_.views_ind,
+                                                         Y=self.X_)
+        check_array(X)
+        C = self.C
+        weights  = self.weights
+        pred = self.lpMKL_predict(K, C, weights)
+        return pred
 
     def predict(self, X):
         """
@@ -280,15 +314,7 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
         y : numpy.ndarray, shape = (n_samples,)
             Predicted classes.
         """
-        check_is_fitted(self, ['X_', 'C', 'K_', 'y_', 'weights'])
-        X, K = self._global_kernel_transform(X,
-                                                         views_ind=self.X_.views_ind,
-                                                         Y=self.X_)
-        check_array(X)
-        C = self.C
-        weights  = self.weights
-        pred = self.lpMKL_predict(K, C, weights)
-
+        pred = self.decision_function(X)
         pred = np.sign(pred)
         pred = pred.astype(int)
         pred = np.where(pred == -1, 0, pred)
@@ -315,7 +341,7 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
         """
         views = X.n_views
         tt = X.shape[0]
-        m = self.K_.shape[0] # self.m_param * n
+        m = self.K_.shape[0] # self.nystrom_param * n
 
         #  NO TEST KERNEL APPROXIMATION
         # kernel = weights[0] * self.data.test_kernel_dict[0]
@@ -325,7 +351,7 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
         # TEST KERNEL APPROXIMATION
         kernel = np.zeros((tt, self.K_.shape[0]))
         for v in range(0, views):
-            if self.m_param < 1:
+            if self.nystrom_param < 1:
                 kernel = kernel + weights[v] * np.dot(np.dot(X.get_view(v)[:, 0:m], self.W_sqrootinv_dict[v]),
                                                   np.transpose(self.U_dict[v]))
             else:
