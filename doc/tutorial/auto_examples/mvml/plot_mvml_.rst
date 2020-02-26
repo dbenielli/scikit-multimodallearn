@@ -268,7 +268,7 @@ make kernel dictionaries
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  4.803 seconds)
+   **Total running time of the script:** ( 0 minutes  3.630 seconds)
 
 
 .. _sphx_glr_download_tutorial_auto_examples_mvml_plot_mvml_.py:

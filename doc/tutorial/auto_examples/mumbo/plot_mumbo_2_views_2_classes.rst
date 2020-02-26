@@ -71,6 +71,8 @@ rightly classify the points.
     The second figure displays the classification results for the sub-classifiers
     on the learning sample data.
 
+    /home/dominique/projets/ANR-Lives/scikit-multimodallearn/examples/mumbo/plot_mumbo_2_views_2_classes.py:127: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+      plt.show()
 
 
 
@@ -190,7 +192,7 @@ rightly classify the points.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.706 seconds)
+   **Total running time of the script:** ( 0 minutes  0.700 seconds)
 
 
 .. _sphx_glr_download_tutorial_auto_examples_mumbo_plot_mumbo_2_views_2_classes.py:

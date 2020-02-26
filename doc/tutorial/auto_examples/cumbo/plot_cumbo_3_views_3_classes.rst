@@ -51,6 +51,8 @@ the views to rightly classify the points.
     The second figure displays the classification results for the sub-classifiers
     on the learning sample data.
 
+    /home/dominique/projets/ANR-Lives/scikit-multimodallearn/examples/cumbo/plot_cumbo_3_views_3_classes.py:121: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+      plt.show()
 
 
 
@@ -170,7 +172,7 @@ the views to rightly classify the points.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.497 seconds)
+   **Total running time of the script:** ( 0 minutes  0.499 seconds)
 
 
 .. _sphx_glr_download_tutorial_auto_examples_cumbo_plot_cumbo_3_views_3_classes.py:

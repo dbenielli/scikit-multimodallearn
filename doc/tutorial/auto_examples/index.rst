@@ -169,6 +169,122 @@ The following toy examples illustrate how the MVML algorithm
 
 
 
+.. _sphx_glr_tutorial_auto_examples_usecase:
+
+
+Use Case Examples
+-----------------
+
+The following toy examples illustrate how the multimodal as usecase on digit  dataset of sklearn
+
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Function plot_subplot">
+
+.. only:: html
+
+ .. figure:: /tutorial/auto_examples/usecase/images/thumb/sphx_glr_usecase_function_thumb.png
+
+     :ref:`sphx_glr_tutorial_auto_examples_usecase_usecase_function.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /tutorial/auto_examples/usecase/usecase_function
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="multi class digit from sklearn, multivue  - vue 0 digit data (color of sklearn)  - vue 1 gradia...">
+
+.. only:: html
+
+ .. figure:: /tutorial/auto_examples/usecase/images/thumb/sphx_glr_plot_usecase_exampleMVML_thumb.png
+
+     :ref:`sphx_glr_tutorial_auto_examples_usecase_plot_usecase_exampleMVML.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /tutorial/auto_examples/usecase/plot_usecase_exampleMVML
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="multi class digit from sklearn, multivue  - vue 0 digit data (color of sklearn)  - vue 1 gradia...">
+
+.. only:: html
+
+ .. figure:: /tutorial/auto_examples/usecase/images/thumb/sphx_glr_plot_usecase_exampleMumBo_thumb.png
+
+     :ref:`sphx_glr_tutorial_auto_examples_usecase_plot_usecase_exampleMumBo.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /tutorial/auto_examples/usecase/plot_usecase_exampleMumBo
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="multi class digit from sklearn, multivue  - vue 0 digit data (color of sklearn)  - vue 1 gradia...">
+
+.. only:: html
+
+ .. figure:: /tutorial/auto_examples/usecase/images/thumb/sphx_glr_plot_usecase_exampleMuCuBo_thumb.png
+
+     :ref:`sphx_glr_tutorial_auto_examples_usecase_plot_usecase_exampleMuCuBo.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /tutorial/auto_examples/usecase/plot_usecase_exampleMuCuBo
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Use Case MKL">
+
+.. only:: html
+
+ .. figure:: /tutorial/auto_examples/usecase/images/thumb/sphx_glr_plot_usecase_exampleMKL_thumb.png
+
+     :ref:`sphx_glr_tutorial_auto_examples_usecase_plot_usecase_exampleMKL.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /tutorial/auto_examples/usecase/plot_usecase_exampleMKL
+.. raw:: html
+
+    <div class="sphx-glr-clear"></div>
+
+
+
 .. only :: html
 
  .. container:: sphx-glr-footer
