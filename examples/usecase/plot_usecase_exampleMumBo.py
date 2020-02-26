@@ -22,7 +22,7 @@ from multimodal.datasets.data_sample import MultiModalArray
 
 from multimodal.boosting.mumbo import MumboClassifier
 
-from usecase_function import plot_subplot
+from .usecase_function import plot_subplot
 
 
 if __name__ == '__main__':
