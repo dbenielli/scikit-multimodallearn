@@ -21,7 +21,7 @@ from multimodal.tests.data.get_dataset_path import get_dataset_path
 from multimodal.datasets.data_sample import MultiModalArray
 
 from multimodal.boosting.cumbo import MuCumboClassifier
-from .usecase_function import plot_subplot
+from usecase_function import plot_subplot
 
 
 if __name__ == '__main__':
