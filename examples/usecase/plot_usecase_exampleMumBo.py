@@ -11,7 +11,7 @@ multi class digit from sklearn, multivue
  - vue 2 gradiant of image in second direction
 
 """
-from __future__ import absolute_import
+
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
