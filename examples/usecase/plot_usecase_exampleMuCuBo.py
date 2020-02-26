@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-================
-Use Case MuCumBo
-================
+=========================
+Use Case MuCumBo on digit
+=========================
 Use case for all classifier of multimodallearn  MuCumBo
 
 multi class digit from sklearn, multivue
@@ -41,9 +41,9 @@ if __name__ == '__main__':
 
     fig = plt.figure(figsize=(12., 11.))
     fig.suptitle("MuCumbo: result" + str(result3), fontsize=16)
-    plot_subplot(X_train, y_train, y_pred33  ,0, (4, 1, 1), "train vue 0" )
-    plot_subplot(X_test, y_test,y_pred3 , 0, (4, 1, 2), "test vue 0" )
-    plot_subplot(X_test, y_test, y_pred3,1, (4, 1, 3), "test vue 1" )
-    plot_subplot(X_test, y_test,y_pred3, 2, (4, 1, 4), "test vue 2" )
+    plot_subplot(X_train, y_train, y_pred33  ,0, (4, 1, 1), "train vue 0 color" )
+    plot_subplot(X_test, y_test,y_pred3 , 0, (4, 1, 2), "test vue 0 color" )
+    plot_subplot(X_test, y_test, y_pred3,1, (4, 1, 3), "test vue 1 gradiant 0" )
+    plot_subplot(X_test, y_test,y_pred3, 2, (4, 1, 4), "test vue 2 gradiant 1" )
     # plt.legend()
     plt.show()

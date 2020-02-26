@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-================
-Use Case of MVML
-================
+=========================
+Use Case of MVML on digit
+========================
 Use case for all classifier of multimodallearn MVML
 
 multi class digit from sklearn, multivue
@@ -40,10 +40,10 @@ if __name__ == '__main__':
     fig = plt.figure(figsize=(12., 11.))
     fig.suptitle("MVML: result" + str(result1), fontsize=16)
     plot_subplot(X_train, y_train, y_pred11
-                 , 0, (4, 1, 1), "train vue 0" )
-    plot_subplot(X_test, y_test,y_pred1, 0, (4, 1, 2), "test vue 0" )
-    plot_subplot(X_test, y_test, y_pred1, 1, (4, 1, 3), "test vue 1" )
-    plot_subplot(X_test, y_test,y_pred1, 2, (4, 1, 4), "test vue 2" )
+                 , 0, (4, 1, 1), "train vue 0 color" )
+    plot_subplot(X_test, y_test,y_pred1, 0, (4, 1, 2), "test vue 0 color" )
+    plot_subplot(X_test, y_test, y_pred1, 1, (4, 1, 3), "test vue 1 gradiant 0" )
+    plot_subplot(X_test, y_test,y_pred1, 2, (4, 1, 4), "test vue 2 gradiant 1" )
     #plt.legend()
     plt.show()
 

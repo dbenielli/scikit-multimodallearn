@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-============
-Use Case MKL
-============
+=====================
+Use Case MKL on digit
+=====================
 Use case for all classifier of multimodallearn MKL
 multi class digit from sklearn, multivue
  - vue 0 digit data (color of sklearn)
@@ -42,10 +42,10 @@ if __name__ == '__main__':
 
     fig = plt.figure(figsize=(12., 11.))
     fig.suptitle("MKL : result" + str(result4), fontsize=16)
-    plot_subplot(X_train, y_train, y_pred44  ,0, (4, 1, 1), "train vue 0" )
-    plot_subplot(X_test, y_test,y_pred4 , 0, (4, 1, 2), "test vue 0" )
-    plot_subplot(X_test, y_test, y_pred4,1, (4, 1, 3), "test vue 1" )
-    plot_subplot(X_test, y_test,y_pred4, 2, (4, 1, 4), "test vue 2" )
+    plot_subplot(X_train, y_train, y_pred44  ,0, (4, 1, 1), "train vue 0 color" )
+    plot_subplot(X_test, y_test,y_pred4 , 0, (4, 1, 2), "test vue 0 color" )
+    plot_subplot(X_test, y_test, y_pred4,1, (4, 1, 3), "test vue 1 gradiant 0" )
+    plot_subplot(X_test, y_test,y_pred4, 2, (4, 1, 4), "test vue 2 gradiant 1" )
     # plt.legend()
     plt.show()
 

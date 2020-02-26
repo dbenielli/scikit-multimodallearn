@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-==============
-Use Case MumBo
-==============
+=======================
+Use Case MumBo on digit
+=======================
 Use case for all classifier of multimodallearn MumBo
 
 multi class digit from sklearn, multivue
