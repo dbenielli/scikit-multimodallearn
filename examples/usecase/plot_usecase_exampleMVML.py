@@ -20,7 +20,7 @@ from multimodal.datasets.base import load_dict, save_dict
 from multimodal.tests.data.get_dataset_path import get_dataset_path
 from multimodal.datasets.data_sample import MultiModalArray
 from multimodal.kernels.mvml import MVML
-from .usecase_function import plot_subplot
+from usecase_function import plot_subplot
 
 
 if __name__ == '__main__':
