@@ -22,7 +22,7 @@ from multimodal.datasets.data_sample import MultiModalArray
 from multimodal.kernels.mvml import MVML
 from multimodal.kernels.lpMKL import MKL
 
-from usecase_function import plot_subplot
+from examples.usecase.usecase_function import plot_subplot
 
 if __name__ == '__main__':
     # file = get_dataset_path("digit_histogram.npy")
