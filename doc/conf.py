@@ -275,6 +275,7 @@ sphinx_gallery_conf = {
     'backreferences_dir': 'tutorial/backreferences',
     # path to your examples scripts
     'examples_dirs': '../examples',
+    'ignore_pattern': r'__init__\.py',
     # path where to save gallery generated examples
     'gallery_dirs': 'tutorial/auto_examples'}
 
