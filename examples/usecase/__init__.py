@@ -7,3 +7,4 @@ init file
 
 """
 
+from .usecase_function import plot_subplot
