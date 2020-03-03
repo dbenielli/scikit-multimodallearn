@@ -172,8 +172,8 @@ The following toy examples illustrate how the MVML algorithm
 .. _sphx_glr_tutorial_auto_examples_usecase:
 
 
-Use Case Examples
------------------
+Use Case Examples on Digit
+--------------------------
 
 The following toy examples illustrate how the multimodal as usecase on digit  dataset of sklearn
 
@@ -262,7 +262,7 @@ The following toy examples illustrate how the multimodal as usecase on digit  da
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Use Case MKL">
+    <div class="sphx-glr-thumbcontainer" tooltip="Use Case MKL on digit">
 
 .. only:: html
 

@@ -7,9 +7,9 @@
 .. _sphx_glr_tutorial_auto_examples_usecase_plot_usecase_exampleMumBo.py:
 
 
-==============
-Use Case MumBo
-==============
+=======================
+Use Case MumBo on digit
+=======================
 Use case for all classifier of multimodallearn MumBo
 
 multi class digit from sklearn, multivue
@@ -30,9 +30,11 @@ multi class digit from sklearn, multivue
 
  .. code-block:: none
 
+    /home/dominique/.virtualenvs/env_multiv/local/lib/python3.6/site-packages/sklearn/ensemble/weight_boosting.py:29: DeprecationWarning: numpy.core.umath_tests is an internal NumPy module and should not be imported. It will be removed in a future NumPy release.
+      from numpy.core.umath_tests import inner1d
     result of MumboClassifier on digit 
-    96.0
-    /home/dominique/projets/ANR-Lives/scikit-multimodallearn/examples/usecase/plot_usecase_exampleMumBo.py:51: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    98.22222222222223
+    /home/dominique/projets/ANR-Lives/scikit-multimodallearn/examples/usecase/plot_usecase_exampleMumBo.py:73: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
 
 
@@ -45,7 +47,7 @@ multi class digit from sklearn, multivue
 
 .. code-block:: default
 
-    from __future__ import absolute_import
+
     import numpy as np
     import matplotlib.pyplot as plt
     from sklearn.model_selection import train_test_split
@@ -56,7 +58,29 @@ multi class digit from sklearn, multivue
 
     from multimodal.boosting.mumbo import MumboClassifier
 
-    from usecase_function import plot_subplot
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import matplotlib._color_data as mcd
+
+
+    def plot_subplot(X, Y, Y_pred, vue, subplot, title):
+        cn = mcd.CSS4_COLORS
+        classes = np.unique(Y)
+        n_classes = len(np.unique(Y))
+        axs = plt.subplot(subplot[0],subplot[1],subplot[2])
+        axs.set_title(title)
+        #plt.scatter(X._extract_view(vue), X._extract_view(vue), s=40, c='gray',
+        #            edgecolors=(0, 0, 0))
+        for index, k in zip(range(n_classes), cn.keys()):
+             Y_class, = np.where(Y==classes[index])
+             Y_class_pred = np.intersect1d(np.where(Y_pred==classes[index])[0], np.where(Y_pred==Y)[0])
+             plt.scatter(X._extract_view(vue)[Y_class],
+                         X._extract_view(vue)[Y_class],
+                         s=40, c=cn[k], edgecolors='blue', linewidths=2, label="class real class: "+str(index)) #
+             plt.scatter(X._extract_view(vue)[Y_class_pred],
+                         X._extract_view(vue)[Y_class_pred],
+                         s=160, edgecolors='orange', linewidths=2, label="class prediction: "+str(index))
+
 
 
     if __name__ == '__main__':
@@ -87,7 +111,7 @@ multi class digit from sklearn, multivue
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  5.520 seconds)
+   **Total running time of the script:** ( 0 minutes  6.374 seconds)
 
 
 .. _sphx_glr_download_tutorial_auto_examples_usecase_plot_usecase_exampleMumBo.py:
