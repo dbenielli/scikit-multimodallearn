@@ -33,7 +33,7 @@ doc:
 # project public
 #
 pages:
-    image: registry.gitlab.lis-lab.fr:5005/dev//scikit-multimodallearn/ubuntu:18.04
+    image: registry.gitlab.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:18.04
     tags:
         - docker
     only:
