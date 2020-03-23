@@ -29,7 +29,6 @@ doc:
 
 #        - python3 setup.py build_sphinx
 
-# TODO: Replace the task doc by the following task pages when making the
 # project public
 #
 pages:
