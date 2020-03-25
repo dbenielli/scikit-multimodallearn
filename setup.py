@@ -1,15 +1,111 @@
 
-import os
+import os, re
+import shutil
 from setuptools import setup, find_packages
-
+from distutils.command.clean import clean as _clean
+from distutils.dir_util import remove_tree
+from distutils.command.sdist import sdist
 import multimodal
 
+try:
+    import numpy
+except:
+    raise 'Cannot build iw without numpy'
+    sys.exit()
+
+# --------------------------------------------------------------------
+# Clean target redefinition - force clean everything supprimer de la liste '^core\.*$',
+relist = ['^.*~$', '^#.*#$', '^.*\.aux$', '^.*\.pyc$', '^.*\.o$']
+reclean = []
+USE_COPYRIGHT = True
+try:
+    from copyright import writeStamp, eraseStamp
+except ImportError:
+    USE_COPYRIGHT = False
+
+###################
+# Get Multimodal version
+####################
+def get_version():
+    v_text = open('VERSION').read().strip()
+    v_text_formted = '{"' + v_text.replace('\n', '","').replace(':', '":"')
+    v_text_formted += '"}'
+    v_dict = eval(v_text_formted)
+    return v_dict["multimodal"]
+
+########################
+# Set Multimodal __version__
+########################
+def set_version(multimodal_dir, version):
+    filename = os.path.join(multimodal_dir, '__init__.py')
+    buf = ""
+    for line in open(filename, "rb"):
+        if not line.decode("utf8").startswith("__version__ ="):
+            buf += line.decode("utf8")
+    f = open(filename, "wb")
+    f.write(buf.encode("utf8"))
+    f.write(('__version__ = "%s"\n' % version).encode("utf8"))
+
+for restring in relist:
+    reclean.append(re.compile(restring))
+
+
+def wselect(args, dirname, names):
+    for n in names:
+        for rev in reclean:
+            if (rev.match(n)):
+                os.remove("%s/%s" %(dirname, n))
+        break
+
+
+######################
+# Custom clean command
+######################
+class clean(_clean):
+    def walkAndClean(self):
+        os.walk("..", wselect, [])
+        pass
+
+    def run(self):
+        clean.run(self)
+        if os.path.exists('build'):
+            shutil.rmtree('build')
+        for dirpath, dirnames, filenames in os.walk('iw'):
+            for filename in filenames:
+                if (filename.endswith('.so') or
+                        filename.endswith('.pyd') or
+                        filename.endswith('.dll') or
+                        filename.endswith('.pyc')):
+                    os.unlink(os.path.join(dirpath, filename))
+            for dirname in dirnames:
+                if dirname == '__pycache__':
+                    shutil.rmtree(os.path.join(dirpath, dirname))
+
+
+##############################
+# Custom sdist command
+##############################
+class m_sdist(sdist):
+    """ Build source package
+
+    WARNING : The stamping must be done on an default utf8 machine !
+    """
+
+    def run(self):
+        if USE_COPYRIGHT:
+            writeStamp()
+            sdist.run(self)
+            # eraseStamp()
+        else:
+            sdist.run(self)
 
 def setup_package():
     """Setup function"""
 
     name = 'scikit-multimodallearn'
-    version = multimodal.__version__
+    version = get_version()
+    multimodal_dir = 'multimodal'
+    set_version(multimodal_dir, version)
     description = 'A scikit-learn compatible package for multimodal Classifiers'
     here = os.path.abspath(os.path.dirname(__file__))
     with open(os.path.join(here, 'README.rst'), encoding='utf-8') as readme:
@@ -21,7 +117,7 @@ def setup_package():
         'Source': url,
         'Tracker': '{}/issues'.format(url)}
     author = 'Dominique Benielli and Sokol Koço and Florent Jaillet and Riikka Huusari ' \
-             'and Cécile Capponi and Hachem Kadri'
+             'and Baptiste Bauvin and Cécile Capponi and Hachem Kadri'
     author_email = 'contact.dev@lis-lab.fr'
     license = 'newBSD'
     classifiers = [

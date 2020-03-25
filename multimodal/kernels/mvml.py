@@ -613,7 +613,7 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
 
         return A_new
 
-    def score(self, X, y=None):
+    def score(self, X, y):
         """Return the mean accuracy on the given test data and labels.
 
         Parameters

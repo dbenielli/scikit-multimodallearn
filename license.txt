@@ -1,6 +1,6 @@
 New BSD License
 
-Copyright (c) 2020-15-01, The scit-multimodallearn developers.
+Copyright (c) 2020-15-01, The scikit-multimodallearn developers.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

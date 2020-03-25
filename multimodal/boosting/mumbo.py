@@ -221,12 +221,19 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
 
     def _compute_alphas(self, edges):
         """Compute values of confidence rate alpha given edge values."""
+        dim = edges.shape[0]
         np.where(edges > 1.0, edges, 1.0)
         alphas = 0.5 * np.log((1. + edges) / (1. - edges))
         if np.any(np.isinf(alphas)):
-            alphas[np.where(np.isinf(alphas))[0]] = 1.0
+            if isinstance(alphas, float):
+                alphas = 1.0
+            else:
+                alphas[np.where(np.isinf(alphas))[0]] = 1.0
         if np.any(np.isnan(alphas)):
-            alphas[np.where(np.isnan(alphas))[0]] = 1.0
+            if isinstance(alphas, float):
+                alphas = 1.0
+            else:
+                alphas[np.where(np.isnan(alphas))[0]] = 1.0
         return alphas
 
     def _compute_cost_global(self, label_score_global, best_predicted_classes,

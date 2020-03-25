@@ -311,16 +311,16 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         zeta2 = zeta**2
         def F(x=None, z=None):
             if x is None:
-                # l'algorithme fonctionne de manière itérative
-                # il faut choisir un x initial, c'est ce qu'on fait ici
+                # iteratif algo
+                # choice x initial
                 return 0, matrix(1.0, (n_view*m, 1))
             if min(x) < 0.0:
-                return None   # cas impossible
-            # ici commence le code qui définit ce qu'est une itération
-            f = sum(matrix(coef * exp( matrix(zeta * x.T))   ))
-            Df = matrix(np.sum( zeta * coef * exp(matrix( zeta * x.T ) ), axis=0 )).T # -(x**-1).T
+                return None   # impossible
+            # begin iteration
+            f = sum(matrix(coef * exp( matrix(zeta * x.T))))
+            Df = matrix(np.sum( zeta * coef * exp(matrix( zeta * x.T)), axis=0)).T  # -(x**-1).T
             if z is None: return f, Df
-            H = spdiag(z[0] * matrix(np.sum(coef * zeta2 * exp( matrix(zeta* x.T) ), axis= 0))) ## beta**(-2))
+            H = spdiag(z[0] * matrix(np.sum(coef * zeta2 * exp( matrix(zeta* x.T)), axis=0)))  # beta**(-2))
             return f, Df, H
         try:
             solver = solvers.cp(F, A=A, b=b, G=G, h=h, dim={'l':2*n_view*m})['x']

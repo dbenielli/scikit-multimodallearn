@@ -34,7 +34,7 @@ Version:
 Licence:
 -------
 
-License: LGPLv3+
+License: New BSD License
 
 
 ######### COPYRIGHT #########

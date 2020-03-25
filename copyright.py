@@ -50,7 +50,7 @@ def getStamp(date, iw_version):
     """ Return the corrected formated stamp """
     stamp = open("copyrightstamp.txt").read()
     stamp = stamp.replace("DATE", date)
-    stamp = stamp.replace("IW_VERSION", iw_version)
+    stamp = stamp.replace("MULTIMODAL_VERSION", multimodal_version)
     stamp = stamp.replace('\n', '\n# ')
     stamp = "# " + stamp
     stamp = stamp.replace("# \n", "#\n")
