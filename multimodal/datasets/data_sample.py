@@ -40,6 +40,10 @@
 #
 # ######### COPYRIGHT #########
 #
+#
+#
+#
+#
 
 """This module contains the DataSample class, MultiModalArray, MultiModalSparseArray, MultiModalSparseInfo and MultiModalData, class
 The DataSample class encapsulates a sample 's components

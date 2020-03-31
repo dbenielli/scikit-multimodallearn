@@ -39,8 +39,6 @@
 #
 #
 # ######### COPYRIGHT #########
-#
-
 import pickle
 import unittest
 

@@ -39,7 +39,6 @@
 #
 #
 # ######### COPYRIGHT #########
-#
 r"""Multimodal Boosting
 
 This module contains a **Mu**\ lti\ **M**\ odal **Bo**\ osting (**MuMBo**)

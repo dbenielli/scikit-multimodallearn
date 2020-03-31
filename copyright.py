@@ -80,7 +80,7 @@ def writeStamp():
 def eraseStamp():
     """ Erase a copyright stamp from all files """
     files = findFiles(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                   "iw"))
+                                   "multimodal"))
     for filename in files:
         fileUnStamping(filename)
     fileUnStamping("setup.py")

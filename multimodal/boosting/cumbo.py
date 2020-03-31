@@ -39,7 +39,6 @@
 #
 #
 # ######### COPYRIGHT #########
-#
 r"""
 
 This module contains a **Mu**\ lti\ **C**\ onfusion **M**\ Matrix **B**\ osting (**CuMBo**)
