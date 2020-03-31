@@ -46,7 +46,7 @@ def fileStamping(filename, stamp):
             print(line, end="")
 
 
-def getStamp(date, iw_version):
+def getStamp(date, multimodal_version):
     """ Return the corrected formated stamp """
     stamp = open("copyrightstamp.txt").read()
     stamp = stamp.replace("DATE", date)
@@ -58,19 +58,20 @@ def getStamp(date, iw_version):
 
 
 def getVersionsAndDate():
-    """ Return (date, iw_version) """
+    """ Return (date, multimodal_version..
+    ) """
     v_text = open('VERSION').read().strip()
     v_text_formted = '{"' + v_text.replace('\n', '","').replace(':', '":"')
     v_text_formted += '"}'
     v_dict = eval(v_text_formted)
-    return (time.strftime("%Y"), v_dict['iw'])
+    return (time.strftime("%Y"), v_dict['multimodal'])
 
 
 def writeStamp():
     """ Write a copyright stamp on all files """
     stamp = getStamp(*getVersionsAndDate())
     files = findFiles(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                   "iw"))
+                                   "multimodal"))
     for filename in files:
         fileStamping(filename, stamp)
     fileStamping("setup.py", stamp)
