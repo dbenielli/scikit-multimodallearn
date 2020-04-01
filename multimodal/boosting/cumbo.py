@@ -48,7 +48,7 @@ estimator for classification implemented in the ``MuCumboClassifier`` class.
 import numpy as np
 from sklearn.base import ClassifierMixin
 from sklearn.ensemble import BaseEnsemble
-from sklearn.ensemble._forest import BaseForest
+from sklearn.ensemble.forest import BaseForest
 from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.tree._tree import DTYPE
