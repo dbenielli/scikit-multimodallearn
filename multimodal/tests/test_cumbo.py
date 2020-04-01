@@ -489,24 +489,24 @@ class TestMuCumboClassifier(unittest.TestCase):
 
     #     assert_array_equal(clf.views_ind_, expected_views_ind)
     # #
-    # def test_class_variation(self):
-    #     # Check that classes labels can be integers or strings and can be stored
-    #     # into any kind of sequence
-    #     X = np.array([[1., 1., 1.], [-1., -1., -1.]])
-    #     views_ind = np.array([0, 1, 3])
-    #     y = np.array([3, 1])
-    #     clf = MuCumboClassifier()
-    #     clf.fit(X, y, views_ind)
-    #     np.testing.assert_almost_equal(clf.predict(X), y)
-    #
-    #     y = np.array(["class_1", "class_2"])
-    #     clf = MuCumboClassifier()
-    #     clf.fit(X, y)
-    #     np.testing.assert_equal(clf.predict(X), y)
-    #     # Check that misformed or inconsistent inputs raise expections
-    #     X = np.zeros((5, 4, 2))
-    #     y = np.array([0, 1])
-    #     self.assertRaises(ValueError, clf.fit, X, y, views_ind)
+    def test_class_variation(self):
+        # Check that classes labels can be integers or strings and can be stored
+        # into any kind of sequence
+        X = np.array([[1., 1., 1.], [-1., -1., -1.]])
+        views_ind = np.array([0, 1, 3])
+        y = np.array([3, 1])
+        clf = MuCumboClassifier()
+        clf.fit(X, y, views_ind)
+        np.testing.assert_almost_equal(clf.predict(X), y)
+
+        y = np.array(["class_1", "class_2"])
+        clf = MuCumboClassifier()
+        clf.fit(X, y)
+        np.testing.assert_equal(clf.predict(X), y)
+        # Check that misformed or inconsistent inputs raise expections
+        X = np.zeros((5, 4, 2))
+        y = np.array([0, 1])
+        self.assertRaises(ValueError, clf.fit, X, y, views_ind)
 
 
     #     assert_raises(ValueError, clf.fit, X, y, views_ind)
@@ -634,30 +634,30 @@ class TestMuCumboClassifier(unittest.TestCase):
     #     assert_array_equal(clf.predict(np.array([[-1., 0., 1.]])), np.array([1]))
 
 
-    # def test_simple_predict(self):
-    #     #np.random.seed(seed)
-    #
-    #     # Simple example with 2 classes and 1 view
-    #     X = np.array(
-    #         [[1.1, 2.1],
-    #          [2.1, 0.2],
-    #          [0.7, 1.2],
-    #          [-0.9, -1.8],
-    #          [-1.1, -2.2],
-    #          [-0.3, -1.3]])
-    #     y = np.array([0, 0, 0, 1, 1, 1])
-    #     views_ind = np.array([0, 2])
-    #     clf = MuCumboClassifier()
-    #     clf.fit(X, y, views_ind)
-    #     #assert_array_equal(clf.predict(X), y)
-    #     #assert_array_equal(clf.predict(np.array([[1., 1.], [-1., -1.]])),
-    #     #                   np.array([0, 1]))
-    #     #assert_equal(clf.decision_function(X).shape, y.shape)
-    #
-    #     views_ind = np.array([[1, 0]])
-    #     clf = MuCumboClassifier()
-    #     clf.fit(X, y, views_ind)
-    #     np.testing.assert_almost_equal(clf.predict(X), y)
+    def test_simple_predict(self):
+        #np.random.seed(seed)
+
+        # Simple example with 2 classes and 1 view
+        X = np.array(
+            [[1.1, 2.1],
+             [2.1, 0.2],
+             [0.7, 1.2],
+             [-0.9, -1.8],
+             [-1.1, -2.2],
+             [-0.3, -1.3]])
+        y = np.array([0, 0, 0, 1, 1, 1])
+        views_ind = np.array([0, 2])
+        clf = MuCumboClassifier()
+        clf.fit(X, y, views_ind)
+        #assert_array_equal(clf.predict(X), y)
+        #assert_array_equal(clf.predict(np.array([[1., 1.], [-1., -1.]])),
+        #                   np.array([0, 1]))
+        #assert_equal(clf.decision_function(X).shape, y.shape)
+
+        views_ind = np.array([[1, 0]])
+        clf = MuCumboClassifier()
+        clf.fit(X, y, views_ind)
+        np.testing.assert_almost_equal(clf.predict(X), y)
 
 
 
@@ -835,8 +835,8 @@ class TestMuCumboClassifier(unittest.TestCase):
     #     assert_equal(clf.score(X, y), 1.)
     #
 
-    # def test_classifier(self):
-    #     return check_estimator(MuCumboClassifier)
+    def test_classifier(self):
+        return check_estimator(MuCumboClassifier)
     #
     #
     # def test_iris():
