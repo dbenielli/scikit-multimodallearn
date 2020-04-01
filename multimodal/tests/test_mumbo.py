@@ -52,6 +52,7 @@ from sklearn.svm import SVC
 from sklearn.utils.estimator_checks import check_estimator
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.cluster import KMeans
+from sklearn.linear_model import Lasso
 from sklearn.tree import DecisionTreeClassifier
 from sklearn import datasets
 from multimodal.boosting.mumbo import MumboClassifier
@@ -839,7 +840,7 @@ class TestMuCumboClassifier(unittest.TestCase):
 
         # Check that using a base estimator that doesn't support sample_weight
         # raises an error.
-        clf = MumboClassifier(KMeans())
+        clf = MumboClassifier(Lasso())
         self.assertRaises(ValueError, clf.fit, self.iris.data, self.iris.target, self.iris.views_ind)
 
 

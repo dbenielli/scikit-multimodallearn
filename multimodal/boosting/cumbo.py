@@ -48,7 +48,7 @@ estimator for classification implemented in the ``MuCumboClassifier`` class.
 import numpy as np
 from sklearn.base import ClassifierMixin
 from sklearn.ensemble import BaseEnsemble
-from sklearn.ensemble.forest import BaseForest
+from sklearn.ensemble._forest import BaseForest
 from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.tree._tree import DTYPE
@@ -358,9 +358,9 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
                 return None   # impossible
             # begin iteration
             f = sum(matrix(coef * exp( matrix(zeta * x.T))))
-            Df = matrix(np.sum( zeta * coef * exp(matrix( zeta * x.T)), axis=0)).T  # -(x**-1).T
+            Df = matrix(np.sum( zeta * coef * exp(matrix( zeta * x.T)), axis=0) ).T  # -(x**-1).T
             if z is None: return f, Df
-            H = spdiag(z[0] * matrix(np.sum(coef * zeta2 * exp( matrix(zeta* x.T)), axis=0)))  # beta**(-2))
+            H = spdiag(z[0] * matrix(np.sum(coef * zeta2 * exp( matrix(zeta* x.T) ), axis=0) ))  # beta**(-2))
             return f, Df, H
         try:
             solver = solvers.cp(F, A=A, b=b, G=G, h=h, dim={'l':2*n_view*m})['x']
@@ -440,7 +440,6 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         else:
             dtype = None
             accept_sparse = ['csr', 'csc']
-
         self.X_ = self._global_X_transform(X, views_ind=views_ind)
         views_ind_, n_views = self.X_._validate_views_ind(self.X_.views_ind,
                                                           self.X_.shape[1])

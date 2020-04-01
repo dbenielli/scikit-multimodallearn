@@ -185,7 +185,7 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         """Check the estimator and set the base_estimator_ attribute."""
         super(MumboClassifier, self)._validate_estimator(
             default=DecisionTreeClassifier(max_depth=1))
-
+        print()
         if not has_fit_parameter(self.base_estimator_, "sample_weight"):
             raise ValueError("%s doesn't support sample_weight."
                              % self.base_estimator_.__class__.__name__)
@@ -261,7 +261,6 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
 
     def _compute_alphas(self, edges):
         """Compute values of confidence rate alpha given edge values."""
-        dim = edges.shape[0]
         np.where(edges > 1.0, edges, 1.0)
         alphas = 0.5 * np.log((1. + edges) / (1. - edges))
         if np.any(np.isinf(alphas)):
