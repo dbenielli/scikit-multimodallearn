@@ -121,7 +121,7 @@ class MuComboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
 
     Examples
     --------
-    >>> from multimodal.boosting.cumbo import MuComboClassifier
+    >>> from multimodal.boosting.combo import MuComboClassifier
     >>> from sklearn.datasets import load_iris
     >>> X, y = load_iris(return_X_y=True)
     >>> views_ind = [0, 2, 4]  # view 0: sepal data, view 1: petal data
