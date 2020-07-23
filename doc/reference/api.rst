@@ -20,7 +20,7 @@ multimodal.boosting.mumbo
    :inherited-members:
 
 
-multimodal.boosting.cumbo
+multimodal.boosting.combo
 +++++++++++++++++++++++++
 
 .. automodule:: multimodal.boosting.combo
