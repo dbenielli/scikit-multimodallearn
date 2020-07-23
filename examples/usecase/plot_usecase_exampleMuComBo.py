@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 =========================
-Use Case MuCumBo on digit
+Use Case MuComBo on digit
 =========================
-Use case for all classifier of multimodallearn  MuCumBo
+Use case for all classifier of multimodallearn  MuComBo
 
 multi class digit from sklearn, multivue
  - vue 0 digit data (color of sklearn)
@@ -54,15 +54,15 @@ if __name__ == '__main__':
     dic_digit = load_dict(file)
     XX =MultiModalArray(dic_digit)
     X_train, X_test, y_train, y_test = train_test_split(XX, y)
-    est3 = MuCumboClassifier(base_estimator=base_estimator).fit(X_train, y_train)
+    est3 = MuComboClassifier(base_estimator=base_estimator).fit(X_train, y_train)
     y_pred3 = est3.predict(X_test)
     y_pred33 = est3.predict(X_train)
-    print("result of MuCumboClassifier on digit ")
+    print("result of MuComboClassifier on digit ")
     result3 = np.mean(y_pred3.ravel() == y_test.ravel()) * 100
     print(result3)
 
     fig = plt.figure(figsize=(12., 11.))
-    fig.suptitle("MuCumbo: result" + str(result3), fontsize=16)
+    fig.suptitle("MuCombo: result" + str(result3), fontsize=16)
     plot_subplot(X_train, y_train, y_pred33  ,0, (4, 1, 1), "train vue 0 color" )
     plot_subplot(X_test, y_test,y_pred3 , 0, (4, 1, 2), "test vue 0 color" )
     plot_subplot(X_test, y_test, y_pred3,1, (4, 1, 3), "test vue 1 gradiant 0" )
