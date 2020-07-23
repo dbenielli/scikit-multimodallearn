@@ -24,7 +24,7 @@
 # -----------
 #
 # The multimodal package implement classifiers multiview, 
-# MumboClassifier class, MuCumboClassifier class, MVML class, MKL class.
+# MumboClassifier class, MuComboClassifier class, MVML class, MKL class.
 # compatible with sklearn
 #
 # Version:
@@ -60,11 +60,11 @@ from sklearn.linear_model import Lasso
 from sklearn.tree import DecisionTreeClassifier
 from sklearn import datasets
 from sklearn.utils.estimator_checks import check_estimator
-from multimodal.boosting.cumbo import MuCumboClassifier
+from multimodal.boosting.combo import MuComboClassifier
 from multimodal.tests.data.get_dataset_path import get_dataset_path
 from multimodal.datasets.data_sample import MultiModalArray
 
-class TestMuCumboClassifier(unittest.TestCase):
+class TestMuComboClassifier(unittest.TestCase):
 
     @classmethod
     def setUpClass(clf):
@@ -75,11 +75,11 @@ class TestMuCumboClassifier(unittest.TestCase):
 
 
     def test_init(self):
-        clf = MuCumboClassifier()
+        clf = MuComboClassifier()
         self.assertEqual(clf.random_state, None)
         self.assertEqual(clf.n_estimators, 50)
         n_estimators = 3
-        clf = MuCumboClassifier(n_estimators=n_estimators)
+        clf = MuComboClassifier(n_estimators=n_estimators)
         #self.assertEqual(clf.view_mode_)
 
     def test_init_var(self):
@@ -98,7 +98,7 @@ class TestMuCumboClassifier(unittest.TestCase):
         expected_predicted_classes_shape = ((n_views, y.shape[0]))
         expected_n_yi_s = np.array([1, 1, 2])
         expected_beta_class = np.ones((n_views, n_classes)) / n_classes
-        clf = MuCumboClassifier()
+        clf = MuComboClassifier()
         clf.n_classes_ = n_classes
         (cost,  label_score, label_score_glob, predicted_classes, score_function, beta_class, n_yi_s) \
             = clf._init_var(n_views, y)
@@ -121,7 +121,7 @@ class TestMuCumboClassifier(unittest.TestCase):
         expected_dist = np.array(
             [[0.25, 0.25, 0.25, 0.25], [0.5, 0.5, -2., 2.], [-0.5, 0.5, -1., 2.]])
 
-        clf = MuCumboClassifier()
+        clf = MuComboClassifier()
         dist = clf._compute_dist(cost, y)
 
         np.testing.assert_equal(dist, expected_dist)
@@ -156,7 +156,7 @@ class TestMuCumboClassifier(unittest.TestCase):
     #     expected_coop_coef = np.array([[1, 0, 1, 0], [1, 1, 1, 0], [0, 0, 1, 1]],
     #                                   dtype=np.float64)
     #
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     coop_coef = clf._compute_coop_coef(predicted_classes, y)
     #
     #     assert_array_equal(coop_coef, expected_coop_coef)
@@ -172,7 +172,7 @@ class TestMuCumboClassifier(unittest.TestCase):
         y = np.array([0, 2, 1, 2])
         expected_edges = np.array([1.25, 0.75, 0.25])
 
-        clf = MuCumboClassifier()
+        clf = MuComboClassifier()
         edges = clf._compute_edges(cost, predicted_classes, y)
 
         np.testing.assert_equal(edges, expected_edges)
@@ -183,7 +183,7 @@ class TestMuCumboClassifier(unittest.TestCase):
         expected_alpha = 0.5
         edge = (np.e-1.) / (np.e+1.)
 
-        clf = MuCumboClassifier()
+        clf = MuComboClassifier()
         alpha = clf._compute_alphas(edge)
         self.assertAlmostEqual(alpha, expected_alpha, decimal)
 
@@ -197,7 +197,7 @@ class TestMuCumboClassifier(unittest.TestCase):
 
 
     def test_prepare_beta_solver(self):
-        clf = MuCumboClassifier()
+        clf = MuComboClassifier()
         clf.n_views_ = 3
         clf.n_classes_ = 3
         A, b, G, h, l = clf._prepare_beta_solver()
@@ -239,7 +239,7 @@ class TestMuCumboClassifier(unittest.TestCase):
         self.assertEqual(l, {'l': 18})
 
     def test_solver_cp_forbeta(self):
-            clf = MuCumboClassifier()
+            clf = MuComboClassifier()
             clf.n_views_ = 3
             clf.n_classes_ = 3
             clf.n_yi_ = np.array([1, 1, 2])
@@ -265,7 +265,7 @@ class TestMuCumboClassifier(unittest.TestCase):
             np.testing.assert_almost_equal(s_r, np.ones(3, dtype=np.float), 9)
 
     def test_solver_compute_betas(self):
-        clf = MuCumboClassifier()
+        clf = MuComboClassifier()
         clf.n_views_ = 3
         clf.n_classes_ = 3
         clf.n_yi_ = np.array([1, 1, 2])
@@ -295,7 +295,7 @@ class TestMuCumboClassifier(unittest.TestCase):
 
 
     def test_indicatrice(self):
-        clf = MuCumboClassifier()
+        clf = MuComboClassifier()
         clf.n_views_ = 3
         clf.n_classes_ = 3
         y_i = np.array([0, 1, 2, 0])
@@ -331,7 +331,7 @@ class TestMuCumboClassifier(unittest.TestCase):
                  [[-2, 1, 0.5], [1, 1, -1], [1, -2, 0.5], [1, 1, -1]]],
                 dtype=np.float64)
         score_function_Tminus1 =10 *np.ones((3,4,3), dtype=np.float)
-        clf = MuCumboClassifier()
+        clf = MuComboClassifier()
         clf.n_views_ = 3
         clf.n_classes_ = 3
         clf.n_yi_ = np.array([1, 1, 2])
@@ -380,7 +380,7 @@ class TestMuCumboClassifier(unittest.TestCase):
     #          [[8, 2, -4], [2, 4, 0.], [4, 1, -2], [8, 4., 1]]],
     #         dtype=np.float64)
     #
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     cost, label_score = clf._compute_cost(label_score, pred_classes, y, alphas,
     #                                           use_coop_coef=True)
     #
@@ -413,7 +413,7 @@ class TestMuCumboClassifier(unittest.TestCase):
     #          [[-9., 1., 8.], [1., 0.125, -1.125], [4., -4.5, 0.5], [1., 8., -9.]]],
     #         dtype=np.float64)
     #
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     cost, label_score = clf._compute_cost(label_score, pred_classes, y, alphas,
     #                                           use_coop_coef=False)
     #
@@ -447,7 +447,7 @@ class TestMuCumboClassifier(unittest.TestCase):
     #          [[-2., 1., 1.], [1., 0.125, -1.125], [0.5, -1., 0.5], [1., 8., -9.]]],
     #         dtype=np.float64)
     #
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     cost, label_score = clf._compute_cost(label_score, pred_classes, y, alphas,
     #                                           use_coop_coef=True)
     #
@@ -461,19 +461,19 @@ class TestMuCumboClassifier(unittest.TestCase):
     #
     #     n_estimators = 10
     #
-    #     clf = MuCumboClassifier(n_estimators=n_estimators, best_view_mode='edge')
+    #     clf = MuComboClassifier(n_estimators=n_estimators, best_view_mode='edge')
     #     clf.fit(iris.data, iris.target, iris.views_ind)
     #     score = clf.score(iris.data, iris.target)
     #     assert_greater(score, 0.95, "Failed with score = {}".format(score))
     #
-    #     clf = MuCumboClassifier(n_estimators=n_estimators, best_view_mode='error')
+    #     clf = MuComboClassifier(n_estimators=n_estimators, best_view_mode='error')
     #     clf.fit(iris.data, iris.target, iris.views_ind)
     #     score = clf.score(iris.data, iris.target)
     #     assert_greater(score, 0.95, "Failed with score = {}".format(score))
     #
-    #     assert_raises(ValueError, MuCumboClassifier(), best_view_mode='test')
+    #     assert_raises(ValueError, MuComboClassifier(), best_view_mode='test')
     #
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     clf.best_view_mode = 'test'
     #     assert_raises(ValueError, clf.fit, iris.data, iris.target, iris.views_ind)
     #
@@ -483,7 +483,7 @@ class TestMuCumboClassifier(unittest.TestCase):
        X = np.array([[1., 1., 1.], [-1., -1., -1.]])
        y = np.array([0, 1])
        expected_views_ind = np.array([0, 1, 3])
-       clf = MuCumboClassifier()
+       clf = MuComboClassifier()
        clf.fit(X, y)
        # np.testing.assert_equal(clf.X_.views_ind, expected_views_ind)
 
@@ -495,12 +495,12 @@ class TestMuCumboClassifier(unittest.TestCase):
         X = np.array([[1., 1., 1.], [-1., -1., -1.]])
         views_ind = np.array([0, 1, 3])
         y = np.array([3, 1])
-        clf = MuCumboClassifier()
+        clf = MuComboClassifier()
         clf.fit(X, y, views_ind)
         np.testing.assert_almost_equal(clf.predict(X), y)
 
         y = np.array(["class_1", "class_2"])
-        clf = MuCumboClassifier()
+        clf = MuComboClassifier()
         clf.fit(X, y)
         np.testing.assert_equal(clf.predict(X), y)
         # Check that misformed or inconsistent inputs raise expections
@@ -517,70 +517,70 @@ class TestMuCumboClassifier(unittest.TestCase):
     #     X = np.array([[1., 1., 1.], [-1., -1., -1.]])
     #     y = np.array([1])
     #     views_ind = np.array([0, 1, 3])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     assert_raises(ValueError, clf.fit, X, y, views_ind)
     #
     #     y = np.array([1, 0, 0, 1])
     #     views_ind = np.array([0, 1, 3])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     assert_raises(ValueError, clf.fit, X, y, views_ind)
     #
     #     y = np.array([3.2, 1.1])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     assert_raises(ValueError, clf.fit, X, y, views_ind)
     #
     #     y = np.array([0, 1])
     #     views_ind = np.array([0, 3, 1])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     assert_raises(ValueError, clf.fit, X, y, views_ind)
     #
     #     views_ind = np.array([-1, 1, 3])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     assert_raises(ValueError, clf.fit, X, y, views_ind)
     #
     #     views_ind = np.array([0, 1, 4])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     assert_raises(ValueError, clf.fit, X, y, views_ind)
     #
     #     views_ind = np.array([0.5, 1, 3])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     assert_raises(ValueError, clf.fit, X, y, views_ind)
     #
     #     views_ind = np.array("test")
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     assert_raises(ValueError, clf.fit, X, y, views_ind)
     #
     #     views_ind = np.zeros((3, 2, 4))
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     assert_raises(ValueError, clf.fit, X, y, views_ind)
     #
     #     views_ind = np.array([[-1], [1, 2]])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     assert_raises(ValueError, clf.fit, X, y, views_ind)
     #
     #     views_ind = np.array([[3], [1, 2]])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     assert_raises(ValueError, clf.fit, X, y, views_ind)
     #
     #     views_ind = np.array([[0.5], [1, 2]])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     assert_raises(ValueError, clf.fit, X, y, views_ind)
     #
     #     views_ind = np.array([[-1, 0], [1, 2]])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     assert_raises(ValueError, clf.fit, X, y, views_ind)
     #
     #     views_ind = np.array([[0, 3], [1, 2]])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     assert_raises(ValueError, clf.fit, X, y, views_ind)
     #
     #     views_ind = np.array([[0.5], [1], [2]])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     assert_raises(ValueError, clf.fit, X, y, views_ind)
     #
     #
     def test_decision_function(self):
-        clf = MuCumboClassifier()
+        clf = MuComboClassifier()
         clf.fit(self.iris.data, self.iris.target, self.iris.views_ind)
         X = np.zeros((4, 3))
         with self.assertRaises(ValueError):
@@ -591,7 +591,7 @@ class TestMuCumboClassifier(unittest.TestCase):
         np.testing.assert_almost_equal(dec, dec_expected, 9)
 
     def test_predict(self):
-        clf = MuCumboClassifier()
+        clf = MuComboClassifier()
         X = np.array([[0., 0.5, 0.7], [1., 1.5, 1.7], [2., 2.5, 2.7]])
         y = np.array([1, 1, 1])
         clf.fit(X, y)
@@ -605,13 +605,13 @@ class TestMuCumboClassifier(unittest.TestCase):
     #     # Check that using empty data raises an exception
     #     X = np.array([[]])
     #     y = np.array([])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     assert_raises(ValueError, clf.fit, X, y)
     #
     #     # Check that fit() works for the smallest possible dataset
     #     X = np.array([[0.]])
     #     y = np.array([0])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     clf.fit(X, y)
     #     assert_array_equal(clf.predict(X), y)
     #     assert_array_equal(clf.predict(np.array([[1.]])), np.array([0]))
@@ -620,7 +620,7 @@ class TestMuCumboClassifier(unittest.TestCase):
     #     X = np.array([[0., 0.5, 0.7], [1., 1.5, 1.7], [2., 2.5, 2.7]])
     #     y = np.array([1, 1, 1])
     #     views_ind = np.array([0, 1, 3])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     clf.fit(X, y, views_ind)
     #     assert_array_equal(clf.predict(X), y)
     #     assert_array_equal(clf.predict(np.array([[-1., 0., 1.]])), np.array([1]))
@@ -628,7 +628,7 @@ class TestMuCumboClassifier(unittest.TestCase):
     #     X = np.array([[0., 0.5, 0.7], [1., 1.5, 1.7], [2., 2.5, 2.7]])
     #     y = np.array([1, 1, 1])
     #     views_ind = np.array([[0, 2], [1]])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     clf.fit(X, y, views_ind)
     #     assert_array_equal(clf.predict(X), y)
     #     assert_array_equal(clf.predict(np.array([[-1., 0., 1.]])), np.array([1]))
@@ -647,7 +647,7 @@ class TestMuCumboClassifier(unittest.TestCase):
              [-0.3, -1.3]])
         y = np.array([0, 0, 0, 1, 1, 1])
         views_ind = np.array([0, 2])
-        clf = MuCumboClassifier()
+        clf = MuComboClassifier()
         clf.fit(X, y, views_ind)
         #assert_array_equal(clf.predict(X), y)
         #assert_array_equal(clf.predict(np.array([[1., 1.], [-1., -1.]])),
@@ -655,7 +655,7 @@ class TestMuCumboClassifier(unittest.TestCase):
         #assert_equal(clf.decision_function(X).shape, y.shape)
 
         views_ind = np.array([[1, 0]])
-        clf = MuCumboClassifier()
+        clf = MuComboClassifier()
         clf.fit(X, y, views_ind)
         np.testing.assert_almost_equal(clf.predict(X), y)
 
@@ -676,7 +676,7 @@ class TestMuCumboClassifier(unittest.TestCase):
     #          [-0.3, -1.3, -1.4]])
     #     y = np.array([0, 0, 0, 1, 1, 1])
     #     views_ind = np.array([0, 2, 3])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     clf.fit(X, y, views_ind)
     #     assert_array_equal(clf.predict(X), y)
     #     assert_array_equal(clf.predict(np.array([[1., 1., 1.], [-1., -1., -1.]])),
@@ -684,7 +684,7 @@ class TestMuCumboClassifier(unittest.TestCase):
     #     assert_equal(clf.decision_function(X).shape, y.shape)
     #
     #     views_ind = np.array([[2, 0], [1]])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     clf.fit(X, y, views_ind)
     #     assert_array_equal(clf.predict(X), y)
     #     assert_array_equal(clf.predict(np.array([[1., 1., 1.], [-1., -1., -1.]])),
@@ -701,7 +701,7 @@ class TestMuCumboClassifier(unittest.TestCase):
     #          [-0.3, -1.3, -1.4, -0.6, -0.7]])
     #     y = np.array([0, 0, 0, 1, 1, 1])
     #     views_ind = np.array([0, 2, 3, 5])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     clf.fit(X, y, views_ind)
     #     assert_array_equal(clf.predict(X), y)
     #     data = np.array([[1., 1., 1., 1., 1.], [-1., -1., -1., -1., -1.]])
@@ -709,7 +709,7 @@ class TestMuCumboClassifier(unittest.TestCase):
     #     assert_equal(clf.decision_function(X).shape, y.shape)
     #
     #     views_ind = np.array([[2, 0], [1], [3, 4]])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     clf.fit(X, y, views_ind)
     #     assert_array_equal(clf.predict(X), y)
     #     data = np.array([[1., 1., 1., 1., 1.], [-1., -1., -1., -1., -1.]])
@@ -726,7 +726,7 @@ class TestMuCumboClassifier(unittest.TestCase):
     #          [-0.3, -1.3, -1.4, -0.6, -0.7]])
     #     y = np.array([0, 0, 1, 1, 2, 2])
     #     views_ind = np.array([0, 2, 3, 5])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     clf.fit(X, y, views_ind)
     #     assert_array_equal(clf.predict(X), y)
     #     data = np.array(
@@ -737,7 +737,7 @@ class TestMuCumboClassifier(unittest.TestCase):
     #     assert_equal(clf.decision_function(X).shape, (X.shape[0], 3))
     #
     #     views_ind = np.array([[1, 0], [2], [3, 4]])
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     clf.fit(X, y, views_ind)
     #     assert_array_equal(clf.predict(X), y)
     #     data = np.array(
@@ -767,7 +767,7 @@ class TestMuCumboClassifier(unittest.TestCase):
     #     y = np.zeros(2*n_samples, dtype=np.int64)
     #     y[n_samples:] = 1
     #     views_ind = np.array([0, 2, 4])
-    #     clf = MuCumboClassifier(n_estimators=1)
+    #     clf = MuComboClassifier(n_estimators=1)
     #     clf.fit(X, y, views_ind)
     #     assert_equal(clf.score(X, y), 1.)
     #
@@ -786,7 +786,7 @@ class TestMuCumboClassifier(unittest.TestCase):
     #     y = np.zeros(4*n_samples, dtype=np.int64)
     #     y[2*n_samples:] = 1
     #     views_ind = np.array([0, 2, 4])
-    #     clf = MuCumboClassifier(n_estimators=3)
+    #     clf = MuComboClassifier(n_estimators=3)
     #     clf.fit(X, y, views_ind)
     #     assert_equal(clf.score(X, y), 1.)
     #
@@ -808,7 +808,7 @@ class TestMuCumboClassifier(unittest.TestCase):
     #     y[n_samples:2*n_samples] = 1
     #     y[2*n_samples:] = 2
     #     views_ind = np.array([0, 2, 4, 6])
-    #     clf = MuCumboClassifier(n_estimators=3)
+    #     clf = MuComboClassifier(n_estimators=3)
     #     clf.fit(X, y, views_ind)
     #     assert_equal(clf.score(X, y), 1.)
     #
@@ -830,13 +830,13 @@ class TestMuCumboClassifier(unittest.TestCase):
     #     y[n_samples:2*n_samples] = 1
     #     y[2*n_samples:] = 2
     #     views_ind = np.array([0, 2, 4, 6])
-    #     clf = MuCumboClassifier(n_estimators=4)
+    #     clf = MuComboClassifier(n_estimators=4)
     #     clf.fit(X, y, views_ind)
     #     assert_equal(clf.score(X, y), 1.)
     #
 
     def test_classifier(self):
-        return check_estimator(MuCumboClassifier)
+        return check_estimator(MuComboClassifier)
     #
     #
     # def test_iris():
@@ -847,7 +847,7 @@ class TestMuCumboClassifier(unittest.TestCase):
     #     classes = np.unique(iris.target)
     #
     #     for views_ind in [iris.views_ind, np.array([[0, 2], [1, 3]])]:
-    #         clf = MuCumboClassifier(n_estimators=n_estimators)
+    #         clf = MuComboClassifier(n_estimators=n_estimators)
     #
     #         clf.fit(iris.data, iris.target, views_ind)
     #
@@ -884,7 +884,7 @@ class TestMuCumboClassifier(unittest.TestCase):
 
     #
         for X, y, views_ind in data:
-            clf = MuCumboClassifier(n_estimators=n_estimators, random_state=seed)
+            clf = MuComboClassifier(n_estimators=n_estimators, random_state=seed)
             clf.fit(X, y, views_ind)
             staged_dec_func = [dec_f for dec_f in clf.staged_decision_function(X)]
             staged_predict = [predict for predict in clf.staged_predict(X)]
@@ -897,7 +897,7 @@ class TestMuCumboClassifier(unittest.TestCase):
             # assert_equal(len(staged_score), n_estimators)
     #
     #         for ind in range(n_estimators):
-    #             clf = MuCumboClassifier(n_estimators=ind+1, random_state=seed)
+    #             clf = MuComboClassifier(n_estimators=ind+1, random_state=seed)
     #             clf.fit(X, y, views_ind)
     #             dec_func = clf.decision_function(X)
     #             predict = clf.predict(X)
@@ -911,7 +911,7 @@ class TestMuCumboClassifier(unittest.TestCase):
     #     np.random.seed(seed)
     #
     #     # Check that base trees can be grid-searched.
-        mumbo = MuCumboClassifier(base_estimator=DecisionTreeClassifier())
+        mumbo = MuComboClassifier(base_estimator=DecisionTreeClassifier())
         parameters = {'n_estimators': (1, 2),
                       'base_estimator__max_depth': (1, 2)}
         clf = GridSearchCV(mumbo, parameters)
@@ -929,7 +929,7 @@ class TestMuCumboClassifier(unittest.TestCase):
     #
     #     # Check pickability.
     #
-    #     clf = MuCumboClassifier()
+    #     clf = MuComboClassifier()
     #     clf.fit(iris.data, iris.target, iris.views_ind)
     #     score = clf.score(iris.data, iris.target)
     #     dump = pickle.dumps(clf)
@@ -945,19 +945,19 @@ class TestMuCumboClassifier(unittest.TestCase):
     #
         """ Test different base estimators."""
         n_estimators = 5
-        clf = MuCumboClassifier(RandomForestClassifier(), n_estimators=n_estimators)
+        clf = MuComboClassifier(RandomForestClassifier(), n_estimators=n_estimators)
         clf.fit(self.iris.data, self.iris.target, self.iris.views_ind)
         score = clf.score(self.iris.data, self.iris.target)
         self.assertGreater(score, 0.95, "Failed with score = {}".format(score))
 
-        clf = MuCumboClassifier(SVC(), n_estimators=n_estimators)
+        clf = MuComboClassifier(SVC(), n_estimators=n_estimators)
         clf.fit(self.iris.data, self.iris.target, self.iris.views_ind)
         score = clf.score(self.iris.data, self.iris.target)
         self.assertGreater(score, 0.95, "Failed with score = {}".format(score))
 
     #     # Check that using a base estimator that doesn't support sample_weight
     #     # raises an error.
-        clf = MuCumboClassifier(Lasso())
+        clf = MuComboClassifier(Lasso())
         self.assertRaises(ValueError, clf.fit, self.iris.data, self.iris.target, self.iris.views_ind)
     #     assert_raises(ValueError, clf.fit, iris.data, iris.target, iris.views_ind)
     #
@@ -985,13 +985,13 @@ class TestMuCumboClassifier(unittest.TestCase):
     #         for views_ind in (iris.views_ind, np.array([[0, 2], [1, 3]])):
     #             X_sparse = sparse_format(X_dense)
     #
-    #             clf_sparse = MuCumboClassifier(
+    #             clf_sparse = MuComboClassifier(
     #                 base_estimator=CustomSVC(),
     #                 random_state=seed,
     #                 n_estimators=n_estimators)
     #             clf_sparse.fit(X_sparse, y, views_ind)
     #
-    #             clf_dense = MuCumboClassifier(
+    #             clf_dense = MuComboClassifier(
     #                 base_estimator=CustomSVC(),
     #                 random_state=seed,
     #                 n_estimators=n_estimators)
@@ -1032,5 +1032,5 @@ class TestMuCumboClassifier(unittest.TestCase):
 if __name__ == '__main__':
     unittest.main()
     # suite = unittest.TestLoader().loadTestsFromTestCase
-    # (TestMuCumboClassifier().test_class_variation())
+    # (TestMuComboClassifier().test_class_variation())
     # unittest.TextTestRunner(verbosity=2).run(suite)

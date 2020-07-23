@@ -23,7 +23,7 @@ rightly classify the points.
 """
 
 import numpy as np
-from multimodal.boosting.cumbo import MuCumboClassifier
+from multimodal.boosting.combo import MuComboClassifier
 from matplotlib import pyplot as plt
 
 
@@ -59,7 +59,7 @@ y[2*n_samples:] = 1
 views_ind = np.array([0, 2, 4])
 
 n_estimators = 3
-clf = MuCumboClassifier(n_estimators=n_estimators)
+clf = MuComboClassifier(n_estimators=n_estimators)
 clf.fit(X, y, views_ind)
 
 print('\nAfter 3 iterations, the MuCuMBo classifier reaches exact '

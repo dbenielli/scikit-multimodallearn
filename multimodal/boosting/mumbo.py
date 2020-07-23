@@ -24,7 +24,7 @@
 # -----------
 #
 # The multimodal package implement classifiers multiview, 
-# MumboClassifier class, MuCumboClassifier class, MVML class, MKL class.
+# MumboClassifier class, MuComboClassifier class, MVML class, MKL class.
 # compatible with sklearn
 #
 # Version:

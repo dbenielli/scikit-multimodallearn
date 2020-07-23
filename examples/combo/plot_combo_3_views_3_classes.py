@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 ==================================
-MuCumbo 3 views, 3 classes example
+MuCombo 3 views, 3 classes example
 ==================================
 
 In this toy example, we generate data from three classes, split between three
@@ -12,12 +12,12 @@ well seperated, while the points for the third class are not seperated with
 the two other classes. That means that, taken separately, none of the single
 views allows for a good classification of the data.
 
-Nevertheless, the MuCuMbo algorithm take adavantage of the complementarity of
+Nevertheless, the MuCoMbo algorithm take adavantage of the complementarity of
 the views to rightly classify the points.
 """
 
 import numpy as np
-from multimodal.boosting.cumbo import MuCumboClassifier
+from multimodal.boosting.combo import MuComboClassifier
 from matplotlib import pyplot as plt
 
 
@@ -56,7 +56,7 @@ y[2*n_samples:] = 2
 views_ind = np.array([0, 2, 4, 6])
 
 n_estimators = 4
-clf = MuCumboClassifier(n_estimators=n_estimators)
+clf = MuComboClassifier(n_estimators=n_estimators)
 clf.fit(X, y, views_ind)
 
 print('\nAfter 4 iterations, the MuCuMBo classifier reaches exact '

@@ -20,7 +20,7 @@ from multimodal.datasets.base import load_dict, save_dict
 from multimodal.tests.data.get_dataset_path import get_dataset_path
 from multimodal.datasets.data_sample import MultiModalArray
 
-from multimodal.boosting.cumbo import MuCumboClassifier
+from multimodal.boosting.combo import MuComboClassifier
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib._color_data as mcd

@@ -1,6 +1,6 @@
 from .mumbo import MumboClassifier
-from .cumbo import MuCumboClassifier
+from .combo import MuComboClassifier
 
-__all__ = ['MumboClassifier', 'MuCumboClassifier']
+__all__ = ['MumboClassifier', 'MuComboClassifier']
 
 

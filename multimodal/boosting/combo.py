@@ -24,7 +24,7 @@
 # -----------
 #
 # The multimodal package implement classifiers multiview, 
-# MumboClassifier class, MuCumboClassifier class, MVML class, MKL class.
+# MumboClassifier class, MuComboClassifier class, MVML class, MKL class.
 # compatible with sklearn
 #
 # Version:
@@ -42,7 +42,7 @@
 r"""
 
 This module contains a **Mu**\ lti\ **C**\ onfusion **M**\ Matrix **B**\ osting (**CuMBo**)
-estimator for classification implemented in the ``MuCumboClassifier`` class.
+estimator for classification implemented in the ``MuComboClassifier`` class.
 """
 
 import numpy as np
@@ -61,7 +61,7 @@ from .boost import UBoosting
 import warnings
 
 
-class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
+class MuComboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
     r"""It then iterates the process on the same dataset but where the weights of
     incorrectly classified instances are adjusted such that subsequent
     classifiers focus more on difficult cases.
@@ -121,27 +121,27 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
 
     Examples
     --------
-    >>> from multimodal.boosting.cumbo import MuCumboClassifier
+    >>> from multimodal.boosting.cumbo import MuComboClassifier
     >>> from sklearn.datasets import load_iris
     >>> X, y = load_iris(return_X_y=True)
     >>> views_ind = [0, 2, 4]  # view 0: sepal data, view 1: petal data
-    >>> clf = MuCumboClassifier(random_state=0)
+    >>> clf = MuComboClassifier(random_state=0)
     >>> clf.fit(X, y, views_ind)  # doctest: +NORMALIZE_WHITESPACE
-    MuCumboClassifier(base_estimator=None, n_estimators=50, random_state=0)
+    MuComboClassifier(base_estimator=None, n_estimators=50, random_state=0)
     >>> print(clf.predict([[ 5.,  3.,  1.,  1.]]))
     [0]
     >>> views_ind = [[0, 2], [1, 3]]  # view 0: length data, view 1: width data
-    >>> clf = MuCumboClassifier(random_state=0)
+    >>> clf = MuComboClassifier(random_state=0)
     >>> clf.fit(X, y, views_ind)  # doctest: +NORMALIZE_WHITESPACE
-    MuCumboClassifier(base_estimator=None, n_estimators=50, random_state=0)
+    MuComboClassifier(base_estimator=None, n_estimators=50, random_state=0)
     >>> print(clf.predict([[ 5.,  3.,  1.,  1.]]))
     [0]
 
     >>> from sklearn.tree import DecisionTreeClassifier
     >>> base_estimator = DecisionTreeClassifier(max_depth=2)
-    >>> clf = MuCumboClassifier(base_estimator=base_estimator, random_state=1)
+    >>> clf = MuComboClassifier(base_estimator=base_estimator, random_state=1)
     >>> clf.fit(X, y, views_ind)  # doctest: +NORMALIZE_WHITESPACE
-    MuCumboClassifier(base_estimator=DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=2,
+    MuComboClassifier(base_estimator=DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=2,
             max_features=None, max_leaf_nodes=None,
             min_impurity_decrease=0.0, min_impurity_split=None,
             min_samples_leaf=1, min_samples_split=2,
@@ -177,14 +177,14 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
                  base_estimator=None,
                  n_estimators=50,
                  random_state=None): # n_estimators=50,
-        super(MuCumboClassifier, self).__init__(
+        super(MuComboClassifier, self).__init__(
             base_estimator=base_estimator,
             n_estimators=n_estimators)
         self.random_state = random_state
 
     def _validate_estimator(self):
         """Check the estimator and set the base_estimator_ attribute."""
-        super(MuCumboClassifier, self)._validate_estimator(
+        super(MuComboClassifier, self)._validate_estimator(
             default=DecisionTreeClassifier(max_depth=1))
 
         if not has_fit_parameter(self.base_estimator_, "sample_weight"):
@@ -688,7 +688,7 @@ class MuCumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         score : float
             Mean accuracy of self.predict(X) wrt. y.
         """
-        return super(MuCumboClassifier, self).score(X, y)
+        return super(MuComboClassifier, self).score(X, y)
 
     def staged_score(self, X, y):
         """Return staged mean accuracy on the given test data and labels.

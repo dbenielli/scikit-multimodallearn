@@ -24,7 +24,7 @@
 # -----------
 #
 # The multimodal package implement classifiers multiview, 
-# MumboClassifier class, MuCumboClassifier class, MVML class, MKL class.
+# MumboClassifier class, MuComboClassifier class, MVML class, MKL class.
 # compatible with sklearn
 #
 # Version:
@@ -53,7 +53,7 @@ from multimodal.datasets.data_sample import MultiModalData, MultiModalArray, Mul
 
 class UBoosting(metaclass=ABCMeta):
     """
-    Abstract class MuCumboClassifier and  MumboClassifier should inherit from
+    Abstract class MuComboClassifier and  MumboClassifier should inherit from
     UBoosting for methods
     """
 
