@@ -95,6 +95,22 @@ class MVMLTest(unittest.TestCase):
         w_expected = np.array([[0.5],[0.5]])
         np.testing.assert_almost_equal(mvml.w, w_expected, 8)
 
+    def testFitMVMLRegression(self):
+        #######################################################
+        # task with dict and not precomputed
+        #######################################################
+        y = self.y
+        y += np.random.uniform(0,1, size=y.shape)
+        mvml = MVML(lmbda=0.1, eta=1,
+                    kernel=['rbf'], kernel_params=[{'gamma':50}],
+                    nystrom_param=0.2)
+        views_ind = [120, 240]
+        mvml.fit(self.kernel_dict, y=y, views_ind=None)
+        self.assertEqual(mvml.A.shape, (48, 48))
+        self.assertEqual(mvml.g.shape,(48, 1))
+        w_expected = np.array([[0.5],[0.5]])
+        np.testing.assert_almost_equal(mvml.w, w_expected, 8)
+
     def testFitMVMLPrecision(self):
         #######################################################
         # task with dict and not precomputed

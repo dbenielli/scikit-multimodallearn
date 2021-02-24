@@ -48,11 +48,11 @@ estimator for classification implemented in the ``MuComboClassifier`` class.
 import numpy as np
 from sklearn.base import ClassifierMixin
 from sklearn.ensemble import BaseEnsemble
-from sklearn.ensemble.forest import BaseForest
+from sklearn.ensemble._forest import BaseForest
 from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.tree._tree import DTYPE
-from sklearn.tree.tree import BaseDecisionTree
+from sklearn.tree import BaseDecisionTree
 from sklearn.utils import check_array, check_X_y, check_random_state
 from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import check_is_fitted, has_fit_parameter
@@ -141,11 +141,11 @@ class MuComboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
     >>> base_estimator = DecisionTreeClassifier(max_depth=2)
     >>> clf = MuComboClassifier(base_estimator=base_estimator, random_state=1)
     >>> clf.fit(X, y, views_ind)  # doctest: +NORMALIZE_WHITESPACE
-    MuComboClassifier(base_estimator=DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=2,
+    MuComboClassifier(base_estimator=DecisionTreeClassifier(ccp_alpha=0.0, class_weight=None, criterion='gini', max_depth=2,
             max_features=None, max_leaf_nodes=None,
             min_impurity_decrease=0.0, min_impurity_split=None,
             min_samples_leaf=1, min_samples_split=2,
-            min_weight_fraction_leaf=0.0, presort=False, random_state=None,
+            min_weight_fraction_leaf=0.0, presort='deprecated', random_state=None,
             splitter='best'),
          n_estimators=50, random_state=1)
     >>> print(clf.predict([[ 5.,  3.,  1.,  1.]]))
@@ -222,8 +222,9 @@ class MuComboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         dist = np.empty(cost.shape[:2], dtype=cost.dtype, order="C")
         # NOTE: In Sokol's PhD thesis, the formula for dist is mistakenly given
         # with a minus sign in section 2.2.2 page 31
-        dist[:, :] = cost[:, np.arange(n_samples), y] \
-            / np.sum(cost[:, np.arange(n_samples), y], axis=1)[:, np.newaxis]
+        sum_cost = np.sum(cost[:, np.arange(n_samples), y], axis=1)[:, np.newaxis]
+        sum_cost[sum_cost==0] = 1
+        dist[:, :] = cost[:, np.arange(n_samples), y] / sum_cost
         return dist
 
     def _indicatrice(self, predicted_classes, y_i):
@@ -444,6 +445,8 @@ class MuComboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         views_ind_, n_views = self.X_._validate_views_ind(self.X_.views_ind,
                                                           self.X_.shape[1])
         check_X_y(self.X_, y)
+        if not isinstance(y, np.ndarray):
+            y = np.asarray(y)
         check_classification_targets(y)
         self._validate_estimator()
 
