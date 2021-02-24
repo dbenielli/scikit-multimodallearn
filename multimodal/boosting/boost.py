@@ -47,6 +47,9 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.tree.tree import BaseDecisionTree
 from sklearn.tree._tree import DTYPE
 from sklearn.ensemble.forest import BaseForest
+from sklearn.base import clone
+from sklearn.ensemble._base import _set_random_states
+from sklearn.ensemble import BaseEnsemble
 from multimodal.datasets.data_sample import DataSample
 from multimodal.datasets.data_sample import MultiModalData, MultiModalArray, MultiModalSparseArray
 
@@ -56,6 +59,27 @@ class UBoosting(metaclass=ABCMeta):
     Abstract class MuComboClassifier and  MumboClassifier should inherit from
     UBoosting for methods
     """
+
+    def _make_unique_estimator(self, base_estimator, estimator_params, append=True, random_state=None, ):
+        # Copy/Paste of sklearn.ensebmle.BaseEnsemble._make_estimator
+        estimator = clone(base_estimator)
+        estimator.set_params(**{p: getattr(self, p)
+                                for p in estimator_params})
+
+        if random_state is not None:
+            _set_random_states(estimator, random_state)
+
+        if append:
+            self.estimators_.append(estimator)
+
+        return estimator
+
+    def _make_estimator(self, append=True, random_state=None, ind_view=0):
+        if type(self.base_estimator_) is list:
+            return self._make_unique_estimator(self.base_estimator[ind_view], self.estimator_params[ind_view], append=append, random_state=random_state)
+
+        else:
+            return self._make_unique_estimator(self.base_estimator, self.estimator_params, append=append, random_state=random_state)
 
     def _validate_X_predict(self, X):
         """Ensure that X is in the proper format."""

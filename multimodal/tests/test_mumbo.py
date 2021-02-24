@@ -58,7 +58,7 @@ from sklearn import datasets
 from multimodal.boosting.mumbo import MumboClassifier
 
 
-class TestMuCumboClassifier(unittest.TestCase):
+class TestMumboClassifier(unittest.TestCase):
 
     @classmethod
     def setUpClass(clf):
