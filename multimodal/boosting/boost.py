@@ -44,9 +44,9 @@ import scipy.sparse as sp
 from abc import ABCMeta
 from sklearn.utils import check_array, check_X_y, check_random_state
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.tree.tree import BaseDecisionTree
+from sklearn.tree import BaseDecisionTree
 from sklearn.tree._tree import DTYPE
-from sklearn.ensemble.forest import BaseForest
+from sklearn.ensemble._forest import BaseForest
 from multimodal.datasets.data_sample import DataSample
 from multimodal.datasets.data_sample import MultiModalData, MultiModalArray, MultiModalSparseArray
 
