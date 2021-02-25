@@ -54,7 +54,7 @@ from scipy.sparse import csc_matrix, csr_matrix, coo_matrix, dok_matrix
 from scipy.sparse import lil_matrix
 from sklearn.model_selection import GridSearchCV
 from sklearn.svm import SVC
-from sklearn.ensemble.forest import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.cluster import KMeans
 from sklearn.linear_model import Lasso
 from sklearn.tree import DecisionTreeClassifier
