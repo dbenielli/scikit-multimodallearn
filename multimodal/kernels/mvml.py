@@ -152,8 +152,7 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
     >>> clf.get_params()
     {'eta': 1, 'kernel': 'linear', 'kernel_params': None, 'learn_A': 1, 'learn_w': 0, 'lmbda': 0.1, 'n_loops': 6, 'nystrom_param': 1.0, 'precision': 0.0001}
     >>> clf.fit(X, y, views_ind)  # doctest: +NORMALIZE_WHITESPACE
-    MVML(eta=1, kernel='linear', kernel_params=None, learn_A=1, learn_w=0,
-       lmbda=0.1, n_loops=6, nystrom_param=1.0, precision=0.0001)
+    MVML()
     >>> print(clf.predict([[ 5.,  3.,  1.,  1.]]))
     0
 

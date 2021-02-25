@@ -177,7 +177,7 @@ def setup_package():
                 'ensemble methods, boosting, kernel')
     packages = find_packages(exclude=['*.tests'])
     install_requires = ['scikit-learn>=0.24', 'numpy', 'scipy', 'cvxopt' ]
-    python_requires = '>=3.5'
+    python_requires = '>=3.6'
     extras_require = {
         'dev': ['pytest', 'pytest-cov'],
         'doc': ['sphinx', 'numpydoc', 'sphinx_gallery', 'matplotlib']}
