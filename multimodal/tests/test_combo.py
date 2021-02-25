@@ -64,6 +64,12 @@ from multimodal.boosting.combo import MuComboClassifier
 from multimodal.tests.data.get_dataset_path import get_dataset_path
 from multimodal.datasets.data_sample import MultiModalArray
 
+class NoSampleWeightLasso(Lasso):
+
+    def fit(self, X, y, check_input=True):
+        return Lasso.fit(self, X, y, sample_weight=None, check_input=True)
+
+
 class TestMuComboClassifier(unittest.TestCase):
 
     @classmethod
@@ -836,7 +842,7 @@ class TestMuComboClassifier(unittest.TestCase):
     #
 
     def test_classifier(self):
-        return check_estimator(MuComboClassifier)
+        return check_estimator(MuComboClassifier())
     #
     #
     # def test_iris():
@@ -957,7 +963,8 @@ class TestMuComboClassifier(unittest.TestCase):
 
     #     # Check that using a base estimator that doesn't support sample_weight
     #     # raises an error.
-        clf = MuComboClassifier(Lasso())
+        clf = MuComboClassifier(NoSampleWeightLasso())
+
         self.assertRaises(ValueError, clf.fit, self.iris.data, self.iris.target, self.iris.views_ind)
     #     assert_raises(ValueError, clf.fit, iris.data, iris.target, iris.views_ind)
     #
