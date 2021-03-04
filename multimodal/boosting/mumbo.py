@@ -378,6 +378,7 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         self.classes_, y = np.unique(y, return_inverse=True)
         self.n_classes_ = len(self.classes_)
         self.n_features_ = self.X_.shape[1]
+        self.n_features_in_ = self.n_features_ 
         if self.n_classes_ == 1:
             # This case would lead to division by 0 when computing the cost
             # matrix so it needs special handling (but it is an obvious case as
