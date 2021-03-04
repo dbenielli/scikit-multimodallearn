@@ -178,7 +178,6 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         """Check the estimator and set the base_estimator_ attribute."""
         super(MumboClassifier, self)._validate_estimator(
             default=DecisionTreeClassifier(max_depth=1))
-        print()
         if not has_fit_parameter(self.base_estimator_, "sample_weight"):
             raise ValueError("%s doesn't support sample_weight."
                              % self.base_estimator_.__class__.__name__)

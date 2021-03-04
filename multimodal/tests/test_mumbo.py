@@ -59,7 +59,7 @@ from multimodal.boosting.mumbo import MumboClassifier
 
 from multimodal.tests.test_combo import NoSampleWeightLasso
 
-class TestMuCumboClassifier(unittest.TestCase):
+class TestMumboClassifier(unittest.TestCase):
 
     @classmethod
     def setUpClass(clf):
