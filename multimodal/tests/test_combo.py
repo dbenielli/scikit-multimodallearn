@@ -374,6 +374,8 @@ class TestMuComboClassifier(unittest.TestCase):
                                        [ 4.49110023,  1.,         -2.        ],
                                        [ 8.,          2.49110023,  1.        ]]])
         np.testing.assert_almost_equal(label_score, expected_label_score,6)
+
+
     #
     #     label_score = np.array(
     #         [[[-1, -2, 4], [-8, 1, 4], [2, 8, -4], [2, -1, 4]],

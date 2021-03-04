@@ -43,6 +43,7 @@ import pickle
 import unittest
 
 import numpy as np
+import scipy as sp
 from sklearn.exceptions import NotFittedError
 
 from multimodal.datasets.data_sample import MultiModalArray
@@ -270,6 +271,21 @@ class MVMLTest(unittest.TestCase):
     def test_classifier(self):
         pass
         # return check_estimator(MVML)
+
+    def test_check_kernel(self):
+        clf = MVML()
+        clf.kernel = "an_unknown_kernel"
+        self.assertRaises(ValueError, clf._check_kernel)
+
+    def testFitMVMLSparesArray(self):
+        #######################################################
+        # task with nparray 2d
+        #######################################################
+        x_metricl = MultiModalArray(self.kernel_dict)
+        x_array = np.asarray(x_metricl)
+        x_array_sparse = sp.sparse.csr_matrix(x_array)
+        mvml3 = MVML(lmbda=0.1, eta=1, nystrom_param=1.0)
+        self.assertRaises(TypeError, mvml3.fit, x_array_sparse, self.y, [0, 120, 240])
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'Test.testName']

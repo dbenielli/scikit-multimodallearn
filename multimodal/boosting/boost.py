@@ -59,13 +59,6 @@ class UBoosting(metaclass=ABCMeta):
 
     def _validate_X_predict(self, X):
         """Ensure that X is in the proper format."""
-        if (self.base_estimator is None or
-                isinstance(self.base_estimator,
-                           (BaseDecisionTree, BaseForest))):
-            check_array(X, accept_sparse='csr', dtype=DTYPE)
-
-        else:
-            check_array(X, accept_sparse=['csr', 'csc'])
         if X.ndim < 2:
             X = X[np.newaxis, :]
             if X.shape[1] != self.n_features_:
@@ -73,8 +66,15 @@ class UBoosting(metaclass=ABCMeta):
                                     "match the input. Model n_features is %s and "
                                      "input n_features is %s " % (self.n_features_, X.shape[1]))
             else:
-                mes = "Reshape your data"
+                mes = "Reshape your data as a 2D-array "
                 raise ValueError(mes)
+        if (self.base_estimator is None or
+                isinstance(self.base_estimator,
+                           (BaseDecisionTree, BaseForest))):
+            check_array(X, accept_sparse='csr', dtype=DTYPE)
+
+        else:
+            check_array(X, accept_sparse=['csr', 'csc'])
         if X.ndim > 1:
             if X.shape[1] != self.n_features_:
                 if X.shape[0] == self.n_features_ and X.shape[1] > 1:
@@ -83,10 +83,6 @@ class UBoosting(metaclass=ABCMeta):
                     raise ValueError("Number of features of the model must "
                                     "match the input. Model n_features is %s and "
                                      "input n_features is %s " % (self.n_features_, X.shape[1]))
-
-
-            #
-            # raise ValueError(mes)
         return X
 
     def _global_X_transform(self, X, views_ind=None):
@@ -97,10 +93,10 @@ class UBoosting(metaclass=ABCMeta):
             X_ = MultiModalSparseArray(X, views_ind)
         else:
             X_ = MultiModalArray(X, views_ind)
-        if not isinstance(X_, MultiModalData):
-            try:
-                X_ = np.asarray(X)
-                X_ = MultiModalArray(X_)
-            except Exception as e:
-                raise TypeError('Reshape your data')
+        # if not isinstance(X_, MultiModalData):
+        #     try:
+        #         X_ = np.asarray(X)
+        #         X_ = MultiModalArray(X_)
+        #     except Exception as e:
+        #         raise TypeError('Reshape your data')
         return X_

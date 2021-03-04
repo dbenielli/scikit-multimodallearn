@@ -909,6 +909,18 @@ class TestMumboClassifier(unittest.TestCase):
                 else:
                     self.assertTrue(all([issubclass(type_, csr_matrix) for type_ in types]))
 
+    def test_validate_X_predict(self):
+        clf = MumboClassifier()
+        X = np.random.randint(1, 10, (2, 10))
+        y = [1, 0]
+        clf.fit(X, y)
+        X_pred = np.random.randint(1, 10, 10)
+        self.assertRaises(ValueError, clf._validate_X_predict, X_pred)
+        X_pred = np.random.randint(1,10,9)
+        self.assertRaises(ValueError, clf._validate_X_predict, X_pred)
+        X_pred = np.random.randint(1, 10, (2, 9))
+        self.assertRaises(ValueError, clf._validate_X_predict, X_pred)
+
 
 if __name__ == '__main__':
     unittest.main()
