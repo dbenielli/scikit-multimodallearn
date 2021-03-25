@@ -54,7 +54,7 @@ from scipy.sparse import csc_matrix, csr_matrix, coo_matrix, dok_matrix
 from scipy.sparse import lil_matrix
 from sklearn.model_selection import GridSearchCV
 from sklearn.svm import SVC
-from sklearn.ensemble.forest import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.cluster import KMeans
 from sklearn.linear_model import Lasso
 from sklearn.tree import DecisionTreeClassifier
@@ -63,6 +63,12 @@ from sklearn.utils.estimator_checks import check_estimator
 from multimodal.boosting.combo import MuComboClassifier
 from multimodal.tests.data.get_dataset_path import get_dataset_path
 from multimodal.datasets.data_sample import MultiModalArray
+
+class NoSampleWeightLasso(Lasso):
+
+    def fit(self, X, y, check_input=True):
+        return Lasso.fit(self, X, y, sample_weight=None, check_input=True)
+
 
 class TestMuComboClassifier(unittest.TestCase):
 
@@ -368,6 +374,8 @@ class TestMuComboClassifier(unittest.TestCase):
                                        [ 4.49110023,  1.,         -2.        ],
                                        [ 8.,          2.49110023,  1.        ]]])
         np.testing.assert_almost_equal(label_score, expected_label_score,6)
+
+
     #
     #     label_score = np.array(
     #         [[[-1, -2, 4], [-8, 1, 4], [2, 8, -4], [2, -1, 4]],
@@ -836,7 +844,7 @@ class TestMuComboClassifier(unittest.TestCase):
     #
 
     def test_classifier(self):
-        return check_estimator(MuComboClassifier)
+        return check_estimator(MuComboClassifier())
     #
     #
     # def test_iris():
@@ -957,7 +965,8 @@ class TestMuComboClassifier(unittest.TestCase):
 
     #     # Check that using a base estimator that doesn't support sample_weight
     #     # raises an error.
-        clf = MuComboClassifier(Lasso())
+        clf = MuComboClassifier(NoSampleWeightLasso())
+
         self.assertRaises(ValueError, clf.fit, self.iris.data, self.iris.target, self.iris.views_ind)
     #     assert_raises(ValueError, clf.fit, iris.data, iris.target, iris.views_ind)
     #

@@ -47,6 +47,7 @@ from multimodal.tests.datasets.get_dataset_path import get_dataset_path
 from multimodal.datasets.data_sample import MultiModalArray
 import pickle
 
+
 class UnitaryTest(unittest.TestCase):
 
     @classmethod
@@ -85,6 +86,44 @@ class UnitaryTest(unittest.TestCase):
         array_x = a.data
         b = MultiModalArray(a)
         np.testing.assert_equal(b.views_ind, np.array([0, 120, 240]))
+        view_1 = np.random.randint(1,10,10)
+        view_2 = np.random.randint(1,10,11)
+        data = {0 : view_1,
+                1 : view_2,}
+        c = MultiModalArray(data)
+        np.testing.assert_array_equal(np.asarray(c[0,:]), np.concatenate((view_1, view_2)))
+        view_1 = np.random.randint(1, 10, 1)
+        data = {0: view_1, }
+        self.assertRaises(ValueError, MultiModalArray, data)
+        view_1 = np.array([0,])
+        data = view_1
+        d = MultiModalArray(data)
+        np.testing.assert_array_equal(d.views_ind, np.array([0,1]))
+        view_1 = [[0]]
+        data = view_1
+        self.assertRaises(ValueError, MultiModalArray, data)
+        view_1 = [[0,1,2 ],[0,1,2 ]]
+        data = view_1
+        d = MultiModalArray(data, [0,1])
+        np.testing.assert_array_equal(d.views_ind, np.array([0, 1]))
+        view_1 = [[0]]
+        data = view_1
+        self.assertRaises(ValueError, MultiModalArray, data)
+
+    def test_view_functions(self):
+        view_1 = np.random.randint(1, 10, (5, 10))
+        view_2 = np.random.randint(1, 10, (5, 10))
+        view_3 = np.random.randint(1, 10, (5, 10))
+        data = {0: view_1,
+                1: view_2, }
+        c = MultiModalArray(data)
+        c.set_view(1, view_3)
+        np.testing.assert_array_equal(c.get_view(1), view_3)
+        view_3 = np.random.randint(1, 10, (12, 10))
+        c = MultiModalArray(data)
+        self.assertRaises(ValueError, c.set_view, 1, view_3)
+        np.testing.assert_array_equal(c.get_row(0, 2), view_1[2, :])
+
 
 
 if __name__ == '__main__':

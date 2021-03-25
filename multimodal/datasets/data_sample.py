@@ -365,14 +365,14 @@ class MultiModalArray(np.ndarray, MultiModalData):
                 views_ind.append(dat_values.shape[1] + views_ind[index])
                 index += 1
             thekeys = data.keys()
-            if new_data.ndim < 2 :
-                raise ValueError('Reshape your data')
-            if  new_data.ndim > 1 and (new_data.shape == (1, 1) or new_data.shape == ()):
+            # if new_data.ndim < 2 :
+            #     raise ValueError('Reshape your data')
+            if new_data.ndim > 1 and (new_data.shape == (1, 1) or new_data.shape == ()):
                 raise ValueError('Reshape your data')
         elif isinstance(data, np.ndarray) and views_ind is None and data.ndim == 1:
             try:
                 dat0 = np.array(data[0])
-            except Exception:
+            except Exception:  # pragma: no cover
                 raise TypeError("input format is not supported")
 
             if dat0.ndim < 2:
@@ -388,13 +388,13 @@ class MultiModalArray(np.ndarray, MultiModalData):
         elif (isinstance(data, np.ndarray) ) and data.ndim > 1:
             try:
                 data = np.asarray(data)
-            except:
+            except:  # pragma: no cover
                 raise TypeError("input format is not supported")
 
             if  views_ind is not None:
                 try:
                     views_ind = np.asarray(views_ind)
-                except :
+                except :  # pragma: no cover
                     raise TypeError("n_views should be list or nparray")
             elif views_ind is None:
                 if data.shape[1] > 1:
@@ -413,7 +413,7 @@ class MultiModalArray(np.ndarray, MultiModalData):
                 elif not isinstance(views_ind, np.ndarray):
                     try:
                        views_ind = np.asarray(views_ind)
-                    except Exception:
+                    except Exception:  # pragma: no cover
                         raise TypeError("format of views_ind is not list or nd array")
             except  Exception as e:
                 raise ValueError('Reshape your data')
@@ -421,8 +421,8 @@ class MultiModalArray(np.ndarray, MultiModalData):
                 raise ValueError('Reshape your data')
             if  new_data.ndim > 1 and (new_data.shape == (1, 1) or new_data.shape == ()):
                 raise ValueError('Reshape your data')
-            if views_ind.ndim < 2 and new_data.ndim < 2 and views_ind[-1] > new_data.shape[1]:
-                raise ValueError('Reshape your data')
+            # if views_ind.ndim < 2 and new_data.ndim < 2 and views_ind[-1] > new_data.shape[1]:
+            #     raise ValueError('Reshape your data')
 
             # views_ind_self = views_ind
         # if new_data.shape[1] < 1:
@@ -437,7 +437,7 @@ class MultiModalArray(np.ndarray, MultiModalData):
         # obj =   ma.MaskedArray.__new(new_data)   # new_data.view()  a.MaskedArray(new_data, mask=new_data.mask).view(cls)
         # bj = super(Metriclearn_array, cls).__new__(cls, new_data.data, new_data.mask)
 
-        if hasattr(new_data, "mask"):
+        if hasattr(new_data, "mask"):  # pragma: no cover
             obj = ma.masked_array(new_data.data, new_data.mask).view(cls)
         elif hasattr(new_data, "data") and \
                 hasattr(new_data, "shape") and len(new_data.shape) > 0:
@@ -462,7 +462,7 @@ class MultiModalArray(np.ndarray, MultiModalData):
         for dat_values in data:
             try:
                 dat_values = np.array(dat_values)
-            except Exception:
+            except Exception:  # pragma: no cover
                 raise TypeError("input format is not supported")
             new_data = cls._populate_new_data(index, dat_values, new_data)
             views_ind[index + 1] = dat_values.shape[1] + views_ind[index]
@@ -471,7 +471,8 @@ class MultiModalArray(np.ndarray, MultiModalData):
         return new_data, shapes_int, views_ind
 
     @staticmethod
-    def _populate_new_data(index, dat_values, new_data):
+    def _populate_new_data(index, dat_values, new_data):  # pragma: no cover
+        """Work in progress : including missing data"""
         if index == 0:
             if isinstance(dat_values, ma.MaskedArray)  or \
                   isinstance(dat_values, np.ndarray) or sp.issparse(dat_values):
@@ -525,30 +526,32 @@ class MultiModalArray(np.ndarray, MultiModalData):
     def set_view(self, view, data):
         start = int(np.sum(np.asarray(self.shapes_int[0: view])))
         stop = int(start + self.shapes_int[view])
-        if stop-start == data.shape[0] and data.shape[1]== self.data.shape[1]:
+        if stop-start == data.shape[1] and data.shape[0] == self.data.shape[0]:
              self[:, start:stop] = data
         else:
             raise ValueError(
-                "shape of data does not match (%d, %d)" %stop-start %self.data.shape[1])
+                "shape of data does not match (%d, %d)" %(stop-start ,self.data.shape[0]))
 
-    def get_raw(self, view, raw):
-        start = np.sum(np.asarray(self.shapes_int[0: view]))
-        stop = np.sum(np.asarray(self.shapes_int[0: view+1]))
-        return self.data[start:stop, raw]
+    def get_row(self, view, row):
+        start = int(np.sum(np.asarray(self.shapes_int[0: view])))
+        stop = int(np.sum(np.asarray(self.shapes_int[0: view+1])))
+        return self[row, start:stop]
 
-    def add_view(self, v, data):
-        if len(self.shape) > 0:
-            if data.shape[0] == self.data.shape[0]:
-                indice = self.shapes_int[v]
-                np.insert(self.data, data, indice+1, axis=0)
-                self.shapes_int.append(data.shape[1])
-                self.n_views +=1
-        else:
-            raise ValueError("New view can't initialazed")
-           # self.shapes_int= [data.shape[1]]
-           # self.data.reshape(data.shape[0],)
-           # np.insert(self.data, data, 0)
-           # self.n_views = 1
+    # def add_view(self, data):
+    #     if len(self.shape) > 0:
+    #         if data.shape[0] == self.data.shape[0]:
+    #             print(self.data.shape, data.shape)
+    #             new_data = np.hstack((self.data, data))
+    #             self.shapes_int.append(data.shape[1])
+    #             self.n_views +=1
+    #             print(new_data.shape)
+    #
+    #     else:
+    #         raise ValueError("New view can't initialazed")
+    #        # self.shapes_int= [data.shape[1]]
+    #        # self.data.reshape(data.shape[0],)
+    #        # np.insert(self.data, data, 0)
+    #        # self.n_views = 1
 
     def _todict(self):
         dico = {}

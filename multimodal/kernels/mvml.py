@@ -152,8 +152,7 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
     >>> clf.get_params()
     {'eta': 1, 'kernel': 'linear', 'kernel_params': None, 'learn_A': 1, 'learn_w': 0, 'lmbda': 0.1, 'n_loops': 6, 'nystrom_param': 1.0, 'precision': 0.0001}
     >>> clf.fit(X, y, views_ind)  # doctest: +NORMALIZE_WHITESPACE
-    MVML(eta=1, kernel='linear', kernel_params=None, learn_A=1, learn_w=0,
-       lmbda=0.1, n_loops=6, nystrom_param=1.0, precision=0.0001)
+    MVML()
     >>> print(clf.predict([[ 5.,  3.,  1.,  1.]]))
     0
 
@@ -230,9 +229,10 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
         # if type_of_target(y) not in "binary":
         #     raise ValueError("target should be binary")
 
-        check_classification_targets(y)
+
 
         if type_of_target(y) in "binary":
+            check_classification_targets(y)
             self.classes_, y = np.unique(y, return_inverse=True)
             y[y==0] = -1.0
             self.n_classes = len(self.classes_)
@@ -342,7 +342,7 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
                 else:
                     # A_inv = self._inverse_precond_LU(A + 1e-8 * np.eye(views * self.n_approx), pos="precond_A") # self._inverse_precond_jacobi(A + 1e-8 * np.eye(views * self.n_approx), pos="precond_A")
                     A_inv = self._inv_best_precond(A + 1e-8 * np.eye(views * self.n_approx), pos="precond_A")
-            except spli.LinAlgError:
+            except spli.LinAlgError:  # pragma: no cover
                 self.warning_message["LinAlgError"] = self.warning_message.get("LinAlgError", 0) + 1
                 try:
                     A_inv = spli.pinv(A + 1e-07 * np.eye(views * self.n_approx))
@@ -352,7 +352,7 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
                     except ValueError:
                         self.warning_message["ValueError"] = self.warning_message.get("ValueError", 0) + 1
                         return A_prev, g_prev
-            except ValueError:
+            except ValueError:  # pragma: no cover
                 self.warning_message["ValueError"] = self.warning_message.get("ValueError", 0) + 1
                 return A_prev, g_prev, w_prev
             # print("A_inv ",np.sum(A_inv))
@@ -372,7 +372,7 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
                 else:
                     # g = np.dot(self._inverse_precond_LU(A_inv, pos="precond_A_1"), g)
                     g = np.dot(self._inv_best_precond(A_inv, pos="precond_A_1"), g)
-            except spli.LinAlgError:
+            except spli.LinAlgError:  # pragma: no cover
                 self.warning_message["LinAlgError"] = self.warning_message.get("LinAlgError", 0) + 1
                 g = spli.solve(A_inv, g)
 
@@ -428,7 +428,7 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
             A_inv = spli.pinv(A)
         return A_inv
 
-    def _inverse_precond_jacobi(self, A, pos="precond_A"):
+    def _inverse_precond_jacobi(self, A, pos="precond_A"):  # pragma: no cover
         J_1 = np.diag(1.0/np.diag(A))
         # J_1 = np.linalg.inv(J)
         P = np.dot(J_1, A)
@@ -438,10 +438,9 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
             self.warning_message[pos] = self.warning_message.get(pos, 0) + 1
         else:
             A_inv = self._inverse_precond_LU(A, pos=pos)
-
         return A_inv
 
-    def _inverse_precond_LU(self, A, pos="precond_A"):
+    def _inverse_precond_LU(self, A, pos="precond_A"):  # pragma: no cover
         P, L, U = spli.lu(A)
         M = spli.inv(np.dot(L, U))
         P = np.dot(M, A)
@@ -606,17 +605,17 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
         try:
             # minA_inv = np.min(np.absolute(A_prev)) , rcond=self.r_cond*minA_inv
             A_prev_inv = spli.pinv(A_prev)
-        except spli.LinAlgError:
+        except spli.LinAlgError:  # pragma: no cover
             try:
                 A_prev_inv = spli.pinv(A_prev + 1e-6 * np.eye(views * m))
             except spli.LinAlgError:
                 return A_prev
             except ValueError:
                 return A_prev
-        except ValueError:
+        except ValueError:  # pragma: no cover
             return A_prev
 
-        if np.any(np.isnan(A_prev_inv)):
+        if np.any(np.isnan(A_prev_inv)):  # pragma: no cover
             # just in case the inverse didn't return a proper solution (happened once or twice)
             return A_prev
 
@@ -625,9 +624,9 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
         # if there is one small negative eigenvalue this gets rid of it
         try:
             val, vec = spli.eigh(A_tmp)
-        except spli.LinAlgError:
+        except spli.LinAlgError:  # pragma: no cover
             return A_prev
-        except ValueError:
+        except ValueError:  # pragma: no cover
             return A_prev
         val[val < 0] = 0
 

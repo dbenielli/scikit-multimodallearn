@@ -43,6 +43,7 @@ import pickle
 import unittest
 
 import numpy as np
+import scipy as sp
 from sklearn.exceptions import NotFittedError
 
 from multimodal.datasets.data_sample import MultiModalArray
@@ -90,6 +91,22 @@ class MVMLTest(unittest.TestCase):
                     nystrom_param=0.2)
         views_ind = [120, 240]
         mvml.fit(self.kernel_dict, y=self.y, views_ind=None)
+        self.assertEqual(mvml.A.shape, (48, 48))
+        self.assertEqual(mvml.g.shape,(48, 1))
+        w_expected = np.array([[0.5],[0.5]])
+        np.testing.assert_almost_equal(mvml.w, w_expected, 8)
+
+    def testFitMVMLRegression(self):
+        #######################################################
+        # task with dict and not precomputed
+        #######################################################
+        y = self.y
+        y += np.random.uniform(0,1, size=y.shape)
+        mvml = MVML(lmbda=0.1, eta=1,
+                    kernel=['rbf'], kernel_params=[{'gamma':50}],
+                    nystrom_param=0.2)
+        views_ind = [120, 240]
+        mvml.fit(self.kernel_dict, y=y, views_ind=None)
         self.assertEqual(mvml.A.shape, (48, 48))
         self.assertEqual(mvml.g.shape,(48, 1))
         w_expected = np.array([[0.5],[0.5]])
@@ -254,6 +271,21 @@ class MVMLTest(unittest.TestCase):
     def test_classifier(self):
         pass
         # return check_estimator(MVML)
+
+    def test_check_kernel(self):
+        clf = MVML()
+        clf.kernel = "an_unknown_kernel"
+        self.assertRaises(ValueError, clf._check_kernel)
+
+    def testFitMVMLSparesArray(self):
+        #######################################################
+        # task with nparray 2d
+        #######################################################
+        x_metricl = MultiModalArray(self.kernel_dict)
+        x_array = np.asarray(x_metricl)
+        x_array_sparse = sp.sparse.csr_matrix(x_array)
+        mvml3 = MVML(lmbda=0.1, eta=1, nystrom_param=1.0)
+        self.assertRaises(TypeError, mvml3.fit, x_array_sparse, self.y, [0, 120, 240])
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'Test.testName']

@@ -57,6 +57,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn import datasets
 from multimodal.boosting.mumbo import MumboClassifier
 
+from multimodal.tests.test_combo import NoSampleWeightLasso
 
 class TestMumboClassifier(unittest.TestCase):
 
@@ -730,7 +731,7 @@ class TestMumboClassifier(unittest.TestCase):
         # e = MumboClassifier()
         # e.fit(X_zero_features, y)
         # print(e.predict(X_zero_features))
-        return check_estimator(MumboClassifier)
+        return check_estimator(MumboClassifier())
 
     def test_iris(self):
         # Check consistency on dataset iris.
@@ -840,7 +841,7 @@ class TestMumboClassifier(unittest.TestCase):
 
         # Check that using a base estimator that doesn't support sample_weight
         # raises an error.
-        clf = MumboClassifier(Lasso())
+        clf = MumboClassifier(NoSampleWeightLasso())
         self.assertRaises(ValueError, clf.fit, self.iris.data, self.iris.target, self.iris.views_ind)
 
 
@@ -907,6 +908,18 @@ class TestMumboClassifier(unittest.TestCase):
                     self.assertTrue(all([issubclass(type_, csc_matrix)  for type_ in types]))
                 else:
                     self.assertTrue(all([issubclass(type_, csr_matrix) for type_ in types]))
+
+    def test_validate_X_predict(self):
+        clf = MumboClassifier()
+        X = np.random.randint(1, 10, (2, 10))
+        y = [1, 0]
+        clf.fit(X, y)
+        X_pred = np.random.randint(1, 10, 10)
+        self.assertRaises(ValueError, clf._validate_X_predict, X_pred)
+        X_pred = np.random.randint(1,10,9)
+        self.assertRaises(ValueError, clf._validate_X_predict, X_pred)
+        X_pred = np.random.randint(1, 10, (2, 9))
+        self.assertRaises(ValueError, clf._validate_X_predict, X_pred)
 
 
 if __name__ == '__main__':
