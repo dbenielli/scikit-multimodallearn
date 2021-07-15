@@ -445,16 +445,11 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
                     self.X_._extract_view(ind_view))
             edges = self._compute_edge_global(
                 cost_global, predicted_classes, y)
-            print(cost_global)
-            print(edges)
-            print(np.unique(predicted_classes), np.unique(y))
-            print(np.sum(predicted_classes != y, axis=1))
             if self.best_view_mode == "edge":
                 best_view = np.argmax(edges)
             else:  # self.best_view_mode == "error"
                 n_errors = np.sum(predicted_classes != y, axis=1)
                 best_view = np.argmin(n_errors)
-            print("Best view:", best_view)
             edge = edges[best_view]
 
             if (edge == 1.):
