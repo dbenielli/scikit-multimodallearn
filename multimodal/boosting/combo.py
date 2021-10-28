@@ -215,7 +215,7 @@ class MuComboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         # required by some scikit-learn classifiers (for example
         # sklearn.svm.SVC)
         dist = np.empty(cost.shape[:2], dtype=cost.dtype, order="C")
-        # NOTE: In Sokol's PhD thesis, the formula for dist is mistakenly given
+        # NOTE: In Sokol Koco's PhD thesis, the formula for dist is mistakenly given
         # with a minus sign in section 2.2.2 page 31
         sum_cost = np.sum(cost[:, np.arange(n_samples), y], axis=1)[:, np.newaxis]
         sum_cost[sum_cost==0] = 1
@@ -233,7 +233,6 @@ class MuComboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         indicatrice_one_yi[:, np.arange(n_samples), y_i] = 1
         delta = np.ones((self.n_views_, n_samples, self.n_classes_), dtype=np.int)
         delta[:, np.arange(n_samples), y_i] = -1
-        # indic_minus_one = np.where(np.arange(self.n_classes_) == y)
         return indicate_ones, indicatrice_one_yi, delta
 
     def _compute_edges(self, cost, predicted_classes, y):
@@ -268,10 +267,6 @@ class MuComboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         n_views = predicted_classes.shape[0]
         n_samples = y.shape[0]
         if use_coop_coef:
-            # coop_coef = self._compute_coop_coef(predicted_classes, y)
-
-            # ajout mucumbo verifier les dim
-            # ????? coop_cof_beta = betas[predicted_classes]
             increment = alphas[:, np.newaxis, np.newaxis] * betas[:, np.newaxis, :]
             increment = np.tile(increment,(1, n_samples, 1))
         else:
@@ -324,7 +319,6 @@ class MuComboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         -------
         betas arrays
         """
-        # delta = self.delta_c_yi(predicted_classes, y)
         indicat, indicate_yi, delta = self._indicatrice(predicted_classes, y)
         delta_vue = np.block(np.split(delta, self.n_views_, axis=0)).squeeze()
         indicate_vue = np.block(np.split(indicat, self.n_views_, axis=0)).squeeze()
@@ -460,10 +454,7 @@ class MuComboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
             self.estimator_weights_beta_ = np.zeros((self.n_iterations_, n_views), dtype=np.float)
             self.estimator_errors_ = np.array([], dtype=np.float64)
             return
-        # probablement la list de  h de t global  que l'on a a la fin
         self.estimators_ = []
-        # modification mu cumbo
-        # mettre deux dim sur n_estimators * n_views
         self.estimator_weights_alpha_ = np.zeros((self.n_iterations_, n_views), dtype=np.float64)
         self.estimator_weights_beta_ = np.zeros((self.n_iterations_, n_views, self.n_classes_), dtype=np.float)
         self.estimator_errors_ = np.zeros((n_views, self.n_iterations_), dtype=np.float64)
@@ -473,7 +464,7 @@ class MuComboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
          predicted_classes, score_function_dif, betas, n_yi) = self._init_var(n_views, y)
         self.n_yi_ = n_yi
         for current_iteration in range(self.n_iterations_):
-            # list de h pris a l'etape t
+            # list of h at stage t
             dist = self._compute_dist(cost, y)
             # get h_t _i  with edges delta
             for ind_view in range(n_views):
@@ -488,13 +479,11 @@ class MuComboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
             # end of choose cost matrix
             #   TO DO estimator_errors_ estimate
             ###########################################
-
-            #############self.estimator_errors_[current_iteration] = to do
+            #self.estimator_errors_[current_iteration] = to do
             # update C_t de g
 
             edges = self._compute_edges(cost, predicted_classes, y)
             alphas = self._compute_alphas(edges)
-            # modif mu cumbo
             self.estimator_weights_alpha_[current_iteration, :] = alphas
 
             betas = self._compute_betas(alphas, y, score_function_dif, predicted_classes)
@@ -540,7 +529,6 @@ class MuComboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
 
         dec_func = np.zeros((n_samples, n_classes))
         # update muCombo
-        # for ind_estimator in range(n_estimators):
         for ind_estimator in range(n_estimators):
             ind_iteration = ind_estimator // self.n_views_
             current_vue = ind_estimator % self.n_views_
