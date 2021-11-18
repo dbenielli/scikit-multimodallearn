@@ -19,7 +19,6 @@ from sklearn.tree import DecisionTreeClassifier
 from multimodal.datasets.base import load_dict, save_dict
 from multimodal.tests.data.get_dataset_path import get_dataset_path
 from multimodal.datasets.data_sample import MultiModalArray
-from multimodal.kernels.mvml import MVML
 from multimodal.kernels.lpMKL import MKL
 
 import numpy as np
@@ -50,7 +49,6 @@ if __name__ == '__main__':
     # file = get_dataset_path("digit_histogram.npy")
     file = get_dataset_path("digit_col_grad.npy")
     y = np.load(get_dataset_path("digit_y.npy"))
-    base_estimator = DecisionTreeClassifier(max_depth=4)
     dic_digit = load_dict(file)
     XX =MultiModalArray(dic_digit)
     X_train, X_test, y_train, y_test = train_test_split(XX, y)

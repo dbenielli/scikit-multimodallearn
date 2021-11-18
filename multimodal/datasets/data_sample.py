@@ -133,7 +133,6 @@ class MultiModalData(metaclass=ABCMeta):
 
     def _validate_views_ind(self, views_ind, n_features):
         """Ensure proper format for views_ind and return number of views."""
-        # views_ind = np.array(views_ind)
         if np.issubdtype(views_ind.dtype, np.integer) and views_ind.ndim == 1:
             if len(views_ind) > 2 and np.any(views_ind[:-1] >= views_ind[1:]):
                 raise ValueError("Values in views_ind must be sorted.")
@@ -180,7 +179,6 @@ class MultiModalSparseInfo():
         new_data = np.ndarray([])
         n_views = data.size
         thekeys = None
-        # views_ind_self =  None
         view_mode = 'slices'
 
         if (sp.issparse(data)) and data.ndim > 1:
@@ -196,7 +194,6 @@ class MultiModalSparseInfo():
                     views_ind = np.array([0, data.shape[1]])
 
             new_data = data
-            # views_ind_self = views_ind
         views_ind, n_views, view_mode = self._first_validate_views_ind(views_ind,
                                                                       data.shape[1])
         if views_ind.ndim == 1 and view_mode.startswith("slicing"):
@@ -365,8 +362,6 @@ class MultiModalArray(np.ndarray, MultiModalData):
                 views_ind.append(dat_values.shape[1] + views_ind[index])
                 index += 1
             thekeys = data.keys()
-            # if new_data.ndim < 2 :
-            #     raise ValueError('Reshape your data')
             if new_data.ndim > 1 and (new_data.shape == (1, 1) or new_data.shape == ()):
                 raise ValueError('Reshape your data')
         elif isinstance(data, np.ndarray) and views_ind is None and data.ndim == 1:
@@ -421,21 +416,11 @@ class MultiModalArray(np.ndarray, MultiModalData):
                 raise ValueError('Reshape your data')
             if  new_data.ndim > 1 and (new_data.shape == (1, 1) or new_data.shape == ()):
                 raise ValueError('Reshape your data')
-            # if views_ind.ndim < 2 and new_data.ndim < 2 and views_ind[-1] > new_data.shape[1]:
-            #     raise ValueError('Reshape your data')
 
-            # views_ind_self = views_ind
-        # if new_data.shape[1] < 1:
-        #     msg = ("%d feature\(s\) \\(shape=\%s\) while a minimum of \\d* "
-        #            "is required.") % (new_data.shape[1], str(new_data.shape))
-        #     # "%d feature\(s\) \(shape=\(%d, %d\)\) while a minimum of \d* is required." % (new_data.shape[1], new_data.shape[0], new_data.shape[1])
-        #     raise ValueError(msg)
         views_ind, n_views, view_mode = cls._first_validate_views_ind(views_ind,
                                                                       new_data.shape[1])
         if views_ind.ndim == 1 and view_mode.startswith("slices"):
             shapes_int = [in2 - in1 for in1, in2 in zip(views_ind, views_ind[1:])]
-        # obj =   ma.MaskedArray.__new(new_data)   # new_data.view()  a.MaskedArray(new_data, mask=new_data.mask).view(cls)
-        # bj = super(Metriclearn_array, cls).__new__(cls, new_data.data, new_data.mask)
 
         if hasattr(new_data, "mask"):  # pragma: no cover
             obj = ma.masked_array(new_data.data, new_data.mask).view(cls)
@@ -448,7 +433,6 @@ class MultiModalArray(np.ndarray, MultiModalData):
         obj.views_ind = views_ind
         obj.shapes_int = shapes_int
         obj.n_views = n_views
-        # obj.keys = thekeys
         return obj
 
     @staticmethod
@@ -478,8 +462,7 @@ class MultiModalArray(np.ndarray, MultiModalData):
                   isinstance(dat_values, np.ndarray) or sp.issparse(dat_values):
                 new_data = dat_values
             else:
-                new_data = dat_values.view(np.ndarray) #  ma.masked_array(dat_values, mask=ma.nomask) dat_values.view(ma.MaskedArray) #(
-                # new_data.mask = ma.nomask
+                new_data = dat_values.view(np.ndarray)
         else:
             if isinstance(dat_values, np.ndarray):
                 new_data = np.hstack((new_data, dat_values))
@@ -488,15 +471,13 @@ class MultiModalArray(np.ndarray, MultiModalData):
             elif sp.issparse(dat_values):
                 new_data = sp.hstack((new_data, dat_values))
             else:
-                new_data = np.hstack((new_data,  dat_values.view(np.ndarray) ) ) #  ma.masked_array(dat_values, mask=ma.nomask
+                new_data = np.hstack((new_data,  dat_values.view(np.ndarray) ) )
         return new_data
 
     def __array_finalize__(self, obj):
         if obj is None: return
-        # super(MultiModalArray, self).__array_finalize__(obj)
         self.shapes_int = getattr(obj, 'shapes_int', None)
         self.n_views = getattr(obj, 'n_views', None)
-        # self.keys = getattr(obj, 'keys', None)
         self.views_ind = getattr(obj, 'views_ind', None)
         self.view_mode_ = getattr(obj, 'view_mode_', None)
 
@@ -537,29 +518,11 @@ class MultiModalArray(np.ndarray, MultiModalData):
         stop = int(np.sum(np.asarray(self.shapes_int[0: view+1])))
         return self[row, start:stop]
 
-    # def add_view(self, data):
-    #     if len(self.shape) > 0:
-    #         if data.shape[0] == self.data.shape[0]:
-    #             print(self.data.shape, data.shape)
-    #             new_data = np.hstack((self.data, data))
-    #             self.shapes_int.append(data.shape[1])
-    #             self.n_views +=1
-    #             print(new_data.shape)
-    #
-    #     else:
-    #         raise ValueError("New view can't initialazed")
-    #        # self.shapes_int= [data.shape[1]]
-    #        # self.data.reshape(data.shape[0],)
-    #        # np.insert(self.data, data, 0)
-    #        # self.n_views = 1
-
     def _todict(self):
         dico = {}
         for view in range(self.n_views):
             dico[view] = self.get_view(view)
         return dico
-
-
 
 
 class DataSample(dict):
@@ -595,7 +558,6 @@ class DataSample(dict):
     """
 
     def __init__(self, data=None, **kwargs):
-
 
         # The dictionary that contains the sample
         super(DataSample, self).__init__(kwargs)

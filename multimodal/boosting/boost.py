@@ -110,17 +110,10 @@ class UBoosting(metaclass=ABCMeta):
         return X
 
     def _global_X_transform(self, X, views_ind=None):
-        X_ = None
         if isinstance(X, MultiModalData):
             X_ = X
         elif isinstance(X, sp.spmatrix):
             X_ = MultiModalSparseArray(X, views_ind)
         else:
             X_ = MultiModalArray(X, views_ind)
-        # if not isinstance(X_, MultiModalData):
-        #     try:
-        #         X_ = np.asarray(X)
-        #         X_ = MultiModalArray(X_)
-        #     except Exception as e:
-        #         raise TypeError('Reshape your data')
         return X_

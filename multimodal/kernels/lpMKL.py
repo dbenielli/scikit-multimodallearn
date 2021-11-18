@@ -176,7 +176,6 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
             self.regression_ = True
         else:
             raise ValueError("MKL algorithms is a binary classifier")
-                            # " or performs regression with float target")
         self.y_ = y
         n = self.K_.shape[0]
         self._calc_nystrom(self.K_, n)
@@ -233,7 +232,7 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
             # alpha fixed -> calculate gammas
             weights_old = weights.copy()
 
-            # first the ||f_t||^2 todo wtf is the formula used here????
+            # first the ||f_t||^2 todo what is the formula used here ?
             ft2 = np.zeros(views)
             for v in range(0, views):
                 if self.nystrom_param < 1 and self.use_approx:
@@ -274,16 +273,9 @@ class MKL(BaseEstimator, ClassifierMixin, MKernel):
                 stuck = True
 
             max_diff = np.max([max_diff_gamma, diff_alpha])
-            # print([max_diff_gamma, diff_alpha])  # print if convergence is interesting
             C_old = C.copy()
             rounds = rounds + 1
-        # print("\nlearned the weights:")
-        # np.set_printoptions(precision=3, suppress=True)
-        # print(weights)
-        # print("")
 
-        # print if resulting convergence is of interest
-        # print("convergence of ", max_diff, " at step ", rounds, "/500")
         if stuck:
             return C_old, weights_old
         else:

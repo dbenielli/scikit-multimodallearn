@@ -166,7 +166,6 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
         self.nystrom_param = nystrom_param
         self.lmbda = lmbda
         self.eta = eta
-        # self.regression_params = regression_params
         self.learn_A = learn_A
         self.learn_w = learn_w
         self.n_loops = n_loops
@@ -226,10 +225,6 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
         self.regression_ = False
         self.X_, self.K_= self._global_kernel_transform(X, views_ind=views_ind)
         check_X_y(self.X_, y)
-        # if type_of_target(y) not in "binary":
-        #     raise ValueError("target should be binary")
-
-
 
         if type_of_target(y) in "binary":
             check_classification_targets(y)
@@ -244,7 +239,6 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
                              " or performs regression with float target")
         self.y_ = y
 
-        # n = X[0].shape[0]
         n = self.K_.shape[0]
         self.n_approx = int(np.floor(self.nystrom_param * n))  # number of samples in approximation, equals n if no approx.
         if self.nystrom_param < 1:
@@ -257,7 +251,6 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
         if self.warning_message:
             import logging
             logging.warning("warning appears during fit process" + str(self.warning_message))
-            # print("warning appears during fit process", self.warning_message)
         return self
 
     def _learn_mvml(self, learn_A=1, learn_w=0, n_loops=6):
@@ -335,11 +328,13 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
 
             # first invert A
             try:
+                # Changed because of numerical instability
                 # A_inv = np.linalg.pinv(A + 1e-09 * np.eye(views * self.n_approx))
                 cond_A = np.linalg.cond(A + 1e-08 * np.eye(views * self.n_approx))
                 if cond_A < 10:
                     A_inv = spli.pinv(A + 1e-8 * np.eye(views * self.n_approx))
                 else:
+                    # Changed because of numerical instability
                     # A_inv = self._inverse_precond_LU(A + 1e-8 * np.eye(views * self.n_approx), pos="precond_A") # self._inverse_precond_jacobi(A + 1e-8 * np.eye(views * self.n_approx), pos="precond_A")
                     A_inv = self._inv_best_precond(A + 1e-8 * np.eye(views * self.n_approx), pos="precond_A")
             except spli.LinAlgError:  # pragma: no cover
@@ -355,7 +350,6 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
             except ValueError:  # pragma: no cover
                 self.warning_message["ValueError"] = self.warning_message.get("ValueError", 0) + 1
                 return A_prev, g_prev, w_prev
-            # print("A_inv ",np.sum(A_inv))
             # then calculate g (block-sparse multiplications in loop) using A_inv
             for v in range(views):
                 for vv in range(views):
@@ -365,11 +359,13 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
                                       vv * self.n_approx:(vv + 1) * self.n_approx]
                 g[v * self.n_approx:(v + 1) * self.n_approx, 0] = np.dot(w[v] * np.transpose(self.U_dict[v]), self.y_)
             try:
+                # Changed because of numerical instability
                 # minA_inv = np.min(np.absolute(A_inv)) , rcond=self.r_cond*minA_inv
                 # here A_inv isn't actually inverse of A (changed in above loop)
                 if np.linalg.cond(A_inv) < 10:
                    g = np.dot(spli.pinv(A_inv), g)
                 else:
+                    # Changed because of numerical instability
                     # g = np.dot(self._inverse_precond_LU(A_inv, pos="precond_A_1"), g)
                     g = np.dot(self._inv_best_precond(A_inv, pos="precond_A_1"), g)
             except spli.LinAlgError:  # pragma: no cover
@@ -413,9 +409,6 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
         Pm, L, U = spli.lu(A)
         M = spli.inv(np.dot(L, U))
         Pre_lu = np.dot(M, A)
-        # print("cond a", np.linalg.cond(A))
-        # print("cond Pre_J", np.linalg.cond(Pre_J))
-        # print("cond Pre_lu", np.linalg.cond(Pre_lu))
         if np.linalg.cond(A) > np.linalg.cond(Pre_J) and np.linalg.cond(Pre_J) <= np.linalg.cond(Pre_lu):
             P_inv = spli.pinv(Pre_J)
             A_inv = np.dot(P_inv,  J_1)
@@ -430,7 +423,6 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
 
     def _inverse_precond_jacobi(self, A, pos="precond_A"):  # pragma: no cover
         J_1 = np.diag(1.0/np.diag(A))
-        # J_1 = np.linalg.inv(J)
         P = np.dot(J_1, A)
         if np.linalg.cond(A) > np.linalg.cond(P):
             P_inv = spli.pinv(P)
@@ -532,7 +524,6 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
 
         """
         views = len(self.U_dict)
-        # t = test_kernels[0].shape[0]
         t = test_kernels.shape[0]
         K = np.zeros((t, views * self.n_approx))
         for v in range(views):
@@ -580,7 +571,6 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
         rounds = 0
 
         L = lmbda * np.linalg.norm(np.dot(g, g.T))
-        # print("L ", L)
 
         while not converged and rounds < 100:
             # no line search - this has worked well enough experimentally

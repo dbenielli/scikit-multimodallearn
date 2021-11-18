@@ -3,7 +3,7 @@
 Computation times
 =================
 
-total execution time for **tutorial_auto_examples** files:
+Total execution time for **tutorial_auto_examples** files:
 
 
 .. toctree::

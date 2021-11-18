@@ -82,7 +82,6 @@ class MKernel(metaclass=ABCMeta):
         elif isinstance(self.kernel, list):
             ind = min(v, len(self.kernel) - 1)
             met = self.kernel[ind]
-        # Y,
         return pairwise_kernels(X, Y, metric=met,
                                 filter_params=True, **params)
 
@@ -113,7 +112,6 @@ class MKernel(metaclass=ABCMeta):
         """
         kernel_dict = {}
         flag_sparse = False
-        X_ = None
         y = None
         if Y is None:
             y = Y
@@ -124,22 +122,10 @@ class MKernel(metaclass=ABCMeta):
             X = X_
         if isinstance(X, MultiModalArray):
             X_ = X
-        # if not isinstance(X_, MultiModalArray):
-        #     try:
-        #         X_ = np.asarray(X)
-        #         X_ = MultiModalArray(X_, views_ind)
-        #     except Exception as e:
-        #         pass
-                # raise TypeError('Reshape your data')
         if isinstance(X_, MultiModalArray):
             for v in range(X.n_views):
                 if Y is not None:   y = Y.get_view(v) # y = self._global_check_pairwise(X, Y, v)
                 kernel_dict[v] = self._get_kernel(X_.get_view(v), y)
-
-        # if not isinstance(X_, MultiModalArray):
-        #     if sp.sparse.issparse(X):
-        #         raise TypeError("Nonsensical Error: no sparse data are allowed as input")
-        #     raise TypeError('Reshape your data')
         K_ = MultiModalArray(kernel_dict)
         return X_, K_
 

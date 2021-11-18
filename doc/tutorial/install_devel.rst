@@ -38,7 +38,8 @@ The development of scikit-multimodallearn follows the guidelines provided by the
 scikit-learn community.
 
 Refer to the `Developer's Guide <http://scikit-learn.org/stable/developers>`_
-of the scikit-learn project for more details.
+of the scikit-learn project for general details. Expanding the library can be
+done by following the template provided in :ref:`estim-template` .
 
 Source code
 -----------

@@ -19,7 +19,7 @@ Multimodal Examples
 
 
 
-.. _sphx_glr_tutorial_auto_examples_cumbo:
+.. _sphx_glr_tutorial_auto_examples_combo:
 
 
 MuCuMBo Examples
@@ -37,9 +37,9 @@ cooperation between views for classification.
 
 .. only:: html
 
- .. figure:: /tutorial/auto_examples/cumbo/images/thumb/sphx_glr_plot_cumbo_2_views_2_classes_thumb.png
+ .. figure:: /tutorial/auto_examples/combo/images/thumb/sphx_glr_plot_combo_2_views_2_classes_thumb.png
 
-     :ref:`sphx_glr_tutorial_auto_examples_cumbo_plot_cumbo_2_views_2_classes.py`
+     :ref:`sphx_glr_tutorial_auto_examples_combo_plot_combo_2_views_2_classes.py`
 
 .. raw:: html
 
@@ -49,7 +49,7 @@ cooperation between views for classification.
 .. toctree::
    :hidden:
 
-   /tutorial/auto_examples/cumbo/plot_cumbo_2_views_2_classes
+   /tutorial/auto_examples/combo/plot_combo_2_views_2_classes
 
 .. raw:: html
 
@@ -57,9 +57,9 @@ cooperation between views for classification.
 
 .. only:: html
 
- .. figure:: /tutorial/auto_examples/cumbo/images/thumb/sphx_glr_plot_cumbo_3_views_3_classes_thumb.png
+ .. figure:: /tutorial/auto_examples/combo/images/thumb/sphx_glr_plot_combo_3_views_3_classes_thumb.png
 
-     :ref:`sphx_glr_tutorial_auto_examples_cumbo_plot_cumbo_3_views_3_classes.py`
+     :ref:`sphx_glr_tutorial_auto_examples_combo_plot_combo_3_views_3_classes.py`
 
 .. raw:: html
 
@@ -69,7 +69,7 @@ cooperation between views for classification.
 .. toctree::
    :hidden:
 
-   /tutorial/auto_examples/cumbo/plot_cumbo_3_views_3_classes
+   /tutorial/auto_examples/combo/plot_combo_3_views_3_classes
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>
@@ -242,26 +242,6 @@ The following toy examples illustrate how the multimodal as usecase on digit  da
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="multi class digit from sklearn, multivue  - vue 0 digit data (color of sklearn)  - vue 1 gradia...">
-
-.. only:: html
-
- .. figure:: /tutorial/auto_examples/usecase/images/thumb/sphx_glr_plot_usecase_exampleMuCuBo_thumb.png
-
-     :ref:`sphx_glr_tutorial_auto_examples_usecase_plot_usecase_exampleMuCuBo.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /tutorial/auto_examples/usecase/plot_usecase_exampleMuCuBo
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="Use Case MKL on digit">
 
 .. only:: html
@@ -279,6 +259,26 @@ The following toy examples illustrate how the multimodal as usecase on digit  da
    :hidden:
 
    /tutorial/auto_examples/usecase/plot_usecase_exampleMKL
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="multi class digit from sklearn, multivue  - vue 0 digit data (color of sklearn)  - vue 1 gradia...">
+
+.. only:: html
+
+ .. figure:: /tutorial/auto_examples/usecase/images/thumb/sphx_glr_plot_usecase_exampleMuComBo_thumb.png
+
+     :ref:`sphx_glr_tutorial_auto_examples_usecase_plot_usecase_exampleMuComBo.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /tutorial/auto_examples/usecase/plot_usecase_exampleMuComBo
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>
@@ -291,15 +291,15 @@ The following toy examples illustrate how the multimodal as usecase on digit  da
     :class: sphx-glr-footer-gallery
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
-    :download:`Download all examples in Python source code: auto_examples_python.zip <//home/dominique/projets/ANR-Lives/scikit-multimodallearn/doc/tutorial/auto_examples/auto_examples_python.zip>`
+    :download:`Download all examples in Python source code: auto_examples_python.zip <//home/baptiste/Documents/Gitwork/scikit-multimodallearn/doc/tutorial/auto_examples/auto_examples_python.zip>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//home/dominique/projets/ANR-Lives/scikit-multimodallearn/doc/tutorial/auto_examples/auto_examples_jupyter.zip>`
+    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//home/baptiste/Documents/Gitwork/scikit-multimodallearn/doc/tutorial/auto_examples/auto_examples_jupyter.zip>`
 
 
 .. only:: html

@@ -3,8 +3,8 @@
 
 .. _sphx_glr_tutorial_auto_examples_mvml_sg_execution_times:
 
-Computation times
-=================
+MVML computation times
+======================
 **00:03.630** total execution time for **tutorial_auto_examples_mvml** files:
 
 +-------------------------------------------------------------------------------+-----------+--------+

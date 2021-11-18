@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_tutorial_auto_examples_usecase_usecase_function.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_tutorial_auto_examples_usecase_usecase_function.py:
+        Click :ref:`here <sphx_glr_download_tutorial_auto_examples_usecase_usecase_function.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_tutorial_auto_examples_usecase_usecase_function.py:
 
 
 ========================
@@ -60,13 +62,13 @@ Function plot_subplot
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: usecase_function.py <usecase_function.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: usecase_function.ipynb <usecase_function.ipynb>`
 

@@ -21,10 +21,10 @@ Documentation
 
 
 
-   reference/api
    tutorial/install_devel
    tutorial/auto_examples/index
    tutorial/times
+   reference/api
    tutorial/credits
 
 

@@ -3,8 +3,8 @@
 
 .. _sphx_glr_tutorial_auto_examples_mumbo_sg_execution_times:
 
-Computation times
-=================
+Mumbo computation times
+=======================
 **00:02.013** total execution time for **tutorial_auto_examples_mumbo** files:
 
 +--------------------------------------------------------------------------------------------------------------------+-----------+--------+

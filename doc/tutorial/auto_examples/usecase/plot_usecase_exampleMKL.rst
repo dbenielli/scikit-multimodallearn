@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_tutorial_auto_examples_usecase_plot_usecase_exampleMKL.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_tutorial_auto_examples_usecase_plot_usecase_exampleMKL.py:
+        Click :ref:`here <sphx_glr_download_tutorial_auto_examples_usecase_plot_usecase_exampleMKL.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_tutorial_auto_examples_usecase_plot_usecase_exampleMKL.py:
 
 
 =====================
@@ -30,8 +32,8 @@ multi class digit from sklearn, multivue
  .. code-block:: none
 
     result of MKL on digit with oneversone
-    96.88888888888889
-    /home/dominique/projets/ANR-Lives/scikit-multimodallearn/examples/usecase/plot_usecase_exampleMKL.py:72: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    97.77777777777777
+    /home/baptiste/Documents/Gitwork/scikit-multimodallearn/examples/usecase/plot_usecase_exampleMKL.py:70: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
 
 
@@ -53,7 +55,6 @@ multi class digit from sklearn, multivue
     from multimodal.datasets.base import load_dict, save_dict
     from multimodal.tests.data.get_dataset_path import get_dataset_path
     from multimodal.datasets.data_sample import MultiModalArray
-    from multimodal.kernels.mvml import MVML
     from multimodal.kernels.lpMKL import MKL
 
     import numpy as np
@@ -84,7 +85,6 @@ multi class digit from sklearn, multivue
         # file = get_dataset_path("digit_histogram.npy")
         file = get_dataset_path("digit_col_grad.npy")
         y = np.load(get_dataset_path("digit_y.npy"))
-        base_estimator = DecisionTreeClassifier(max_depth=4)
         dic_digit = load_dict(file)
         XX =MultiModalArray(dic_digit)
         X_train, X_test, y_train, y_test = train_test_split(XX, y)
@@ -109,7 +109,7 @@ multi class digit from sklearn, multivue
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  20.457 seconds)
+   **Total running time of the script:** ( 1 minutes  59.263 seconds)
 
 
 .. _sphx_glr_download_tutorial_auto_examples_usecase_plot_usecase_exampleMKL.py:
@@ -122,13 +122,13 @@ multi class digit from sklearn, multivue
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: plot_usecase_exampleMKL.py <plot_usecase_exampleMKL.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: plot_usecase_exampleMKL.ipynb <plot_usecase_exampleMKL.ipynb>`
 
