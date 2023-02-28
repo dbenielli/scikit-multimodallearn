@@ -83,6 +83,7 @@ import numpy as np
 import numpy.ma as ma
 import scipy.sparse as sp
 
+
 class MultiModalData(metaclass=ABCMeta):
 
     @staticmethod
@@ -99,7 +100,7 @@ class MultiModalData(metaclass=ABCMeta):
             n_views = views_ind.shape[0]-1
         else:
             if views_ind.ndim == 1:
-                if not views_ind.dtype == np.object:
+                if not views_ind.dtype == object:
                     raise ValueError("The format of views_ind is not "
                                      + "supported.")
                 for ind, val in enumerate(views_ind):
@@ -143,7 +144,7 @@ class MultiModalData(metaclass=ABCMeta):
             n_views = views_ind.shape[0]-1
         else:
             if views_ind.ndim == 1:
-                if not views_ind.dtype == np.object:
+                if not views_ind.dtype == object:
                     raise ValueError("The format of views_ind is not "
                                      + "supported.")
                 for ind, val in enumerate(views_ind):
@@ -428,7 +429,7 @@ class MultiModalArray(np.ndarray, MultiModalData):
                 hasattr(new_data, "shape") and len(new_data.shape) > 0:
                 obj = np.asarray(new_data.data).view(cls)
         else:
-            obj = np.recarray.__new__(cls, shape=(0, 0), dtype=np.float)
+            obj = np.recarray.__new__(cls, shape=(0, 0), dtype=float)
         obj.view_mode_ = view_mode
         obj.views_ind = views_ind
         obj.shapes_int = shapes_int
@@ -439,7 +440,7 @@ class MultiModalArray(np.ndarray, MultiModalData):
     def _for_data(cls, data):
         n_views = data.shape[0]
         index = 0
-        views_ind = np.empty(n_views + 1, dtype=np.int)
+        views_ind = np.empty(n_views + 1, dtype=int)
         views_ind[0] = 0
         shapes_int = []
         new_data = np.ndarray([])

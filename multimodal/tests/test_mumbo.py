@@ -74,7 +74,7 @@ class TestMumboClassifier(unittest.TestCase):
         X[X < .8] = 0
         X_csr = csr_matrix(X)
         clf = MumboClassifier()
-        y = (4 * rng.rand(40)).astype(np.int)
+        y = (4 * rng.rand(40)).astype(int)
         clf.fit(X_csr, y)
 
     def test_init_var(self):
@@ -450,15 +450,15 @@ class TestMumboClassifier(unittest.TestCase):
         clf = MumboClassifier()
         self.assertRaises(ValueError, clf.fit, X, y, views_ind)
 
-        views_ind = np.array([[-1], [1, 2]])
+        views_ind = np.array([np.array([-1]), np.array([1, 2])])
         clf = MumboClassifier()
         self.assertRaises(ValueError, clf.fit, X, y, views_ind)
 
-        views_ind = np.array([[3], [1, 2]])
+        views_ind = np.array([np.array([3]), np.array([1, 2])])
         clf = MumboClassifier()
         self.assertRaises(ValueError, clf.fit, X, y, views_ind)
 
-        views_ind = np.array([[0.5], [1, 2]])
+        views_ind = np.array([np.array([0.5]), np.array([1, 2])])
         clf = MumboClassifier()
         self.assertRaises(ValueError, clf.fit, X, y, views_ind)
 
@@ -520,7 +520,7 @@ class TestMumboClassifier(unittest.TestCase):
 
         X = np.array([[0., 0.5, 0.7], [1., 1.5, 1.7], [2., 2.5, 2.7]])
         y = np.array([1, 1, 1])
-        views_ind = np.array([[0, 2], [1]])
+        views_ind = np.array([np.array([0, 2]), np.array([1])])
         clf = MumboClassifier()
         clf.fit(X, y, views_ind)
         np.testing.assert_equal(clf.predict(X), y)
@@ -573,7 +573,7 @@ class TestMumboClassifier(unittest.TestCase):
                            np.array([0, 1]))
         self.assertEqual(clf.decision_function(X).shape, y.shape)
 
-        views_ind = np.array([[2, 0], [1]])
+        views_ind = np.array([np.array([2, 0]), np.array([1])])
         clf = MumboClassifier()
         clf.fit(X, y, views_ind)
         np.testing.assert_equal(clf.predict(X), y)
@@ -598,7 +598,7 @@ class TestMumboClassifier(unittest.TestCase):
         np.testing.assert_equal(clf.predict(data), np.array([0, 1]))
         self.assertEqual(clf.decision_function(X).shape, y.shape)
 
-        views_ind = np.array([[2, 0], [1], [3, 4]])
+        views_ind = np.array([np.array([2, 0]), np.array([1]), np.array([3, 4])])
         clf = MumboClassifier()
         clf.fit(X, y, views_ind)
         np.testing.assert_equal(clf.predict(X), y)
@@ -626,7 +626,7 @@ class TestMumboClassifier(unittest.TestCase):
         np.testing.assert_equal(clf.predict(data), np.array([0, 1, 2]))
         self.assertEqual(clf.decision_function(X).shape, (X.shape[0], 3))
 
-        views_ind = np.array([[1, 0], [2], [3, 4]])
+        views_ind = np.array([np.array([1, 0]), np.array([2]), np.array([3, 4])])
         clf = MumboClassifier()
         clf.fit(X, y, views_ind)
         np.testing.assert_equal(clf.predict(X), y)

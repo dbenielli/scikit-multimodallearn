@@ -268,7 +268,7 @@ class TestMuComboClassifier(unittest.TestCase):
                                          cost_Tminus1_vue, A, b, G, h, l))
             self.assertEqual(solver.shape, (9,1))
             s_r = np.sum(solver.reshape(3,3), axis=1)
-            np.testing.assert_almost_equal(s_r, np.ones(3, dtype=np.float), 9)
+            np.testing.assert_almost_equal(s_r, np.ones(3, dtype=float), 9)
 
     def test_solver_compute_betas(self):
         clf = MuComboClassifier()
@@ -289,13 +289,13 @@ class TestMuComboClassifier(unittest.TestCase):
           [ 5.45938775e+01,  4.03397223e+02, -4.57991101e+02],
           [ 1.48401545e+02, -1.48426438e+02,  2.48935342e-02],
           [ 1.09663316e+03,  2.71828184e+00, -1.09935144e+03]]])
-        score_function_Tminus1 =10 *np.ones((3,4,3), dtype =np.float)
+        score_function_Tminus1 =10 *np.ones((3,4,3), dtype =float)
         alphas = np.array([0.5, 1., 2.])
         predicted_classes = np.array([[0, 0, 1, 1], [0, 1, 0, 2], [2, 2, 0, 0]])
         y = np.array([0, 1, 2, 0])
         betas = clf._compute_betas(alphas, y, score_function_Tminus1, predicted_classes)
         self.assertEqual(betas.shape, (3,3))
-        np.testing.assert_almost_equal(np.sum(betas, axis =1), np.ones(3, dtype=np.float), 9)
+        np.testing.assert_almost_equal(np.sum(betas, axis =1), np.ones(3, dtype=float), 9)
         self.assertTrue(np.all(betas <= 1) )
         self.assertTrue(np.all(betas >= 0) )
 
@@ -336,7 +336,7 @@ class TestMuComboClassifier(unittest.TestCase):
                  [[-2, 1, 0.5], [1, 1, -1], [1, -2, 0.5], [1, 1, -1]],
                  [[-2, 1, 0.5], [1, 1, -1], [1, -2, 0.5], [1, 1, -1]]],
                 dtype=np.float64)
-        score_function_Tminus1 =10 *np.ones((3,4,3), dtype=np.float)
+        score_function_Tminus1 =10 *np.ones((3,4,3), dtype=float)
         clf = MuComboClassifier()
         clf.n_views_ = 3
         clf.n_classes_ = 3

@@ -193,7 +193,7 @@ class MuComboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
         # n_yi = np.unique(y, return_inverse=True)
         cost = np.ones((n_views, n_samples, n_classes))
         score_function = np.zeros((n_views, n_samples, n_classes))
-        n_yi_s = np.zeros(n_classes, dtype=np.int)
+        n_yi_s = np.zeros(n_classes, dtype=int)
         for indice_class in range(n_classes):
             # n_yi number of examples of the class y_i
             n_yi = np.where(y==indice_class)[0].shape[0]
@@ -224,14 +224,14 @@ class MuComboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
 
     def _indicatrice(self, predicted_classes, y_i):
         n_samples = y_i.shape[0]
-        indicate_ones = np.zeros((self.n_views_, n_samples, self.n_classes_), dtype=np.int)
-        indicatrice_one_yi = np.zeros((self.n_views_, n_samples, self.n_classes_), dtype=np.int)
+        indicate_ones = np.zeros((self.n_views_, n_samples, self.n_classes_), dtype=int)
+        indicatrice_one_yi = np.zeros((self.n_views_, n_samples, self.n_classes_), dtype=int)
         indicate_ones[np.arange(self.n_views_)[:, np.newaxis],
                     np.arange(n_samples)[np.newaxis, :],
                     predicted_classes[np.arange(self.n_views_), :]] = 1
         indicate_ones[:, np.arange(n_samples), y_i] = 0
         indicatrice_one_yi[:, np.arange(n_samples), y_i] = 1
-        delta = np.ones((self.n_views_, n_samples, self.n_classes_), dtype=np.int)
+        delta = np.ones((self.n_views_, n_samples, self.n_classes_), dtype=int)
         delta[:, np.arange(n_samples), y_i] = -1
         return indicate_ones, indicatrice_one_yi, delta
 
@@ -451,12 +451,12 @@ class MuComboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
             # there is only one single class in the data).
             self.estimators_ = []
             self.estimator_weights_alpha_ = np.array([], dtype=np.float64)
-            self.estimator_weights_beta_ = np.zeros((self.n_iterations_, n_views), dtype=np.float)
+            self.estimator_weights_beta_ = np.zeros((self.n_iterations_, n_views), dtype=float)
             self.estimator_errors_ = np.array([], dtype=np.float64)
             return
         self.estimators_ = []
         self.estimator_weights_alpha_ = np.zeros((self.n_iterations_, n_views), dtype=np.float64)
-        self.estimator_weights_beta_ = np.zeros((self.n_iterations_, n_views, self.n_classes_), dtype=np.float)
+        self.estimator_weights_beta_ = np.zeros((self.n_iterations_, n_views, self.n_classes_), dtype=float)
         self.estimator_errors_ = np.zeros((n_views, self.n_iterations_), dtype=np.float64)
 
         random_state = check_random_state(self.random_state)

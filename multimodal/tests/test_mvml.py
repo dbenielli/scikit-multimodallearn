@@ -270,7 +270,7 @@ class MVMLTest(unittest.TestCase):
 
     def test_classifier(self):
         pass
-        # return check_estimator(MVML)
+        # return check_estimator(MVML())
 
     def test_check_kernel(self):
         clf = MVML()
