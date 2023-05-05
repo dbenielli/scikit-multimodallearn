@@ -170,7 +170,7 @@ def setup_package():
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
         'Operating System :: Microsoft :: Windows',
-        'Operating System :: POSIX :: Linux,
+        'Operating System :: POSIX :: Linux',
         'Operating System :: MacOS'],
     keywords = ('machine learning, supervised learning, classification, '
                 'ensemble methods, boosting, kernel')
