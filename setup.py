@@ -166,7 +166,7 @@ def setup_package():
         'License :: OSI Approved :: GNU Lesser General Public License'
         ' v3 or later (LGPLv3+)',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.6',
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
         'Operating System :: Microsoft :: Windows',
@@ -175,8 +175,8 @@ def setup_package():
     keywords = ('machine learning, supervised learning, classification, '
                 'ensemble methods, boosting, kernel')
     packages = find_packages(exclude=['*.tests'])
-    install_requires = ['scikit-learn>=0.24.2', 'numpy', 'scipy', 'cvxopt' ]
-    python_requires = '>=3.8'
+    install_requires = ['scikit-learn==0.24.2', 'numpy', 'scipy', 'cvxopt' ]
+    python_requires = '>=3.6'
     extras_require = {
         'dev': ['pytest', 'pytest-cov'],
         'doc': ['sphinx', 'numpydoc', 'sphinx_gallery', 'matplotlib', "sphinx_rtd_theme"]}
