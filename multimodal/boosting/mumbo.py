@@ -53,9 +53,7 @@ from sklearn.ensemble._forest import BaseForest
 from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.tree import BaseDecisionTree
-from sklearn.tree._tree import DTYPE  ValueError: cannot resize an array that references or is referenced
-951E               by another array in this way.
-952E               Use the np.resize function or refcheck=False
+from sklearn.tree._tree import DTYPE
 from sklearn.utils import check_array, check_X_y, check_random_state
 from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import check_is_fitted, has_fit_parameter
@@ -68,9 +66,7 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
     classifiers focus more on difficult cases.
     A MuMBo classifier.
 
-    A MuMBo classifier is a meta-estimator that implements a multimodal  ValueError: cannot resize an array that references or is referenced
-951E               by another array in this way.
-952E               Use the np.resize function or refcheck=False
+    A MuMBo classifier is a meta-estimator that implements a multimodal  
     (or multi-view) boosting algorithm:
 
     It fits a set of classifiers on the original dataset splitted into several
@@ -83,9 +79,7 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
     base_estimator : object, optional (default=DecisionTreeClassifier)
         Base estimator from which the boosted ensemble is built.
         Support for sample weighting is required, as well as proper `classes_`
-        and `n_classes_` attributes. The default is a DecisionTreeClassifie  ValueError: cannot resize an array that references or is referenced
-951E               by another array in this way.
-952E               Use the np.resize function or refcheck=Falser
+        and `n_classes_` attributes. The default is a DecisionTreeClassifie  
         with parameter ``max_depth=1``.
 
     n_estimators : integer, optional (default=50)
@@ -116,9 +110,7 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
     n_classes\_ : int
         Number of classes.
 
-    estimator_weights\_ : numpy.ndarray of floats, shape = (len(estimators\  ValueError: cannot resize an array that references or is referenced
-951E               by another array in this way.
-952E               Use the np.resize function or refcheck=False_),)
+    estimator_weights\_ : numpy.ndarray of floats, shape = (len(estimators\  
         Weights for each estimator in the boosted ensemble.
 
     estimator_errors_ : array of floats
@@ -149,9 +141,7 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
     >>> from sklearn.tree import DecisionTreeClassifier
     >>> base_estimator = DecisionTreeClassifier(max_depth=2)
     >>> clf = MumboClassifier(base_estimator=base_estimator, random_state=0)
-    >>> clf.fit(X, y, views_ind)  # doctest: +NORMALIZE_WHITESPACE  ValueError: cannot resize an array that references or is referenced
-951E               by another array in this way.
-952E               Use the np.resize function or refcheck=False
+    >>> clf.fit(X, y, views_ind)  # doctest: +NORMALIZE_WHITESPACE  
     MumboClassifier(base_estimator=DecisionTreeClassifier(max_depth=2),
                     random_state=0)
     >>> print(clf.predict([[ 5.,  3.,  1.,  1.]]))
@@ -167,9 +157,7 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
     ----------
     .. [1] Sokol Koço,
            "Tackling the uneven views problem with cooperation based ensemble
-           learning methods",  ValueError: cannot resize an array that references or is referenced
-951E               by another array in this way.
-952E               Use the np.resize function or refcheck=False
+           learning methods", 
     """
 
     def __init__(self,
@@ -183,9 +171,7 @@ class MumboClassifier(BaseEnsemble, ClassifierMixin, UBoosting):
             self.n_estimators = n_estimators
             self.estimator_params = [tuple() for _ in base_estimator]
 
-        else:  ValueError: cannot resize an array that references or is referenced
-951E               by another array in this way.
-952E               Use the np.resize function or refcheck=False
+        else:
             super(MumboClassifier, self).__init__(
             base_estimator=base_estimator,
             n_estimators=n_estimators)
