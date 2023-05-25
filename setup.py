@@ -172,7 +172,7 @@ def setup_package():
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX :: Linux',
         'Operating System :: MacOS'],
-    keywords = ['machine learning, supervised learning, classification, '
+    keywords = ['machine learning, supervised learning, classification, ' \
                 'ensemble methods, boosting, kernel']
     packages = find_packages(exclude=['*.tests'])
     install_requires = ['scikit-learn>=0.24.2', 'numpy', 'scipy', 'cvxopt' ]
