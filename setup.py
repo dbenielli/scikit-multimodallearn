@@ -94,7 +94,7 @@ def wselect(args, dirname, names):
     for n in names:
         for rev in reclean:
             if (rev.match(n)):
-                os.remove("%s/%s" %(dirname, n))
+                os.remove("%s/%s" %(dirname, n))(
         break
 
 
@@ -172,8 +172,8 @@ def setup_package():
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX :: Linux',
         'Operating System :: MacOS'],
-    keywords = ('machine learning, supervised learning, classification, '
-                'ensemble methods, boosting, kernel')
+    keywords = ['machine learning, supervised learning, classification, '
+                'ensemble methods, boosting, kernel']
     packages = find_packages(exclude=['*.tests'])
     install_requires = ['scikit-learn>=0.24.2', 'numpy', 'scipy', 'cvxopt' ]
     python_requires = '>=3.6'
