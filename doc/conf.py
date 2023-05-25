@@ -282,4 +282,4 @@ sphinx_gallery_conf = {
     'gallery_dirs': 'tutorial/auto_examples'}
 
 # Generate the plots for the gallery
-plot_gallery = 'True'
+plot_gallery = True
