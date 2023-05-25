@@ -50,7 +50,7 @@ import multimodal
 try:
     import numpy
 except:
-    raise 'Cannot build iw without numpy'(
+    raise 'Cannot build iw without numpy'
     sys.exit()
 
 # --------------------------------------------------------------------
@@ -71,7 +71,7 @@ def get_version():
     v_text_formted = '{"' + v_text.replace('\n', '","').replace(':', '":"')
     v_text_formted += '"}'
     v_dict = eval(v_text_formted)
-    return v_dict["multimodal"](
+    return v_dict["multimodal"]
 
 ########################
 # Set Multimodal __version__
@@ -92,9 +92,9 @@ for restring in relist:
 
 def wselect(args, dirname, names):
     for n in names:
-        for rev in reclean:(
+        for rev in reclean:
             if (rev.match(n)):
-                os.remove("%s/%s" %(dirname, n))(
+                os.remove("%s/%s" %(dirname, n))
         break
 
 
@@ -110,7 +110,7 @@ class clean(_clean):
         clean.run(self)
         if os.path.exists('build'):
             shutil.rmtree('build')
-        for dirpath, dirnames, filenames in os.walk('iw'):(
+        for dirpath, dirnames, filenames in os.walk('iw'):
             for filename in filenames:
                 if (filename.endswith('.so') or
                         filename.endswith('.pyd') or
