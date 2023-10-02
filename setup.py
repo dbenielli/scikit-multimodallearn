@@ -110,7 +110,7 @@ class clean(_clean):
         clean.run(self)
         if os.path.exists('build'):
             shutil.rmtree('build')
-        for dirpath, dirnames, filenames in os.walk('iw'):
+        for dirpath, dirnames, filenames in os.walk('multimodal'):
             for filename in filenames:
                 if (filename.endswith('.so') or
                         filename.endswith('.pyd') or
@@ -175,7 +175,7 @@ def setup_package():
     keywords = ['machine learning, supervised learning, classification, ' \
                 'ensemble methods, boosting, kernel']
     packages = find_packages(exclude=['*.tests'])
-    install_requires = ['scikit-learn>=0.24.2', 'numpy', 'scipy', 'cvxopt' ]
+    install_requires = ['scikit-learn==1.2.1', 'numpy', 'scipy', 'cvxopt' ]
     python_requires = '>=3.6'
     extras_require = {
         'dev': ['pytest', 'pytest-cov'],
