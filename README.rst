@@ -1,4 +1,3 @@
-
 .. image:: https://gitlab.lis-lab.fr/dev/scikit-multimodallearn/badges/master/pipeline.svg
     :target: https://gitlab.lis-lab.fr/dev/scikit-multimodallearn/badges/master
     :alt: pipeline status
@@ -61,7 +60,7 @@ Source code
 
 You can get the **source code** from the **Git** repository of the project::
 
-  git clone git@gitlab.lis-lab.fr:dev/multiconfusion.git
+  git clone git@gitlab.lis-lab.fr:dev/scikit-multimodallearn.git
 
 Testing
 ~~~~~~~
