@@ -187,8 +187,8 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
         ----------
 
         X : - Metriclearn_array {array-like, sparse matrix}, shape = (n_samples, n_features)
-              Training multi-view input samples. can be also Kernel where attibute 'kernel'
-              is set to precompute "precomputed"
+              Training multi-view input samples. can be also Kernel where attibute 'kernel' 
+              is set to precompute "precomputed" 
             or
             - Dictionary of {array like} with shape = (n_samples, n_features)  for multi-view
               for each view.
@@ -208,7 +208,7 @@ class MVML(MKernel, BaseEstimator, ClassifierMixin, RegressorMixin):
             - views_ind is a 1-D array of sorted integers, the entries
               indicate the limits of the slices used to extract the views,
               where view ``n`` is given by
-              ``X[:, views_ind[n]:views_ind[n+1]]``.
+              ``X[:, views_ind[n]:views_ind[n+1]]`` .
 
               With this convention each view is therefore a view (in the NumPy
               sense) of X and no copy of the data is done.

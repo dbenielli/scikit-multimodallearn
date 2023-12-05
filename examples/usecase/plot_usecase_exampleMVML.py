@@ -2,7 +2,7 @@
 """
 =========================
 Use Case of MVML on digit
-========================
+=========================
 Use case for all classifier of multimodallearn MVML
 
 multi class digit from sklearn, multivue

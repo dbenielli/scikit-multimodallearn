@@ -3,12 +3,38 @@
 
 .. _sphx_glr_tutorial_auto_examples_combo_sg_execution_times:
 
+
 Computation times
 =================
-**00:03.474** total execution time for **tutorial_auto_examples_combo** files:
+**00:00.547** total execution time for 2 files **from tutorial/auto_examples/combo**:
 
-+--------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_tutorial_auto_examples_combo_plot_combo_2_views_2_classes.py` (``plot_combo_2_views_2_classes.py``) | 00:02.387 | 0.0 MB |
-+--------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_tutorial_auto_examples_combo_plot_combo_3_views_3_classes.py` (``plot_combo_3_views_3_classes.py``) | 00:01.088 | 0.0 MB |
-+--------------------------------------------------------------------------------------------------------------------+-----------+--------+
+.. container::
+
+  .. raw:: html
+
+    <style scoped>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript" class="init">
+    $(document).ready( function () {
+        $('table.sg-datatable').DataTable({order: [[1, 'desc']]});
+    } );
+    </script>
+
+  .. list-table::
+   :header-rows: 1
+   :class: table table-striped sg-datatable
+
+   * - Example
+     - Time
+     - Mem (MB)
+   * - :ref:`sphx_glr_tutorial_auto_examples_combo_plot_combo_3_views_3_classes.py` (``plot_combo_3_views_3_classes.py``)
+     - 00:00.295
+     - 0.0
+   * - :ref:`sphx_glr_tutorial_auto_examples_combo_plot_combo_2_views_2_classes.py` (``plot_combo_2_views_2_classes.py``)
+     - 00:00.252
+     - 0.0
