@@ -32,7 +32,7 @@ Dependencies
 
 **scikit-multimodallearn** works with **Python 3.5 or later**.
 
-**scikit-multimodallearn** depends on **scikit-learn** (version >= 0.19).
+**scikit-multimodallearn** depends on **scikit-learn** (version 1.2.1).
 
 Optionally, **matplotlib** is required to run the examples.
 
