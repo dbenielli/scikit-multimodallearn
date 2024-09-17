@@ -1,13 +1,14 @@
 # run the test suite
 tests:
-    image: docker:latest
+    image: docker:20.10.16
     services:
         - docker:dind  # Docker-in-Docker pour exécuter les commandes Docker
     variables:
-        DOCKER_TLS_CERTDIR: ""  # Désactive TLS dans dind
-    tags:
-        - docker
+        DOCKER_TLS_CERTDIR: ""  # Désactive la gestion TLS dans Docker-in-Docker
+        DOCKER_HOST: tcp://docker:2375  # Utilise Docker via TCP sans TLS
+        DOCKER_OPTS: "--insecure-registry registry.gitlab.lis-lab.fr:5005"  # Ajoute l'option pour ignorer la vérification TLS
     before_script:
+        - echo "Pulling Docker image with TLS disabled..."
         - docker login registry.gitlab.lis-lab.fr:5005 -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
         - docker pull registry.gitlab.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04 || true
     script:
@@ -17,6 +18,7 @@ tests:
     artifacts:
       paths:
         - htmlcov/
+
 
 # generate the documentation
 doc:
