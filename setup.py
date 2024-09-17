@@ -160,21 +160,24 @@ def setup_package():
              'and Baptiste Bauvin and Cécile Capponi and Hachem Kadri'
     author_email = 'contact.dev@lis-lab.fr'
     license = 'newBSD'
-    classifiers = [
+    classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: GNU Lesser General Public License'
-        ' v3 or later (LGPLv3+)',
+        'License :: OSI Approved :: BSD License',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
-        'Topic :: Scientific/Engineering',
-        'Topic :: Scientific/Engineering :: Artificial Intelligence',
-        'Operating System :: Microsoft :: Windows',
-        'Operating System :: POSIX :: Linux',
-        'Operating System :: MacOS'],
-    keywords = ['machine learning, supervised learning, classification, ' \
-                'ensemble methods, boosting, kernel']
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+         'Topic :: Scientific/Engineering',
+         'Topic :: Scientific/Engineering :: Artificial Intelligence',
+         'Operating System :: Microsoft :: Windows',
+         'Operating System :: POSIX :: Linux',
+          'Operating System :: MacOS :: MacOS X',
+         ]
+    keywords = ['machine learning, supervised learning, classification, ensemble methods, boosting, kernel']
     packages = find_packages(exclude=['*.tests'])
+    setup_requires = ['numpy']
     install_requires = ['scikit-learn==1.2.1', 'numpy', 'scipy', 'cvxopt' ]
     python_requires = '>=3.6'
     extras_require = {
@@ -194,6 +197,7 @@ def setup_package():
           classifiers=classifiers,
           keywords=keywords,
           packages=packages,
+          setup_requires=setup_requires,
           install_requires=install_requires,
           python_requires=python_requires,
           extras_require=extras_require,
