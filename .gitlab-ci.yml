@@ -1,12 +1,18 @@
 # run the test suite
 tests:
-    image: registry.gitlab.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04
+    image: docker:latest
+    services:
+        - docker:dind  # Docker-in-Docker pour exécuter les commandes Docker
+    variables:
+        DOCKER_TLS_CERTDIR: ""  # Désactive TLS dans dind
     tags:
         - docker
+    before_script:
+        - docker login registry.gitlab.lis-lab.fr:5005 -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+        - docker pull registry.gitlab.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04 || true
     script:
-        - docker --tls-verify=false pull registry.gitlab.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04
-        - python3 setup.py install
-        - pytest-3
+        - docker run registry.gitlab.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04 python3 setup.py install
+        - docker run registry.gitlab.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04 pytest-3
     coverage: '/^TOTAL.+?(\d+\%)$/'
     artifacts:
       paths:
