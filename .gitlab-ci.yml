@@ -2,22 +2,26 @@
 tests:
     image: docker:20.10.16
     services:
-        - docker:dind  # Docker-in-Docker pour exécuter les commandes Docker
+        - docker:dind
     variables:
-        DOCKER_TLS_CERTDIR: ""  # Désactive la gestion TLS dans Docker-in-Docker
-        DOCKER_HOST: tcp://docker:2375  # Utilise Docker via TCP sans TLS
-        DOCKER_OPTS: "--insecure-registry registry.gitlab.lis-lab.fr:5005"  # Ajoute l'option pour ignorer la vérification TLS
+        DOCKER_TLS_CERTDIR: ""  # Désactive l'utilisation des certificats TLS dans Docker-in-Docker
+        DOCKER_HOST: tcp://docker:2375
+        DOCKER_DRIVER: overlay2
     before_script:
-        - echo "Pulling Docker image with TLS disabled..."
+        - echo "Configuring Docker to use insecure registry"
+        - mkdir -p /etc/docker  # Crée le répertoire Docker si nécessaire
+        - echo '{"insecure-registries":["registry.gitlab.lis-lab.fr:5005"]}' > /etc/docker/daemon.json
+        - dockerd &  # Démarre le démon Docker
         - docker login registry.gitlab.lis-lab.fr:5005 -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
-        - docker pull registry.gitlab.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04 || true
     script:
+        - docker pull registry.gitlab.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04
         - docker run registry.gitlab.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04 python3 setup.py install
         - docker run registry.gitlab.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04 pytest-3
     coverage: '/^TOTAL.+?(\d+\%)$/'
     artifacts:
       paths:
         - htmlcov/
+
 
 
 # generate the documentation
