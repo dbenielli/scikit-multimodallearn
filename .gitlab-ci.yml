@@ -4,7 +4,7 @@ tests:
     tags:
         - docker
     script:
-        - ./build_script.sh
+        - ./install_script.sh
         - python3 setup.py install
         - pytest-3
     coverage: '/^TOTAL.+?(\d+\%)$/'
