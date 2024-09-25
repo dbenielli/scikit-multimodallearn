@@ -1,6 +1,6 @@
 # run the test suite
 tests:
-    image: registry.gitlab.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04
+    image: ubuntu:22.04 
     tags:
         - docker
     script:
