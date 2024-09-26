@@ -182,7 +182,7 @@ def setup_package():
     python_requires = '>=3.6'
     extras_require = {
         'dev': ['pytest', 'pytest-cov'],
-        'doc': ['sphinx==4.5', 'numpydoc', 'sphinx_gallery', 'matplotlib', "sphinx_rtd_theme"]}
+        'doc': ['sphinx==5.0', 'numpydoc', 'sphinx_gallery', 'matplotlib', "sphinx_rtd_theme"]}
     include_package_data = True
 
     setup(name=name,
