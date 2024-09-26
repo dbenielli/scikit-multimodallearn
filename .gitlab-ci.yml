@@ -21,9 +21,7 @@ doc:
     script:
         - export LC_ALL=$(locale -a | grep en_US)
         - export LANG=$(locale -a | grep en_US)
-        - pip3 install --upgrade sphinx>=5.0 --no-warn-script-location
-        - pip3 install -e .[doc]
-        - rm -Rf build
+        - python3 setup.py install
         - python3 setup.py build_sphinx
     artifacts:
         paths:
@@ -42,8 +40,7 @@ pages:
     script:
         - export LC_ALL=$(locale -a | grep en_US)
         - export LANG=$(locale -a | grep en_US)
-        - pip3 install --upgrade sphinx>=5.0 --no-warn-script-location
-        - pip3 install -e .[doc]
+        - python3 setup.py install
         - python3 setup.py build_sphinx
         - cp -r build/sphinx/html public
     artifacts:
