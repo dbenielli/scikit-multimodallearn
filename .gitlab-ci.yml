@@ -1,6 +1,6 @@
 # run the test suite
 tests:
-    image: registry.gitlab.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04
+    image: registry.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04
     tags:
         - docker
     script:
@@ -13,7 +13,7 @@ tests:
 
 # generate the documentation
 doc:
-    image: registry.gitlab.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04
+    image: registry.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04
     tags:
         - docker
     only:
@@ -33,7 +33,7 @@ doc:
 # project public
 #
 pages:
-    image: registry.gitlab.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04
+    image: registry.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04
     tags:
         - docker
     only:
@@ -42,6 +42,7 @@ pages:
         - export LC_ALL=$(locale -a | grep en_US)
         - export LANG=$(locale -a | grep en_US)
         - pip3 install -e .[doc]
+        - rm -Rf build
         - python3 setup.py build_sphinx
         - cp -r build/sphinx/html public
     artifacts:

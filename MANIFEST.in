@@ -3,3 +3,4 @@ include *.rst
 include doc/*.rst doc/*.py
 include multimodal/tests/*.py
 include examples/*.py examples/*.txt
+include VERSION
