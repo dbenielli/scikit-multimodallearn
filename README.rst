@@ -10,8 +10,8 @@
 OLD REPOSITORY
 ==============
 
-.. error::
-   GO TO https://github.com/multi-learn/scikit-multimodallearn or https://gitlab.lis-lab.fr/dev/scikit-multimodallearn
+   .. warning ::
+      GO TO https://github.com/multi-learn/scikit-multimodallearn or https://gitlab.lis-lab.fr/dev/scikit-multimodallearn
 
 
 scikit-multimodallearn
