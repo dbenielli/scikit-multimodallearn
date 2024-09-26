@@ -19,7 +19,7 @@ doc:
     only:
         - master
     script:
-        - pip3 install --upgrade sphinx>=5.0
+        - pip3 install --upgrade sphinx>=5.0 --no-warn-script-location
         - export LC_ALL=$(locale -a | grep en_US)
         - export LANG=$(locale -a | grep en_US)
         - pip3 install -e .[doc]
@@ -40,7 +40,7 @@ pages:
     only:
         - master
     script:
-        - pip3 install --upgrade sphinx>=5.0
+        - pip3 install --upgrade sphinx>=5.0 --no-warn-script-location
         - export LC_ALL=$(locale -a | grep en_US)
         - export LANG=$(locale -a | grep en_US)
         - pip3 install -e .[doc]
