@@ -121,7 +121,6 @@ class clean(_clean):
                 if dirname == '__pycache__':
                     shutil.rmtree(os.path.join(dirpath, dirname))
 
-
 ##############################
 # Custom sdist command
 ##############################
@@ -148,6 +147,8 @@ def setup_package():
     set_version(multimodal_dir, version)
     description = 'A scikit-learn compatible package for multimodal Classifiers'
     here = os.path.abspath(os.path.dirname(__file__))
+    open('README.rst').read(),  # Or 'README.rst', depending on your format
+    long_description_content_type = 'text/x-rst'
     with open(os.path.join(here, 'README.rst'), encoding='utf-8') as readme:
         long_description = readme.read()
     group = 'dev'
@@ -189,6 +190,7 @@ def setup_package():
           version=version,
           description=description,
           long_description=long_description,
+          long_description_content_type=long_description_content_type,
           url=url,
           project_urls=project_urls,
           author=author,
