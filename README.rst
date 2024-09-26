@@ -6,10 +6,12 @@
     :target: https://gitlab.lis-lab.fr/dev/scikit-multimodallearn/badges/master
     :alt: coverage report
 
-## OLD REPOSITORY
 
+OLD REPOSITORY
+==============
 
-GO TO https://github.com/multi-learn/scikit-multimodallearn or https://gitlab.lis-lab.fr/dev/scikit-multimodallearn
+.. error::
+   GO TO https://github.com/multi-learn/scikit-multimodallearn or https://gitlab.lis-lab.fr/dev/scikit-multimodallearn
 
 
 scikit-multimodallearn
