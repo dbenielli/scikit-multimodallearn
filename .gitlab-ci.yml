@@ -1,10 +1,9 @@
 # run the test suite
 tests:
-    image: ubuntu:22.04 
+    image: registry.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04
     tags:
         - docker
     script:
-        - ./install_script.sh
         - python3 setup.py install
         - pytest-3
     coverage: '/^TOTAL.+?(\d+\%)$/'
@@ -14,7 +13,7 @@ tests:
 
 # generate the documentation
 doc:
-    image: registry.gitlab.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04
+    image: registry.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04
     tags:
         - docker
     only:
@@ -34,7 +33,7 @@ doc:
 # project public
 #
 pages:
-    image: registry.gitlab.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04
+    image: registry.lis-lab.fr:5005/dev/scikit-multimodallearn/ubuntu:22.04
     tags:
         - docker
     only:
